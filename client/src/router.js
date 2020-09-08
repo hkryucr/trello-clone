@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Board from './views/Board.vue'
 import Splash from './views/Splash.vue'
 import Task from './views/Task.vue'
+import Register from './views/Register.vue'
 
 Vue.use(Router)
 
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'splash',
       component: Splash
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/board',

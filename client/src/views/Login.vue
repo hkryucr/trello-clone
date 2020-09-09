@@ -1,7 +1,6 @@
 <template>
     <div>
         <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
-
         <section>
             <div class="section-wrapper">
                 <div class="account-form">

@@ -8,7 +8,12 @@ const ColumnSchema = new Schema({
   },
   tasks: {
     type: [Schema.Types.ObjectId],
+    default: []
   },
+  board: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }
   createdAt: {
     type: Date,
     default: Date.now,

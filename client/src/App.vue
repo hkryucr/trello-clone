@@ -3,6 +3,7 @@
     <router-view/>
   </div>
 </template>
+<script src="./socket.js"></script>
 
 <style>
 @import 'assets/styles/tailwind.postcss';

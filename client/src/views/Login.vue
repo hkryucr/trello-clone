@@ -57,8 +57,13 @@
 </template>
 
 <script>
+
+import SplashBottom from '@views/SplashBottom'
+
 export default {
-    
+    components: {
+        SplashBottom
+    }
 }
 </script>
 

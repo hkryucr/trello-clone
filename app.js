@@ -3,7 +3,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const users = require("./routes/api/users");
 const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const socket = require('socket.io')(http);
+
+
 
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
@@ -12,21 +14,21 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// mongoose
-//   .connect(db, {
-//     useUnifiedTopology: true
-//   })
-//   .then(() => {
-//     console.log("Connected to mongoDB");
-//   })
-//   .catch(err => console.log(err));
+mongoose
+  .connect(db, {
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Connected to mongoDB");
+  })
+  .catch(err => console.log(err));
 
-// app.use("/api/users", users);
+app.use("/api/users", users);
 
 // Setup the path
 app.get("/", (req, res) => {
-  // res.send("Hello World!");
-  res.sendFile(__dirname + "/client/src/App.vue")
+  res.send("Hello World!");
+  // res.sendFile(__dirname + "/client/src/App.vue")
 })
 
 // Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
@@ -35,8 +37,16 @@ const port = process.env.PORT || 5000;
 // app.listen(port, () => {
 //   console.log(`Listening on port ${port}`);
 // })
-io.on("connect", socket => {
+socket.on("connect", socket => {
   console.log("connect")
+
+  socket.on("disconnect", function() {
+    console.log("user disconnected");
+  })
+
+  socket.on("createColumn", function(data) {
+    console.log(data);
+  })
 })
 
 http.listen(port)

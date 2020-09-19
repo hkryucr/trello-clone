@@ -20,12 +20,12 @@ module.exports = {
       extractors: [
         {
           extractor: TailwindVueExtractor,
-          extensions: extensionsUsingCSS,
-        },
+          extensions: extensionsUsingCSS
+        }
       ],
       whitelist: [],
-      whitelistPatterns: [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/ ],
+      whitelistPatterns: [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/ ]
     }),
-    require('autoprefixer')(),
-  ],
+    require('autoprefixer')()
+  ]
 }

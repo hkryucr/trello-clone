@@ -20,14 +20,11 @@
       <a href="">Continue with Apple</a>
     </div>
     <a href="">Already have an account? Log In</a>
-      
   </div>
 </template>
 <script>
 export default {
-  
 }
 </script>
 <style lang="css">
-
 </style>

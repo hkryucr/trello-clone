@@ -1,4 +1,3 @@
-const bodyParser = require("body-parser");
 // create board
 // delete board
 // update board (name)

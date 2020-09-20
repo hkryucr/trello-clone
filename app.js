@@ -6,8 +6,8 @@ const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
 const Column = require("./models/Column");
 
-const mongoose = require("mongoose");
-const db = require("./config/keys").mongoURI;
+const mongoose = require('mongoose');
+const db = require('./config/keys').mongoURI;
 
 app.use(bodyParser.urlencoded({
   extended: true

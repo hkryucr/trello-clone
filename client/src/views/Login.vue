@@ -6,7 +6,7 @@
                 <div class="account-form">
                     <h1>Log in to Trello</h1>
                     <div class="login-password-container">
-                        <form id="login-form" method="POST">
+                        <form id="login-form">
                             <div class="login-password-email-container">
                                 <div class="email-password">
                                     <div class="input-container">
@@ -58,13 +58,13 @@
 
 <script>
 
-import SplashBottom from '@views/SplashBottom'
+// import SplashBottom from '@views/SplashBottom'
 
-export default {
-    components: {
-        SplashBottom
-    }
-}
+// export default {
+//     components: {
+//         SplashBottom
+//     }
+// }
 </script>
 
 <style lang="css">

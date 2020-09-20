@@ -17,6 +17,7 @@
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.1.0",
     "@ky-is/vue-cli-plugin-tailwind": "^1.6.0",

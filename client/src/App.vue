@@ -3,7 +3,11 @@
     <router-view/>
   </div>
 </template>
-<script src="./socket.js"></script>
+<script>
+// src="./socket.js"
+// import Socketio from '../src/socket'
+
+</script>
 
 <style>
 @import 'assets/styles/tailwind.postcss';

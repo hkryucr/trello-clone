@@ -6,8 +6,6 @@ const boards = require("./routes/api/boards");
 const http = require('http').createServer(app);
 const socket = require('socket.io')(http);
 
-
-
 const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
 
@@ -54,4 +52,3 @@ socket.on("connect", socket => {
 })
 
 http.listen(port)
-

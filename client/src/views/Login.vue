@@ -19,14 +19,12 @@
                                 </div>
                             </div>
                         </form>
-
                         <div class="login-methods">
                             <div class="login-methods-separtor">OR</div>
                             <div class="login-oauth-container">
                                 <div id="googleButton" class="google-button oauth-button" tabindex="0"> 
                                     <span id="google-icon" class="icon"></span> 
-                                    <span class="label" data-analytics-button="loginWithGmailButton">Continue with Google</span> 
-                                
+                                    <span class="label" data-analytics-button="loginWithGmailButton">Continue with Google</span>                                 
                                 </div>
                             </div>
                             <ul class="bottom-form-link">

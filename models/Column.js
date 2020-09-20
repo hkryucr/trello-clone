@@ -13,11 +13,11 @@ const ColumnSchema = new Schema({
   board: {
     type: Schema.Types.ObjectId,
     required: true
-  }
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = Column = mongoose.model("Task", ColumnSchema);
+module.exports = Column = mongoose.model("Column", ColumnSchema);

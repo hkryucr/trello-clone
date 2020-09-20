@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import defaultBoard from './default-board'
+// import { createColumn } from "./socket"
+import socket from './socket'
 import { saveStatePlugin, uuid } from './utils'
 Vue.use(Vuex)
 
@@ -33,6 +35,11 @@ export default new Vuex.Store({
       })
     },
     CREATE_COLUMN (state, { name }) {
+      // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
+      socket.emit('createColumn', {
+        name: 'a column',
+        board: '5f66c2e45e333316b0443e80'
+      })
       state.board.columns.push({
         name,
         tasks: []

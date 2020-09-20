@@ -39,7 +39,7 @@
         border-radius: 3px;
         padding: 25px 40px;
         box-shadow: rgba(0,0,0,0.1) 0 0 10px;
-        width: 585px;
+        width: 385px;
         align-self: center;
     }
     .signup-page{

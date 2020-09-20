@@ -24,16 +24,16 @@ mongoose
 
 
 // Setup the path
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-//   // res.sendFile(__dirname + "/client/src/App.vue")
-// })
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+  // res.sendFile(__dirname + "/client/src/App.vue")
+})
 
-// app.use("/api/users", users);
+app.use("/api/users", users);
 // app.use("/api/boards", boards);
 
 // Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 
 // app.listen(port, () => {
 //   console.log(`Listening on port ${port}`);
@@ -53,7 +53,6 @@ const socket = require("socket.io")(http);
 //   })
 // });
 
-
 socket.on("connection", socket => {
   socket.on("createColumn", function (data) {
     const column = new Column(data);
@@ -68,3 +67,6 @@ socket.on("connection", socket => {
 })
 
 http.listen(port);
+
+// VUE_APP_SERVER_URL=http://localhost:5000
+// VUE_APP_SOCKET_SERVER_URL=http://localhost:5000

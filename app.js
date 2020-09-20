@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const users = require("./routes/api/users");
+const boards = require("./routes/api/boards");
 const http = require('http').createServer(app);
 const socket = require('socket.io')(http);
 
@@ -23,13 +24,15 @@ mongoose
   })
   .catch(err => console.log(err));
 
-app.use("/api/users", users);
 
 // Setup the path
 app.get("/", (req, res) => {
   res.send("Hello World!");
   // res.sendFile(__dirname + "/client/src/App.vue")
 })
+
+app.use("/api/users", users);
+app.use("/api/boards", boards);
 
 // Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
 const port = process.env.PORT || 5000;

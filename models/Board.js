@@ -8,6 +8,11 @@ const BoardSchema = new Schema({
   },
   columns: {
     type: [Schema.Types.ObjectId],
+    default: []
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true
   },
   createdAt: {
     type: Date,
@@ -15,4 +20,4 @@ const BoardSchema = new Schema({
   },
 });
 
-module.exports = Board = mongoose.model("Task", BoardSchema);
+module.exports = Board = mongoose.model("Board", BoardSchema);

@@ -20,4 +20,4 @@ const ColumnSchema = new Schema({
   },
 });
 
-module.exports = Column = mongoose.model("Task", ColumnSchema);
+module.exports = Column = mongoose.model("Column", ColumnSchema);

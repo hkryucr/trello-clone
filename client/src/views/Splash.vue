@@ -13,7 +13,7 @@
         </a>
         <div>
           <a href="/login" class="login btn-sm text-white">Log In</a>
-          <a href="/signin" class="btn-sm text-trello bg-white">Sign Up</a>
+          <a href="/signup" class="btn-sm text-trello bg-white">Sign Up</a>
         </div>
       </nav>
     </header>

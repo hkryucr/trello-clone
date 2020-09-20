@@ -8,8 +8,8 @@ const socket = require('socket.io')(http);
 
 
 
-const mongoose = require("mongoose");
-const db = require("./config/keys").mongoURI;
+const mongoose = require('mongoose');
+const db = require('./config/keys').mongoURI;
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -41,6 +41,7 @@ const port = process.env.PORT || 5000;
 //   console.log(`Listening on port ${port}`);
 // })
 socket.on("connect", socket => {
+
   console.log("connect")
 
   socket.on("disconnect", function() {

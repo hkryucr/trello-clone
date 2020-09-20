@@ -12,16 +12,16 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// mongoose
-//   .connect(db, {
-//     useUnifiedTopology: true
-//   })
-//   .then(() => {
-//     console.log("Connected to mongoDB");
-//   })
-//   .catch(err => console.log(err));
+mongoose
+  .connect(db, {
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Connected to mongoDB");
+  })
+  .catch(err => console.log(err));
 
-// app.use("/api/users", users);
+app.use("/api/users", users);
 
 // Setup the path
 app.get("/", (req, res) => {
@@ -32,9 +32,9 @@ app.get("/", (req, res) => {
 // Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
 const port = process.env.PORT || 5000;
 
-// app.listen(port, () => {
-//   console.log(`Listening on port ${port}`);
-// })
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+})
 io.on("connect", socket => {
   console.log("connect")
 })

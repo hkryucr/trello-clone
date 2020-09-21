@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-// src="./socket.js"
+src="./socket.js"
 // import Socketio from '../src/socket'
 
 </script>

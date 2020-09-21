@@ -28,6 +28,10 @@ export default new Vuex.Store({
   },
   mutations: {
     CREATE_TASK (state, { tasks, name }) {
+      socket.emit('create task', {
+        name,
+        column: '5f67d92d4633980f6f9f6bf3'
+      })
       tasks.push({
         name,
         id: uuid(),
@@ -36,13 +40,12 @@ export default new Vuex.Store({
     },
     CREATE_COLUMN (state, { name }) {
       // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
-      socket.emit('createColumn', {
-        name: 'a column',
+      socket.emit('create column', {
+        name,
         board: '5f66c2e45e333316b0443e80'
       })
-      state.board.columns.push({
-        name,
-        tasks: []
+      socket.on('new column', (column) => {
+        state.board.columns.push(column)
       })
     },
     UPDATE_TASK (state, { task, key, value }) {

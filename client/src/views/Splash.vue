@@ -27,8 +27,8 @@
           <div class="section-container-row-right">
             <img src="../assets/hero-a.svg" alt="">
           </div>
-          <form class="quick-signup"> 
-            <input name="email" class="quick-signup-email" type="email" placeholder="Email"> 
+          <form class="quick-signup">
+            <input name="email" class="quick-signup-email" type="email" placeholder="Email">
             <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-success px-4">Sign Up – It’s Free!</button>
             <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-guest px-4">Log In as a Demo User</button>
           </form>

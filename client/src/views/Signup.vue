@@ -192,3 +192,51 @@
       text-decoration: underline;
     }
   </style>
+    <a href="">Already have an account? Log In</a>
+  </div>
+</template>
+<script>
+// const newUser = new User({
+//   email: req.body.email,
+//   password: req.body.password,
+//   initials: req.body.initials,
+//   fullName: req.body.fullName,
+//   bio: req.body.bio
+// })
+import axios from 'axios'
+import * as io from 'socket.io-client'
+
+export default {
+  components: {
+    // BoardColumn
+  },
+  data () {
+    return {
+      socket: io('http://localhost:5000')
+    }
+  },
+  mounted () {
+    axios.get(`/api/users/`)
+      .then(response => {
+        // this.chats = response.data
+        console.log(response)
+      })
+      .catch(e => {
+        // this.errors.push(e)
+        console.log(e)
+      })
+
+    console.log('this is between axios and socket')
+
+    this.socket.on('connect', function () {
+      console.log('connected')
+    })
+    // this.socket.on('create column', function (data) {
+
+    // }
+  }
+}
+
+</script>
+<style lang="css">
+</style>

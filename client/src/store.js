@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import defaultBoard from './default-board'
 // import { createColumn } from "./socket"
-// import socket from './socket'
 import { saveStatePlugin, uuid } from './utils'
 Vue.use(Vuex)
 
@@ -28,10 +27,10 @@ export default new Vuex.Store({
   },
   mutations: {
     CREATE_TASK (state, { tasks, name }) {
-      socket.emit('create task', {
-        name,
-        column: '5f67d92d4633980f6f9f6bf3'
-      })
+      // socket.emit('create task', {
+      //   name,
+      //   column: '5f67d92d4633980f6f9f6bf3'
+      // })
       tasks.push({
         name,
         id: uuid(),
@@ -40,13 +39,11 @@ export default new Vuex.Store({
     },
     CREATE_COLUMN (state, { name }) {
       // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
-      socket.emit('create column', {
-        name,
-        board: '5f66c2e45e333316b0443e80'
-      })
-      socket.on('new column', (column) => {
-        state.board.columns.push(column)
-      })
+      // socket.emit('create column', {
+      //   name,
+      //   board: '5f66c2e45e333316b0443e80'
+      // })
+      state.board.columns.push({ name, tasks: [] })
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
@@ -66,33 +63,31 @@ export default new Vuex.Store({
   }
 })
 
-
-
 // fro mern / full
 
-// backend -> entitity -> redux store -> display 
+// backend -> entitity -> redux store -> display
 
 // frontend -> change state -> send the information to the backend
 
 // list
 
-// 1) 
+// 1)
 
 // tasks = {
 //   1: [
 //     name:
-//     description: 
+//     description:
 //   ],
 //   2: [
 //     name:
-//     description: 
+//     description:
 //   ]
-// } 
+// }
 // columns = {
 //   name: "col 1",
 //   tasks: [1,2]
 // }
-// "CREATE_TASK" 
+// "CREATE_TASK"
 // -> "add a task into task db", "update column database"
 // e.g)
 
@@ -100,7 +95,7 @@ export default new Vuex.Store({
 // "CREATE_COLUMN" -> ""
 
 // 2) backend/frontend validation
-// 3) 
+// 3)
 
 // tasks = [1,2,3,4,5,6]
 // tasks = [5,1,2,3,4,6]

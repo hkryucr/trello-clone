@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="board">``
     <div class="board-header">
       {{board.name}}
     </div>
@@ -54,14 +54,30 @@ export default {
     },
     ...mapState(['board'])
   },
+  sockets: {
+    connect () {
+      this.isConnected = true
+      console.log('socket is connected to the board')
+    }
+  },
+  mounted () {
+    this.sockets.subscribe('newColumn', (data) => {
+      console.log('receiving column')
+      const { name } = data
+      this.$store.commit('CREATE_COLUMN', {
+        name
+      })
+    })
+  },
   methods: {
     close () {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      this.$store.commit('CREATE_COLUMN', {
-        name: this.newColumnName
-      })
+      // this.$store.commit('CREATE_COLUMN', {
+      //   name: this.newColumnName
+      // })
+      this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
       this.newColumnName = ''
     }
   }

@@ -192,9 +192,7 @@
       text-decoration: underline;
     }
   </style>
-    <a href="">Already have an account? Log In</a>
-  </div>
-</template>
+
 <script>
 // const newUser = new User({
 //   email: req.body.email,

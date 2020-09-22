@@ -6,6 +6,7 @@ const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
 
 const Column = require("./models/Column");
+const Board = require("./models/Board");
 
 const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
@@ -52,12 +53,26 @@ const io = require("socket.io")(http);
 
 io.on("connection", socket => {
   socket.on("createColumn", (data) => {
-      const column = new Column(data);
-      io.sockets.emit("received")
-      column.save().then((column) => {
-        console.log("column saved")
-        io.sockets.emit("newColumn", column);
-      });
+    const column = new Column(data);
+    io.sockets.emit("received")
+    column.save().then((column) => {
+      console.log("column saved")
+      io.sockets.emit("newColumn", column);
+    });
+  })
+
+  socket.on("editBoard", async (data) => {
+    const { _id, name } = data;
+    const board = await Board.findById(_id);
+    if (board == null) {
+      socket.emit("error", "Board not found!")
+    }
+
+    board.name = name;
+    board.save().then((board) => {
+      console.log("board updated", board)
+      io.sockets.emit("newBoard", board);
+    })
   })
   // EDIT_BOARD
     // edits name in Boards
@@ -75,31 +90,6 @@ io.on("connection", socket => {
   //     user: (not populate)
   //   }
   //   */
-
-  //   const column = new Column(data);
-  //   socket.broadcast.emit("received")
-  //   column.save().then((column) => {
-  //     socket.broadcast.emit("newColumn", column);
-  //   });
-  // });
-
-  // CREATE_COLUMN
-    // add a new column into Columns
-    // edit column attr in Boards - push a new column id
-  // socket.on("createColumn", function (data) {
-  //   /*
-  //   -- receiving
-  //   board: ??
-  //   name: 
-
-  //   -- responding POJO
-  //   {
-  //     _id: 
-  //     name:
-  //     board: (not populated)
-  //   }
-  //   */
-  // });
 
   // // UPDATE_TASK
   //   // edit Tasks
@@ -148,11 +138,7 @@ io.on("connection", socket => {
 
   // });
 
-
   socket.on("disconnect", () => {console.log("disconnected")});
 })
 
 http.listen(port);
-
-// VUE_APP_SERVER_URL=http://localhost:5000
-// VUE_APP_SOCKET_SERVER_URL=http://localhost:5000

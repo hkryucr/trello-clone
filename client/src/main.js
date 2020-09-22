@@ -7,7 +7,7 @@ import AppButton from './components/AppButton'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 
-export const socket = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
+// export const socket = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
 Vue.use(
   new VueSocketIO({
     debug: true,

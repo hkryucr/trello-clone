@@ -5,7 +5,7 @@
     </div>
     <div class="board-main flex flex-col items-start">
       <div class="board-main-header">
-        <input class="text-lg" type="text" v-model="board.name">
+        <input class="text-lg" type="text" v-on:change="updateBoard($event)" v-bind:value="board.name">
       </div>
       <div class="flex flex-row items-start">
         <BoardColumn
@@ -45,7 +45,8 @@ export default {
   },
   data () {
     return {
-      newColumnName: ''
+      newColumnName: '',
+      awaitingNameChange: false
     }
   },
   computed: {
@@ -61,11 +62,17 @@ export default {
     }
   },
   mounted () {
+    console.log('test', this.boardName)
     this.sockets.subscribe('newColumn', (data) => {
       console.log('receiving column')
       const { name } = data
       this.$store.commit('CREATE_COLUMN', {
         name
+      })
+    })
+    this.sockets.subscribe('newBoard', (data) => {
+      this.$store.commit('UPDATE_BOARD', {
+        name: data.name
       })
     })
   },
@@ -74,11 +81,18 @@ export default {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      // this.$store.commit('CREATE_COLUMN', {
-      //   name: this.newColumnName
-      // })
       this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
       this.newColumnName = ''
+    },
+    updateBoard (e) {
+      if (!this.awaitingNameChange) {
+        setTimeout(() => {
+          console.log('firing socket event')
+          this.$socket.emit('editBoard', { _id: '5f66c2e45e333316b0443e80', name: e.target.value })
+          this.awaitingNameChange = false
+        }, 1500) // 1 sec delay
+      }
+      this.awaitingNameChange = true
     }
   }
 }

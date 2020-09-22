@@ -20,19 +20,11 @@ socket.on('connect', () => {
   console.log('connected')
 })
 
-// socket.on('message', data => {
-//   console.log(data)
-// })
-
-// socket.on('greetings', (elem1, elem2, elem3) => {
-//   console.log(elem1, elem2)
-// })
-
 socket.on('received', (data) => {
   console.log('received')
 })
 
-socket.on('newColumn', (data) => {
+socket.on('new column', (data) => {
   console.log('column has been created', data)
 })
 

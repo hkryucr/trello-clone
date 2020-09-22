@@ -10,7 +10,7 @@ export default {
           description: 'This is the first task you have right now',
           name: 'first task',
           id: uuid(),
-          // change the attribute to creator for clarity 
+          // change the attribute to creator for clarity
           userAssigned: null
         },
         {
@@ -52,19 +52,18 @@ export default {
   ]
 }
 
-
 /*
-user: 
+user:
   - has many boards
 
-board: 
-  - has many columns 
-  @ name 
+board:
+  - has many columns
+  @ name
 
 columns:
-  - has many tasks 
+  - has many tasks
 
-task: 
-  @ description, name, id, userAssisgned 
+task:
+  @ description, name, id, userAssisgned
 
  */

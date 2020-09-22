@@ -13,7 +13,7 @@
         </a>
         <div>
           <a href="/login" class="login btn-sm text-white">Log In</a>
-          <a href="/signin" class="btn-sm text-trello bg-white">Sign Up</a>
+          <a href="/signup" class="btn-sm text-trello bg-white">Sign Up</a>
         </div>
       </nav>
     </header>
@@ -27,8 +27,8 @@
           <div class="section-container-row-right">
             <img src="../assets/hero-a.svg" alt="">
           </div>
-          <form class="quick-signup"> 
-            <input name="email" class="quick-signup-email" type="email" placeholder="Email"> 
+          <form class="quick-signup">
+            <input name="email" class="quick-signup-email" type="email" placeholder="Email">
             <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-success px-4">Sign Up – It’s Free!</button>
             <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-guest px-4">Log In as a Demo User</button>
           </form>
@@ -170,8 +170,6 @@ export default {
   -ms-flex: 0 0 50%;
   flex: 0 0 50%;
   max-width: 50%;
-}
-.section-container-row-right > img{
 }
 .quick-signup{
   display: flex;

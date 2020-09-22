@@ -63,33 +63,31 @@ export default new Vuex.Store({
   }
 })
 
-
-
 // fro mern / full
 
-// backend -> entitity -> redux store -> display 
+// backend -> entitity -> redux store -> display
 
 // frontend -> change state -> send the information to the backend
 
 // list
 
-// 1) 
+// 1)
 
 // tasks = {
 //   1: [
 //     name:
-//     description: 
+//     description:
 //   ],
 //   2: [
 //     name:
-//     description: 
+//     description:
 //   ]
-// } 
+// }
 // columns = {
 //   name: "col 1",
 //   tasks: [1,2]
 // }
-// "CREATE_TASK" 
+// "CREATE_TASK"
 // -> "add a task into task db", "update column database"
 // e.g)
 
@@ -97,7 +95,7 @@ export default new Vuex.Store({
 // "CREATE_COLUMN" -> ""
 
 // 2) backend/frontend validation
-// 3) 
+// 3)
 
 // tasks = [1,2,3,4,5,6]
 // tasks = [5,1,2,3,4,6]

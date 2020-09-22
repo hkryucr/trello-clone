@@ -27,22 +27,20 @@
                   <span class="label" data-analytics-button="loginWithGmailButton">Continue with Google</span>
                 </div>
               </div>
-              <ul class="bottom-form-link">
-                <li>
+              <div class="bottom-form-link">
+                <div>
                   <a class="forgot-password-link" href="">Can't log in?</a>
-                </li>
-                <li>
-                  ::before
-                  <a class="register-link" href="/register">Sign up for an account</a>
-                </li>
-              </ul>
+                </div>
+                <div>
+                  <a class="register-link" href="/signup">Sign up for an account</a>
+                </div>
+              </div>
             </div>
             <ul class="smaller-links">
               <li>
                 <a href="">Privacy Policy</a>
               </li>
               <li>
-                ::before
                 <a href="">Terms of Service</a>
               </li>
             </ul>
@@ -51,8 +49,6 @@
       </div>
     </section>
     </div>
-</template>
-<template>
 </template>
 
 <script>

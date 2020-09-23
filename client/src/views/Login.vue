@@ -296,4 +296,13 @@ export default {
         margin: 0 8px 0px 4px;
     }
 
+    #google-icon{
+      background: url('../assets/google.png');
+      display: inline-block;
+      border-radius: 1px;
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+    }
+
 </style>

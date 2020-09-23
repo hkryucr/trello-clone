@@ -37,6 +37,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 
 export default {
@@ -62,7 +63,17 @@ export default {
     }
   },
   mounted () {
-    console.log('test', this.boardName)
+    // Original Fetch from the Backend
+    // boardId should react based on state that is made by a user
+    let boardId = '5f66c2e45e333316b0443e80'
+    fetchBoard(boardId)
+      .then(res => {
+        this.$store.commit('UPDATE_BOARD_STATE', {
+          board: res.data
+        })
+      })
+
+    // SOCKET.IO Subscription
     this.sockets.subscribe('newColumn', (data) => {
       console.log('receiving column')
       const { name } = data

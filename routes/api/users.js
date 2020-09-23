@@ -10,14 +10,11 @@ const validateLoginInput = require("../../validations/login");
 // const fs = require("fs");
 
 router.get("/", async (req, res) => {
-  console.log("the user route is running")
   const users = await User.find({})
   res.json(users)
 });
 
 router.post('/register', (req, res) => {
-  console.log(req)
-  console.log(req.body)
   User.findOne({
     email: req.body.email
   }).then(user => {
@@ -100,26 +97,6 @@ router.post("/login", (req, res) => {
 	});
 });
 
-// router.get("/seed", async (req, res) => {
-//   const arr = JSON.parse(fs.readFileSync("seed/users.json"));
-//   for (let i = 0; i < arr.length; i++) {
-//     arr[i].birthday = new Date(...arr[i].birthday.split("-"));
-//     let user = new User(arr[i]);
-
-//     await bcrypt.genSalt(10, (err, salt) => {
-//       bcrypt.hash(user.password, salt, (err, hash) => {
-//         if (err) throw err;
-//         user.password = hash;
-//         user.save();
-//       });
-//     });
-//   }
-
-//   User.find().then(users => {
-//     res.json(users);
-//   });
-// });
-
 // router.get("/deleteAll", async (req, res) => {
 //   User.deleteMany({}, function (err) {
 //     console.log("User collection removed");
@@ -129,23 +106,16 @@ router.post("/login", (req, res) => {
 //   });
 // });
 
-// router.get("/:id", (req, res) => {
-//   User
-//     .findById(req.params.id)
-//     .populate({
-//       path: "foodRestriction",
-//       select: "restriction"
-//     })
-//     .populate({
-//       path: "groups"
-//     })
-//     .exec(function (err, user) {
-//       if (err) return res.status(404).json({
-//         nouserfound: "No user found with that id"
-//       });
-//       res.json(user);
-//     });
-// });
-
+router.get("/:id", (req, res) => {
+  User
+    .findById(req.params.id)
+    .populate("boards")
+    .exec(function (err, user) {
+      if (err) return res.status(404).json({
+        nouserfound: "No user found with that id"
+      });
+      res.json(user);
+    });
+});
 
 module.exports = router;

@@ -4,63 +4,51 @@ const bodyParser = require('body-parser');
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
+const columns = require("./routes/api/columns")
+const tasks = require("./routes/api/tasks");
 
 const Column = require("./models/Column");
 const Board = require("./models/Board");
+const Task = require("./models/Task");
 
 const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+// Check the environmental variable port. Use 5000 by default
+const port = process.env.PORT || 5000;
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose
-  .connect(db, {
-    useUnifiedTopology: true
-  })
+  .connect(db, { useUnifiedTopology: true })
   .then(() => {
     console.log("Connected to mongoDB");
   })
   .catch(err => console.log(err));
 
-
-// Setup the path
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-  // res.sendFile(__dirname + "/client/src/App.vue")
-})
+// Setup the routers
+if (process.env.NODE_ENV === "production") {
+  // app.use(express.static("frontend/build"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("EXPRESS SERVER IS RUNNING.");
+  })
+}
 
 app.use("/api/users", users);
 app.use("/api/boards", boards);
+app.use("/api/columns", columns);
+app.use("/api/tasks", tasks);
 
-// Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
-const port = process.env.PORT || 5000;
-
-/************************************************************************************
- *                             Socket
- ***********************************************************************************/
+// WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-// socket.on("connect", socket => {
-//   console.log("connect")
-
-//   socket.on("disconnect", function() {
-//     console.log("user disconnected");
-//   })
-// });
-
 io.on("connection", socket => {
-  socket.on("createColumn", (data) => {
-    const column = new Column(data);
-    io.sockets.emit("received")
-    column.save().then((column) => {
-      console.log("column saved")
-      io.sockets.emit("newColumn", column);
-    });
-  })
-
+  // EDIT BOARD
   socket.on("editBoard", async (data) => {
     const { _id, name } = data;
     const board = await Board.findById(_id);
@@ -73,7 +61,19 @@ io.on("connection", socket => {
       console.log("board updated", board)
       io.sockets.emit("newBoard", board);
     })
+      
+  // CREATE COLUMN
+  socket.on("createColumn", (data) => {
+    const column = new Column(data);
+    io.sockets.emit("received")
+    column.save().then((column) => {
+      console.log("column saved")
+      io.sockets.emit("newColumn", column);
+    });
   })
+  
+  })
+
   // EDIT_BOARD
     // edits name in Boards
     // removes name in Boards

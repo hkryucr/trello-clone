@@ -6,10 +6,10 @@ const BoardSchema = new Schema({
     type: String,
     required: true,
   },
-  columns: {
-    type: [Schema.Types.ObjectId],
-    default: []
-  },
+  columns: [{
+    type: Schema.Types.ObjectId,
+    ref: "Column"
+  }],
   user: {
     type: Schema.Types.ObjectId,
     required: true

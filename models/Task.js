@@ -14,10 +14,14 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
   },
-  userAssigned: {
+  column: {
     type: Schema.Types.ObjectId,
-    default: null
+    required: true,
   },
+  // userAssigned: {
+  //   type: Schema.Types.ObjectId,
+  //   default: null
+  // },
   createdAt: {
     type: Date,
     default: Date.now,

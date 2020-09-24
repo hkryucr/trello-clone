@@ -14,14 +14,21 @@ router.get("/", async (req, res) => {
   res.json(users)
 });
 
-router.post('/register', (req, res) => {
+router.post('/signup', (req, res) => {
+  const {
+    errors,
+    isValid
+  } = validateRegisterInput(req.body);
+  
+  if (!isValid) {
+    return res.status(404).json(errors);
+  };
+
   User.findOne({
     email: req.body.email
   }).then(user => {
     if (user) {
-      return res.status(400).json({
-        email: "A user is already registered with that email"
-      })
+      return res.status(400).json({ email: "A user is already registered with that email" })
     } else {
       const newUser = new User({
         email: req.body.email,
@@ -37,11 +44,9 @@ router.post('/register', (req, res) => {
           newUser.password = hash;
           newUser.save()
             .then((user) => res.json(user))
-            .catch(err => console.log(err));
+            .catch(err => res.status(404).json(err));
         })
       })
-
-      newUser.save().then(user => res.send(user)).catch(err => res.send(err));
     }
   });
 })

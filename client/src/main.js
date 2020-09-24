@@ -2,10 +2,11 @@ import Vue from 'vue'
 import './plugins/fontawesome'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import AppButton from './components/AppButton'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
+// import Axios from 'axios'
 
 // export const socket = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
 Vue.use(
@@ -23,6 +24,9 @@ Vue.use(
 Vue.component('AppButton', AppButton)
 
 Vue.config.productionTip = false
+
+// set auth header
+// Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`
 
 new Vue({
   router,

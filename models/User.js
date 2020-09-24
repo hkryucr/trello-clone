@@ -10,14 +10,27 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+<<<<<<< HEAD
   initials: {
     type: String,
     required: false
   },
+=======
+  // initials: {
+  //   type: String,
+  //   required: true
+  // },
+>>>>>>> master
   fullName: {
     type: String,
     required: true
   },
+<<<<<<< HEAD
+  // bio: {
+  //   type: String,
+  //   required: false
+  // },
+=======
   bio: {
     type: String,
     required: false
@@ -26,6 +39,7 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Board",
   }],
+>>>>>>> master
   createdAt: {
     type: Date,
     default: Date.now

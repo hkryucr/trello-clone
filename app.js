@@ -4,147 +4,141 @@ const bodyParser = require('body-parser');
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
+const columns = require("./routes/api/columns")
+const tasks = require("./routes/api/tasks");
 
 const Column = require("./models/Column");
+const Board = require("./models/Board");
+const Task = require("./models/Task");
 
 const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+// Check the environmental variable port. Use 5000 by default
+const port = process.env.PORT || 5000;
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose
-  .connect(db, {
-    useUnifiedTopology: true
-  })
+  .connect(db, { useUnifiedTopology: true })
   .then(() => {
     console.log("Connected to mongoDB");
   })
   .catch(err => console.log(err));
 
-
-// Setup the path
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-  // res.sendFile(__dirname + "/client/src/App.vue")
-})
+// Setup the routers
+if (process.env.NODE_ENV === "production") {
+  // app.use(express.static("frontend/build"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("EXPRESS SERVER IS RUNNING.");
+  })
+}
 
 app.use("/api/users", users);
 app.use("/api/boards", boards);
+app.use("/api/columns", columns);
+app.use("/api/tasks", tasks);
 
-// Check the environmental variable port, if it exist, use it. Otherwise, use 5000 
-const port = process.env.PORT || 5000;
-
-/************************************************************************************
- *                             Socket
- ***********************************************************************************/
+// WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);
-const socket = require("socket.io")(http);
+const io = require("socket.io")(http);
 
-// socket.on("connect", socket => {
-//   console.log("connect")
+io.on("connection", socket => {
+  // EDIT BOARD
+  socket.on("editBoard", async (data) => {
+    const { _id, name } = data;
+    const board = await Board.findById(_id);
+    if (board == null) {
+      socket.emit("error", "Board not found!")
+    }
 
-//   socket.on("disconnect", function() {
-//     console.log("user disconnected");
-//   })
-// });
+    board.name = name;
+    board.save().then((board) => {
+      console.log("board updated", board)
+      io.sockets.emit("newBoard", board);
+    })
+      
+  // CREATE COLUMN
+  socket.on("createColumn", (data) => {
+    const column = new Column(data);
+    io.sockets.emit("received")
+    column.save().then((column) => {
+      console.log("column saved")
+      io.sockets.emit("newColumn", column);
+    });
+  })
+  
+  })
 
-socket.on("connection", socket => {
   // EDIT_BOARD
     // edits name in Boards
     // removes name in Boards
-  socket.on("editBoard", function (data) {
-    /*
-    --receiving
-    _id: 
-    name: 
+  // socket.on("editBoard", function (data) {
+  //   /*
+  //   --receiving
+  //   _id: 
+  //   name: 
 
-    --responding POJO
-    {
-      _id:
-      name: 
-      user: (not populate)
-    }
-    */
+  //   --responding POJO
+  //   {
+  //     _id:
+  //     name: 
+  //     user: (not populate)
+  //   }
+  //   */
 
-    const column = new Column(data);
-    socket.broadcast.emit("received")
-    column.save().then((column) => {
-      socket.broadcast.emit("newColumn", column);
-    });
-  });
+  // // UPDATE_TASK
+  //   // edit Tasks
+  // socket.on("updateTask", function (data) {
+  //   /*
+  //   -- receiving
+  //   {
+  //     _id: 
+  //     name:
+  //     description: 
+  //     ...
+  //   }
 
-  // CREATE_COLUMN
-    // add a new column into Columns
-    // edit column attr in Boards - push a new column id
-  socket.on("createColumn", function (data) {
-    /*
-    -- receiving
-    board: ??
-    name: 
+  //   -- responding POJO
+  //   {
+  //     _id: 
+  //     name:
+  //     description: 
+  //     ...
+  //   }
+  //   */
 
-    -- responding POJO
-    {
-      _id: 
-      name:
-      board: (not populated)
-    }
-    */
-  });
+  // // MOVE_TASK
+  //   // edit Columns - reorder tasks array
+  // socket.on("moveTask", function (data) {
+  //   /*
+  //   -- receiving
+  //   {
+  //     task_id: (task id)
+  //     column_id: 
+  //     fromTasks, 
+  //     toTasks, 
+  //     fromTaskIndex, 
+  //     toTaskIndex,
+  //     ...
+  //   }
 
-  // UPDATE_TASK
-    // edit Tasks
-  socket.on("updateTask", function (data) {
-    /*
-    -- receiving
-    {
-      _id: 
-      name:
-      description: 
-      ...
-    }
+  //   -- responding POJO
+  //   {
+  //     _id: 
+  //     name:
+  //     description: 
+  //     ...
+  //   }
+  //   */
 
-    -- responding POJO
-    {
-      _id: 
-      name:
-      description: 
-      ...
-    }
-    */
-
-  // MOVE_TASK
-    // edit Columns - reorder tasks array
-  socket.on("moveTask", function (data) {
-    /*
-    -- receiving
-    {
-      task_id: (task id)
-      column_id: 
-      fromTasks, 
-      toTasks, 
-      fromTaskIndex, 
-      toTaskIndex,
-      ...
-    }
-
-    -- responding POJO
-    {
-      _id: 
-      name:
-      description: 
-      ...
-    }
-    */
-
-  });
-
+  // });
 
   socket.on("disconnect", () => {console.log("disconnected")});
 })
 
 http.listen(port);
-
-// VUE_APP_SERVER_URL=http://localhost:5000
-// VUE_APP_SOCKET_SERVER_URL=http://localhost:5000

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import defaultBoard from './default-board'
 // import { createColumn } from "./socket"
-// import socket from './socket'
 import { saveStatePlugin, uuid } from './utils'
 Vue.use(Vuex)
 
@@ -27,7 +26,14 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    UPDATE_BOARD_STATE (state, { board }) {
+      this.state.board = board
+    },
     CREATE_TASK (state, { tasks, name }) {
+      // socket.emit('create task', {
+      //   name,
+      //   column: '5f67d92d4633980f6f9f6bf3'
+      // })
       tasks.push({
         name,
         id: uuid(),
@@ -36,14 +42,11 @@ export default new Vuex.Store({
     },
     CREATE_COLUMN (state, { name }) {
       // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
-      // socket.emit('createColumn', {
-      //   name: 'a column',
+      // socket.emit('create column', {
+      //   name,
       //   board: '5f66c2e45e333316b0443e80'
       // })
-      state.board.columns.push({
-        name,
-        tasks: []
-      })
+      state.board.columns.push({ name, tasks: [] })
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
@@ -60,11 +63,17 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
+<<<<<<< HEAD
     SET_TOKEN (state, token) {
       state.token = token
     },
     SET_USER (state, user) {
       state.user = user
+=======
+    UPDATE_BOARD (state, { name }) {
+      console.log('getting new board', name)
+      state.board.name = name
+>>>>>>> master
     }
 
   }

@@ -1,11 +1,11 @@
 <template>
-  <div class="board">
+  <div class="board">``
     <div class="board-header">
       {{board.name}}
     </div>
     <div class="board-main flex flex-col items-start">
       <div class="board-main-header">
-        <input class="text-lg" type="text" v-model="board.name">
+        <input class="text-lg" type="text" v-on:change="updateBoard($event)" v-bind:value="board.name">
       </div>
       <div class="flex flex-row items-start">
         <BoardColumn
@@ -37,6 +37,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 
 export default {
@@ -45,7 +46,8 @@ export default {
   },
   data () {
     return {
-      newColumnName: ''
+      newColumnName: '',
+      awaitingNameChange: false
     }
   },
   computed: {
@@ -54,15 +56,54 @@ export default {
     },
     ...mapState(['board'])
   },
+  sockets: {
+    connect () {
+      this.isConnected = true
+      console.log('socket is connected to the board')
+    }
+  },
+  mounted () {
+    // Original Fetch from the Backend
+    // boardId should react based on state that is made by a user
+    let boardId = '5f66c2e45e333316b0443e80'
+    fetchBoard(boardId)
+      .then(res => {
+        this.$store.commit('UPDATE_BOARD_STATE', {
+          board: res.data
+        })
+      })
+
+    // SOCKET.IO Subscription
+    this.sockets.subscribe('newColumn', (data) => {
+      console.log('receiving column')
+      const { name } = data
+      this.$store.commit('CREATE_COLUMN', {
+        name
+      })
+    })
+    this.sockets.subscribe('newBoard', (data) => {
+      this.$store.commit('UPDATE_BOARD', {
+        name: data.name
+      })
+    })
+  },
   methods: {
     close () {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      this.$store.commit('CREATE_COLUMN', {
-        name: this.newColumnName
-      })
+      this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
       this.newColumnName = ''
+    },
+    updateBoard (e) {
+      if (!this.awaitingNameChange) {
+        setTimeout(() => {
+          console.log('firing socket event')
+          this.$socket.emit('editBoard', { _id: '5f66c2e45e333316b0443e80', name: e.target.value })
+          this.awaitingNameChange = false
+        }, 1500) // 1 sec delay
+      }
+      this.awaitingNameChange = true
     }
   }
 }

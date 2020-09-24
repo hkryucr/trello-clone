@@ -131,7 +131,7 @@
       display: inline-block;
       font-weight: bold;
       margin-bottom: .8em;
-      padding: .6em 1.3em;
+      padding: .6em 1.3em !important;
       position: relative;
       text-decoration: none;
       border: 0px;

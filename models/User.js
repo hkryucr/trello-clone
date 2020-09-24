@@ -18,10 +18,21 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+<<<<<<< HEAD
   // bio: {
   //   type: String,
   //   required: false
   // },
+=======
+  bio: {
+    type: String,
+    required: false
+  },
+  boards: [{
+    type: Schema.Types.ObjectId,
+    ref: "Board",
+  }],
+>>>>>>> master
   createdAt: {
     type: Date,
     default: Date.now

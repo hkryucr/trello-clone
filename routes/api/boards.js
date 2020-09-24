@@ -54,6 +54,11 @@ router.post("/", async (req, res) => {
   console.log(req.body);
 
   const user = await User.findById(req.body.user); 
+
+  if (!user) {
+    return res.status(422).json("User not found!");
+  }
+  
   const board = new Board({name: req.body.name, user: user});
 
   board.save().then((board) => {

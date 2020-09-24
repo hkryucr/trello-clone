@@ -1,20 +1,21 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
-const columns = require("./routes/api/columns")
+const columns = require("./routes/api/columns");
 const tasks = require("./routes/api/tasks");
 
-const Column = require("./models/Column");
-const Board = require("./models/Board");
-const Task = require("./models/Task");
+const BoardController = require("./controllers/BoardController");
+const ColumnController = require("./controllers/ColumnController");
+const TaskController = require("./controllers/TaskController");
 
-const mongoose = require('mongoose');
-const db = require('./config/keys').mongoURI;
+const mongoose = require("mongoose");
+const db = require("./config/keys").mongoURI;
 
-// Check the environmental variable port. Use 5000 by default
+// Check the environmental variable port. Use 5000 by defaul
+
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +25,7 @@ mongoose
   .then(() => {
     console.log("Connected to mongoDB");
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 // Setup the routers
 if (process.env.NODE_ENV === "production") {
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
 } else {
   app.get("/", (req, res) => {
     res.send("EXPRESS SERVER IS RUNNING.");
-  })
+  });
 }
 
 app.use("/api/users", users);
@@ -47,98 +48,18 @@ app.use("/api/tasks", tasks);
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-io.on("connection", socket => {
-  // EDIT BOARD
+io.on("connection", (socket) => {
   socket.on("editBoard", async (data) => {
-    const { _id, name } = data;
-    const board = await Board.findById(_id);
-    if (board == null) {
-      socket.emit("error", "Board not found!")
-    }
+    new BoardController().editBoard(io, socket, data);
+  });
 
-    board.name = name;
-    board.save().then((board) => {
-      console.log("board updated", board)
-      io.sockets.emit("newBoard", board);
-    })
-      
-  // CREATE COLUMN
-  socket.on("createColumn", (data) => {
-    const column = new Column(data);
-    io.sockets.emit("received")
-    column.save().then((column) => {
-      console.log("column saved")
-      io.sockets.emit("newColumn", column);
-    });
-  })
-  
-  })
+  socket.on("createColumn", async (data) => {
+    new ColumnController().createColumn(io, socket, data);
+  });
 
-  // EDIT_BOARD
-    // edits name in Boards
-    // removes name in Boards
-  // socket.on("editBoard", function (data) {
-  //   /*
-  //   --receiving
-  //   _id: 
-  //   name: 
-
-  //   --responding POJO
-  //   {
-  //     _id:
-  //     name: 
-  //     user: (not populate)
-  //   }
-  //   */
-
-  // // UPDATE_TASK
-  //   // edit Tasks
-  // socket.on("updateTask", function (data) {
-  //   /*
-  //   -- receiving
-  //   {
-  //     _id: 
-  //     name:
-  //     description: 
-  //     ...
-  //   }
-
-  //   -- responding POJO
-  //   {
-  //     _id: 
-  //     name:
-  //     description: 
-  //     ...
-  //   }
-  //   */
-
-  // // MOVE_TASK
-  //   // edit Columns - reorder tasks array
-  // socket.on("moveTask", function (data) {
-  //   /*
-  //   -- receiving
-  //   {
-  //     task_id: (task id)
-  //     column_id: 
-  //     fromTasks, 
-  //     toTasks, 
-  //     fromTaskIndex, 
-  //     toTaskIndex,
-  //     ...
-  //   }
-
-  //   -- responding POJO
-  //   {
-  //     _id: 
-  //     name:
-  //     description: 
-  //     ...
-  //   }
-  //   */
-
-  // });
-
-  socket.on("disconnect", () => {console.log("disconnected")});
-})
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+  });
+});
 
 http.listen(port);

@@ -10,10 +10,17 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+<<<<<<< HEAD
+  initials: {
+    type: String,
+    required: false
+  },
+=======
   // initials: {
   //   type: String,
   //   required: true
   // },
+>>>>>>> master
   fullName: {
     type: String,
     required: true

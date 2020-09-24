@@ -1,18 +1,33 @@
+// import { createColumn } from "./socket"
 import Vue from 'vue'
 import Vuex from 'vuex'
-import defaultBoard from './default-board'
-// import { createColumn } from "./socket"
-import { saveStatePlugin, uuid } from './utils'
+import defaultBoard from '../default-board'
+import { saveStatePlugin, uuid } from '../utils'
+import Axios from 'axios'
+import createPersistedState from 'vuex-persistedstate'
+
+// import { signup } from '../utils/SessionApiUtil'
 Vue.use(Vuex)
 
+// should eliminate this lin
 const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
 
 export default new Vuex.Store({
+  strict: true,
+  plugins: [createPersistedState()],
   plugin: [saveStatePlugin],
   state: {
-    board
+    board,
+    token: '',
+    user: {}
   },
   getters: {
+    isLoggedIn: state => {
+      return state.token
+    },
+    getUser: state => {
+      return state.user
+    },
     getTask (state) {
       return (id) => {
         for (const column of state.board.columns) {
@@ -25,7 +40,27 @@ export default new Vuex.Store({
       }
     }
   },
+  actions: {
+    login: ({ commit, dispatch }, { token, user }) => {
+      commit('SET_TOKEN', token)
+      commit('SET_USER', user)
+      // set auth header
+      Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    },
+    logout: ({ commit }) => {
+      commit('RESET', '')
+    }
+  },
   mutations: {
+    SET_TOKEN: (state, token) => {
+      state.token = token
+    },
+    SET_USER: (state, user) => {
+      state.user = user
+    },
+    RESET: state => {
+      Object.assign(state, { token: '', user: {} })
+    },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
     },
@@ -62,10 +97,6 @@ export default new Vuex.Store({
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
-    },
-    UPDATE_BOARD (state, { name }) {
-      console.log('getting new board', name)
-      state.board.name = name
     }
   }
 })

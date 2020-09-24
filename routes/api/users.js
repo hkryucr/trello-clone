@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
   res.json(users)
 });
 
-router.post('/register', (req, res) => {
+router.post('/signup', (req, res) => {
   console.log(req)
   console.log(req.body)
   User.findOne({

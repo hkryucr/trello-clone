@@ -59,7 +59,14 @@ export default new Vuex.Store({
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
+    },
+    SET_TOKEN (state, token) {
+      state.token = token
+    },
+    SET_USER (state, user) {
+      state.user = user
     }
+
   }
 })
 

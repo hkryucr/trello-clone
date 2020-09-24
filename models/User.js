@@ -10,18 +10,18 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  initials: {
-    type: String,
-    required: true
-  },
+  // initials: {
+  //   type: String,
+  //   required: true
+  // },
   fullName: {
     type: String,
     required: true
   },
-  bio: {
-    type: String,
-    required: false
-  },
+  // bio: {
+  //   type: String,
+  //   required: false
+  // },
   createdAt: {
     type: Date,
     default: Date.now

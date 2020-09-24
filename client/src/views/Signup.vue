@@ -2,9 +2,16 @@
   <div class="signup-page">
     <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
     <div class="form-container">
-      <form>
+      <form @submit="checkForm">
         <h1 class="signup-header">Sign up for your account</h1>
-        <input class="signup-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" value="" autocomplete="username" inputmode="email">
+        <p v-if="errors.length">
+          <ul>
+            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+          </ul>
+        </p>
+        <input class="signup-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="text" name="name" id="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="name" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="password" name="password" id="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
         <p class="signup-policy" style="text-align: start">
           By signing up, you confirm that you've read and accepted our
           <a class="policy-link">Terms of Service</a>
@@ -12,9 +19,9 @@
           <a class="policy-link">Privacy Policy</a>
           .
         </p>
-        <input type="submit" class="signup-submit-button" value="Continue" disabled/>
+        <input type="submit" class="signup-submit-button" value="Continue" @click="signUp"/>
       </form>
-      <div class="signup-or">OR</div>
+      <!-- <div class="signup-or">OR</div>
       <div class="signup-link-container">
         <div class="signup-link">
           <span id="google-icon"></span>
@@ -28,7 +35,7 @@
           <span id="apple-icon"></span>
           <span class="signup-link-text">Continue with Apple</span>
         </div>
-      </div>
+      </div> -->
       <a class="login-link" href="/login">Already have an account? Log In</a>
     </div>
   </div>
@@ -67,6 +74,7 @@
       border-radius: 3px;
       height: 44px;
       padding: 7px;
+      margin: 0 0 1.2em;
       -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
       transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
     }
@@ -203,6 +211,7 @@
 // })
 import axios from 'axios'
 import * as io from 'socket.io-client'
+import { signup } from '../utils'
 
 export default {
   components: {
@@ -210,8 +219,43 @@ export default {
   },
   data () {
     return {
+      email: '',
+      name: '',
+      password: '',
+      errors: [],
       socket: io('http://localhost:5000')
     }
+  },
+  methods: {
+    checkForm: function (e) {
+      if (this.email && this.name && this.password) {
+        return true
+      }
+      this.errors = []
+
+      if (!this.email) {
+        this.errors.push('Email field is required')
+      }
+      if (!this.name) {
+        this.errors.push('Name field is required')
+      }
+      if (!this.password) {
+        this.errors.push('Password field is required')
+      }
+      e.preventdefault()
+    },
+    async signUp () {
+      const user = {
+        email: this.email,
+        name: this.name,
+        password: this.password
+      }
+      signup(user).then(res => {
+        this.$router.push('/')
+      })
+    }
+  },
+  actions: {
   },
   mounted () {
     axios.get(`/api/users/`)

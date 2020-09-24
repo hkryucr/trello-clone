@@ -14,7 +14,13 @@ router.get("/", async (req, res) => {
   res.json(users)
 });
 
+<<<<<<< HEAD
+router.post('/signup', (req, res) => {
+  console.log(req)
+  console.log(req.body)
+=======
 router.post('/register', (req, res) => {
+>>>>>>> master
   User.findOne({
     email: req.body.email
   }).then(user => {

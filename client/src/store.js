@@ -63,10 +63,19 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
+<<<<<<< HEAD
+    SET_TOKEN (state, token) {
+      state.token = token
+    },
+    SET_USER (state, user) {
+      state.user = user
+=======
     UPDATE_BOARD (state, { name }) {
       console.log('getting new board', name)
       state.board.name = name
+>>>>>>> master
     }
+
   }
 })
 

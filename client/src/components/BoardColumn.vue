@@ -58,12 +58,14 @@ export default {
     createTask (e, tasks) {
       const data = {
         name: this.name,
-        columnId: this.column._id
+        columnId: this.column._id,
+        tasks: this.column.tasks
       }
       // this.$socket.emit('createTask', {
       // })
       this.$store.dispatch('createTask', data)
-      e.target.value = ''
+      // e.target.value = ''
+      this.name = ''
     }
   }
 }

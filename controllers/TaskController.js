@@ -36,28 +36,28 @@ class TaskController {
     /*
     data: {
       name,
-      description
-      user: objectid
       column: objectid,
     },
     update the task array in column
     */
     const { name, columnId } = data;
-    const column = await Column.findById({columnId});
+    const column = await Column.findById(columnId);
+
     const task = new Task({
       name, 
       column: columnId
     })
-
+    // return
     task.save().then( task => {
       column.tasks.push(task._id);
-      column.save().then( column => {
-        io.socket.emit("newTask", task);
-      }).catch( err => {
-        socket.emit("error", err);
-      })
+      column.save()
+        .then( column => {
+          task.columnId = columnId
+          io.sockets.emit("CREATE_TASK", task);
+        }).catch( err => {
+          socket.emit("error", err);
+        })
     })
-    return
   }
 
   async updateTask(io, socket, data) {

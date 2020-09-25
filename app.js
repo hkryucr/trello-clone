@@ -58,8 +58,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("createTask", async (data) => {
-    console.log(data);
-    // new TaskController().createTask(io, socket, data);
+    new TaskController().createTask(io, socket, data);
   });
 
   socket.on("disconnect", () => {

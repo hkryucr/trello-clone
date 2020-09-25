@@ -23,6 +23,7 @@
           type="text"
           class="block p-2 w-full bg-transparent"
           placeholder="+ Enter new task"
+          v-model='name'
           @keyup.enter="createTask($event, column.tasks)"
         >
       </div>
@@ -36,6 +37,17 @@ import movingTasksAndColumns from '@/mixins/movingTasksAndColumns'
 export default {
   components: { ColumnTask },
   mixins: [movingTasksAndColumns],
+  data () {
+    return {
+      name: ''
+    }
+  },
+  mounted () {
+    // this.sockets.subscribe('newTask', (data) => {
+    //   console.log('receiving task')
+    //   // const { description }
+    // })
+  },
   methods: {
     pickupColumn (e, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
@@ -44,10 +56,13 @@ export default {
       e.dataTransfer.setData('type', 'column')
     },
     createTask (e, tasks) {
-      this.$store.commit('CREATE_TASK', {
-        tasks,
-        name: e.target.value
-      })
+      const data = {
+        name: this.name,
+        columnId: this.column._id
+      }
+      // this.$socket.emit('createTask', {
+      // })
+      this.$store.dispatch('createTask', data)
       e.target.value = ''
     }
   }

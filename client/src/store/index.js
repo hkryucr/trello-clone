@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import defaultBoard from '../default-board'
-import { saveStatePlugin, uuid } from '../utils'
+import { saveStatePlugin } from '../utils'
 import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -14,8 +14,7 @@ const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
 
 export default new Vuex.Store({
   strict: true,
-  plugins: [createPersistedState()],
-  plugin: [saveStatePlugin],
+  plugins: [createPersistedState(), saveStatePlugin],
   state: {
     board,
     token: '',
@@ -29,7 +28,7 @@ export default new Vuex.Store({
       return state.user
     },
     getTask (state) {
-      return (id) => {
+      return id => {
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
             if (task.id === id) {
@@ -49,6 +48,9 @@ export default new Vuex.Store({
     },
     logout: ({ commit }) => {
       commit('RESET', '')
+    },
+    createTask: ({ commit, dispatch }, data) => {
+      commit('SOCKET_CREATE_TASK', data)
     }
   },
   mutations: {
@@ -64,16 +66,14 @@ export default new Vuex.Store({
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
     },
-    CREATE_TASK (state, { tasks, name }) {
-      // socket.emit('create task', {
+    SOCKET_CREATETASK (state, data) {
+      console.log(this)
+      // this.$socket.emit('createTask', data)
+      // tasks.push({
       //   name,
-      //   column: '5f67d92d4633980f6f9f6bf3'
+      //   id: uuid(),
+      //   description: ''
       // })
-      tasks.push({
-        name,
-        id: uuid(),
-        description: ''
-      })
     },
     CREATE_COLUMN (state, { name }) {
       // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
@@ -90,10 +90,7 @@ export default new Vuex.Store({
       const taskToMove = fromTasks.splice(fromTaskIndex, 1)[0]
       toTasks.splice(toTaskIndex, 0, taskToMove)
     },
-    MOVE_COLUMN (state, {
-      fromColumnIndex,
-      toColumnIndex
-    }) {
+    MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)

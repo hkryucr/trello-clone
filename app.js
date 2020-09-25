@@ -57,6 +57,11 @@ io.on("connection", (socket) => {
     new ColumnController().createColumn(io, socket, data);
   });
 
+  socket.on("createTask", async (data) => {
+    console.log(data);
+    // new TaskController().createTask(io, socket, data);
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected");
   });

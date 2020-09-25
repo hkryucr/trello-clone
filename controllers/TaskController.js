@@ -42,17 +42,10 @@ class TaskController {
     },
     update the task array in column
     */
-    const { name, description, userId, columnId } = data;
-    const user = await User.findById({userId});
+    const { name, columnId } = data;
     const column = await Column.findById({columnId});
-    if (!user) {
-      socket.emit("error", "user not found!");
-      return 
-    }
     const task = new Task({
       name, 
-      description, 
-      creator: userId,
       column: columnId
     })
 

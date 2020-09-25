@@ -15,7 +15,7 @@ Vue.use(
     connection: socketio(process.env.VUE_APP_SOCKET_SERVER_URL),
     vuex: {
       store,
-      actionPrefix: 'SOCKET_',
+      actionPrefix: 'socket_',
       mutationPrefix: 'SOCKET_'
     }
   })

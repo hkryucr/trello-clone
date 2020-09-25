@@ -5,7 +5,7 @@ import defaultBoard from '../default-board'
 import { saveStatePlugin } from '../utils'
 import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-
+import VueInstance from '../main'
 // import { signup } from '../utils/SessionApiUtil'
 Vue.use(Vuex)
 
@@ -49,8 +49,9 @@ export default new Vuex.Store({
     logout: ({ commit }) => {
       commit('RESET', '')
     },
-    createTask: ({ commit, dispatch }, data) => {
-      commit('SOCKET_CREATE_TASK', data)
+    createTask: ({ state, commit }, { name, columnId, tasks }) => {
+      commit('SAVE_TASKS', tasks)
+      VueInstance.$socket.emit('createTask', { name, columnId })
     }
   },
   mutations: {
@@ -63,17 +64,14 @@ export default new Vuex.Store({
     RESET: state => {
       Object.assign(state, { token: '', user: {} })
     },
+    SAVE_TASKS (state, tasks) {
+      state.tasks = tasks
+    },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
     },
-    SOCKET_CREATETASK (state, data) {
-      console.log(this)
-      // this.$socket.emit('createTask', data)
-      // tasks.push({
-      //   name,
-      //   id: uuid(),
-      //   description: ''
-      // })
+    SOCKET_CREATE_TASK (state, task) {
+      state.tasks.push(task)
     },
     CREATE_COLUMN (state, { name }) {
       // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });

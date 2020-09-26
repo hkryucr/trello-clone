@@ -61,6 +61,10 @@ io.on("connection", (socket) => {
     new TaskController().createTask(io, socket, data);
   });
 
+  socket.on("moveTask", async (data) => {
+    new TaskController().moveTask(io, socket, data);
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected");
   });

@@ -1,7 +1,6 @@
 // import { createColumn } from "./socket"
 import Vue from 'vue'
 import Vuex from 'vuex'
-import defaultBoard from '../default-board'
 import { saveStatePlugin } from '../utils'
 import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
@@ -10,7 +9,7 @@ import VueInstance from '../main'
 Vue.use(Vuex)
 
 // should eliminate this lin
-const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
+const board = JSON.parse(localStorage.getItem('board')) || []
 
 export default new Vuex.Store({
   strict: true,
@@ -31,9 +30,7 @@ export default new Vuex.Store({
       return id => {
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
-            if (task.id === id) {
-              return task
-            }
+            if (task.id === id) return task
           }
         }
       }
@@ -49,9 +46,25 @@ export default new Vuex.Store({
     logout: ({ commit }) => {
       commit('RESET', '')
     },
-    createTask: ({ state, commit }, { name, columnId, tasks }) => {
-      commit('SAVE_TASKS', tasks)
+    createTask: ({ state, commit }, { name, columnId }) => {
       VueInstance.$socket.emit('createTask', { name, columnId })
+    },
+    createColumn: ({ state, commit }, newColumn) => {
+      VueInstance.$socket.emit('createColumn', newColumn)
+    },
+    moveTask: ({ state, commit }, { fromColumn, fromTask, toColumn, toTask }) => {
+      /*
+        from one place(columnidx, taskIdx) to another (columnidx, taskIdx)
+      */
+      // const fromTasks = state.board.columns[fromColumn]
+      VueInstance.$socket.emit('moveTask', {
+        fromColumn,
+        fromTask,
+        toColumn,
+        toTask,
+        fromColumnId: state.board.columns[fromColumn],
+        toColumnId: state.board.columns[toColumn]
+      })
     }
   },
   mutations: {
@@ -64,30 +77,29 @@ export default new Vuex.Store({
     RESET: state => {
       Object.assign(state, { token: '', user: {} })
     },
-    SAVE_TASKS (state, tasks) {
-      state.tasks = tasks
-    },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
     },
-    SOCKET_CREATE_TASK (state, task) {
-      state.tasks.push(task)
+    SOCKET_CREATE_TASK (state, newTask) {
+      const targetColumn = state.board.columns.find(column => column._id === newTask.column)
+      targetColumn.tasks.push(newTask)
     },
-    CREATE_COLUMN (state, { name }) {
-      // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
-      // socket.emit('create column', {
-      //   name,
-      //   board: '5f66c2e45e333316b0443e80'
-      // })
-      state.board.columns.push({ name, tasks: [] })
+    SOCKET_CREATE_COLUMN (state, newColumn) {
+      state.board.columns.push(newColumn)
+    },
+    SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
+      const fromTasks = state.board.columns[fromColumn].tasks
+      const toTasks = state.board.columns[toColumn].tasks
+      const taskToMove = fromTasks.splice(fromTask, 1)[0]
+      toTasks.splice(toTask, 0, taskToMove)
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     },
-    MOVE_TASK (state, { fromTasks, toTasks, fromTaskIndex, toTaskIndex }) {
-      const taskToMove = fromTasks.splice(fromTaskIndex, 1)[0]
-      toTasks.splice(toTaskIndex, 0, taskToMove)
-    },
+    // MOVE_TASK (state, { fromTasks, toTasks, fromTaskIndex, toTaskIndex }) {
+    //   const taskToMove = fromTasks.splice(fromTaskIndex, 1)[0]
+    //   toTasks.splice(toTaskIndex, 0, taskToMove)
+    // },
     MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]

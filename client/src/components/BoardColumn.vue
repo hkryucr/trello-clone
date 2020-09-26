@@ -24,7 +24,7 @@
           class="block p-2 w-full bg-transparent"
           placeholder="+ Enter new task"
           v-model='name'
-          @keyup.enter="createTask($event, column.tasks)"
+          @keyup.enter="createTask($event)"
         >
       </div>
   </div>
@@ -42,12 +42,6 @@ export default {
       name: ''
     }
   },
-  mounted () {
-    // this.sockets.subscribe('newTask', (data) => {
-    //   console.log('receiving task')
-    //   // const { description }
-    // })
-  },
   methods: {
     pickupColumn (e, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
@@ -55,16 +49,13 @@ export default {
       e.dataTransfer.setData('from-column-index', fromColumnIndex)
       e.dataTransfer.setData('type', 'column')
     },
-    createTask (e, tasks) {
+    createTask (e) {
       const data = {
         name: this.name,
-        columnId: this.column._id,
-        tasks: this.column.tasks
+        columnId: this.column._id
       }
-      // this.$socket.emit('createTask', {
-      // })
+
       this.$store.dispatch('createTask', data)
-      // e.target.value = ''
       this.name = ''
     }
   }

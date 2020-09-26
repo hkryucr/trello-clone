@@ -13,10 +13,10 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
   },
-  // userAssigned: {
-  //   type: Schema.Types.ObjectId,
-  //   default: null
-  // },
+  board: {
+    type: Schema.Types.ObjectId,
+    ref: "Board"
+  },
   createdAt: {
     type: Date,
     default: Date.now,

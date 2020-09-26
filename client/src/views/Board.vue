@@ -56,43 +56,31 @@ export default {
     },
     ...mapState(['board'])
   },
-  sockets: {
-    connect () {
-      this.isConnected = true
-      console.log('socket is connected to the board')
-    }
-  },
   mounted () {
     // Original Fetch from the Backend
     // boardId should react based on state that is made by a user
     let boardId = '5f66c2e45e333316b0443e80'
+    if (this.$route.params.id !== '1') {
+      boardId = this.$route.params.id
+    }
+
     fetchBoard(boardId)
       .then(res => {
         this.$store.commit('UPDATE_BOARD_STATE', {
           board: res.data
         })
       })
-
-    // SOCKET.IO Subscription
-    this.sockets.subscribe('newColumn', (data) => {
-      console.log('receiving column')
-      const { name } = data
-      this.$store.commit('CREATE_COLUMN', {
-        name
-      })
-    })
-    this.sockets.subscribe('newBoard', (data) => {
-      this.$store.commit('UPDATE_BOARD', {
-        name: data.name
-      })
-    })
   },
   methods: {
     close () {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
+      const data = {
+        name: this.newColumnName,
+        boardId: this.board._id
+      }
+      this.$store.dispatch('createColumn', data)
       this.newColumnName = ''
     },
     updateBoard (e) {

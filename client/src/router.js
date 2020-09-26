@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Board from './views/Board.vue'
 import Splash from './views/Splash.vue'
-import Task from './views/Task.vue'
+// import Task from './views/Task.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
 
@@ -28,16 +28,16 @@ export default new Router({
       component: Login
     },
     {
-      path: '/board',
+      path: '/board/:id',
       name: 'board',
-      component: Board,
-      children: [
-        {
-          path: 'task/:id',
-          name: 'task',
-          component: Task
-        }
-      ]
+      component: Board
+      // children: [
+      //   {
+      //     path: '/:id',
+      //     name: 'board',
+      //     component: Board
+      //   }
+      // ]
     }
   ]
 })

@@ -4,55 +4,39 @@ const Task = require("../models/Task")
 
 class TaskController {
   async moveTask(io, socket, data) {
-    // // MOVE_TASK
-    //   // edit Columns - reorder tasks array
-    // socket.on("moveTask", function (data) {
-    //   /*
-    //   -- receiving
-    //   {
-    //     task_id: (task id)
-    //     column_id:
-    //     fromTasks,
-    //     toTasks,
-    //     fromTaskIndex,
-    //     toTaskIndex,
-    //     ...
-    //   }
+    const { fromColumn, fromTask, toColumn, toTask, fromColumnId, toColumnId } = data;
+    const fromColumnObj = await Column.findById(fromColumnId);
+    const toColumnObj = await Column.findById(toColumnId);
 
-    //   -- responding POJO
-    //   {
-    //     _id:
-    //     name:
-    //     description:
-    //     ...
-    //   }
-    //   */
+    console.log(fromColumnObj, toColumnObj, "fromColumnObj, toColumnObj")
 
-    // });
-    return;
+    const taskToMove = fromColumnObj.tasks.splice(fromTask, 1)[0]
+    toColumnObj.tasks.splice(toTask, 0, taskToMove)
+
+    fromColumnObj.save().then(col1 => {
+      toColumnObj.save().then(col2 => {
+        console.log(col1, col2, "col1, col2")
+        io.sockets.emit("MOVE_TASK", { fromColumn, fromTask, toColumn, toTask });
+      }).catch(err => {
+          socket.emit("error", err);
+      })
+    })
   }
 
   async createTask(io, socket, data) {
-    /*
-    data: {
-      name,
-      column: objectid,
-    },
-    update the task array in column
-    */
     const { name, columnId } = data;
     const column = await Column.findById(columnId);
 
     const task = new Task({
       name, 
-      column: columnId
+      column: columnId,
+      board: column.board
     })
     // return
     task.save().then( task => {
       column.tasks.push(task._id);
       column.save()
         .then( column => {
-          task.columnId = columnId
           io.sockets.emit("CREATE_TASK", task);
         }).catch( err => {
           socket.emit("error", err);

@@ -6,6 +6,8 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
 const Board = require("../../models/Board");
+const Column = require("../../models/Column");
+const Task = require("../../models/Task");
 
 router.get("/", async (req, res) => {
   console.log("the board route is running")

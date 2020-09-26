@@ -12,7 +12,7 @@ const ColumnSchema = new Schema({
   }],
   board: {
     type: Schema.Types.ObjectId,
-    required: true
+    ref: "Board"
   },
   createdAt: {
     type: Date,

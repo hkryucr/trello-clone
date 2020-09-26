@@ -6,8 +6,6 @@ import store from './store/index'
 import AppButton from './components/AppButton'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
-// import Axios from 'axios'
-
 var SocketInstance = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
 
 Vue.use(

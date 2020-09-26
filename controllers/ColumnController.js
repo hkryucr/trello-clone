@@ -14,7 +14,7 @@ class ColumnController {
       board.columns.push(column._id);
       board.save()
         .then(board => {
-          io.sockets.in(column.board).emit("CREATE_COLUMN", column);
+          io.sockets.emit("CREATE_COLUMN", column);
         })
         .catch(err => {
           socket.emit("error", err);

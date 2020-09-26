@@ -24,7 +24,7 @@
           class="block p-2 w-full bg-transparent"
           placeholder="+ Enter new task"
           v-model='name'
-          @keyup.enter="createTask($event, column.tasks)"
+          @keyup.enter="createTask($event)"
         >
       </div>
   </div>
@@ -49,7 +49,7 @@ export default {
       e.dataTransfer.setData('from-column-index', fromColumnIndex)
       e.dataTransfer.setData('type', 'column')
     },
-    createTask (e, tasks) {
+    createTask (e) {
       const data = {
         name: this.name,
         columnId: this.column._id

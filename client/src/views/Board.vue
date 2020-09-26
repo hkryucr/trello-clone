@@ -34,7 +34,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapState } from 'vuex'
 import { fetchBoard } from '../utils/BoardApiUtil'
@@ -66,6 +65,11 @@ export default {
     // Original Fetch from the Backend
     // boardId should react based on state that is made by a user
     let boardId = '5f66c2e45e333316b0443e80'
+    if (this.$route.params.id !== '1') {
+      boardId = this.$route.params.id
+    }
+    // let boardId = !this.$route.params.id ? '5f66c2e45e333316b0443e80' : this.$route.params.id
+    // 5f6ecbe35bcb4eb05c459993
     fetchBoard(boardId)
       .then(res => {
         this.$store.commit('UPDATE_BOARD_STATE', {
@@ -92,7 +96,11 @@ export default {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
+      const data = {
+        name: this.newColumnName,
+        boardId: this.board._id
+      }
+      this.$store.dispatch('createColumn', data)
       this.newColumnName = ''
     },
     updateBoard (e) {

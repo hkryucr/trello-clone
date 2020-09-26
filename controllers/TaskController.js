@@ -33,27 +33,20 @@ class TaskController {
   }
 
   async createTask(io, socket, data) {
-    /*
-    data: {
-      name,
-      column: objectid,
-    },
-    update the task array in column
-    */
     const { name, columnId } = data;
     const column = await Column.findById(columnId);
 
     const task = new Task({
       name, 
-      column: columnId
+      column: columnId,
+      board: column.board
     })
     // return
     task.save().then( task => {
       column.tasks.push(task._id);
       column.save()
         .then( column => {
-          task.columnId = columnId
-          io.sockets.emit("CREATE_TASK", task);
+          io.sockets.in(task.board).emit("CREATE_TASK", task);
         }).catch( err => {
           socket.emit("error", err);
         })

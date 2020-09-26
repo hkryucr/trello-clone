@@ -31,9 +31,7 @@ export default new Vuex.Store({
       return id => {
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
-            if (task.id === id) {
-              return task
-            }
+            if (task.id === id) return task
           }
         }
       }
@@ -49,9 +47,11 @@ export default new Vuex.Store({
     logout: ({ commit }) => {
       commit('RESET', '')
     },
-    createTask: ({ state, commit }, { name, columnId, tasks }) => {
-      commit('SAVE_TASKS', tasks)
+    createTask: ({ state, commit }, { name, columnId }) => {
       VueInstance.$socket.emit('createTask', { name, columnId })
+    },
+    createColumn: ({ state, commit }, newColumn) => {
+      VueInstance.$socket.emit('createColumn', newColumn)
     }
   },
   mutations: {
@@ -64,22 +64,19 @@ export default new Vuex.Store({
     RESET: state => {
       Object.assign(state, { token: '', user: {} })
     },
-    SAVE_TASKS (state, tasks) {
-      state.tasks = tasks
-    },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
     },
-    SOCKET_CREATE_TASK (state, task) {
-      state.tasks.push(task)
+    SOCKET_CREATE_TASK (state, newTask) {
+      // - boardId = newTask
+      if (state.board._id !== newTask.board) {
+        return
+      }
+      const targetColumn = state.board.columns.filter(column => column._id === newTask.column)
+      targetColumn[0].tasks.push(newTask)
     },
-    CREATE_COLUMN (state, { name }) {
-      // createColumn({ name: "a column", board: "5f66c2e45e333316b0443e80" });
-      // socket.emit('create column', {
-      //   name,
-      //   board: '5f66c2e45e333316b0443e80'
-      // })
-      state.board.columns.push({ name, tasks: [] })
+    SOCKET_CREATE_COLUMN (state, newColumn) {
+      state.board.columns.push(newColumn)
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value

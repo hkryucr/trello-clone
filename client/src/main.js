@@ -10,9 +10,6 @@ import VueSocketIO from 'vue-socket.io'
 
 var SocketInstance = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
 
-// Vue.use(VueSocketIO, SocketInstance)
-
-// export const socket = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
 Vue.use(
   new VueSocketIO({
     debug: true,

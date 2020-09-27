@@ -22,7 +22,7 @@ export default {
         this.moveColumn(e, toColumnIndex)
       }
     },
-    moveTask (e, toColumn, toTask) {
+    moveTask (e, toColumn, toTasks, toTask) {
       const fromColumn = e.dataTransfer.getData('from-column-index')
       // const fromTasks = this.board.columns[fromColumnIndex].tasks
       const fromTask = e.dataTransfer.getData('from-task-index')
@@ -35,7 +35,7 @@ export default {
     },
     moveColumn (e, toColumnIndex) {
       const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-      this.$store.commit('MOVE_COLUMN', {
+      this.$store.dispatch('moveColumn', {
         fromColumnIndex,
         toColumnIndex
       })

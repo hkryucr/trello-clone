@@ -49,12 +49,16 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
 io.on("connection", (socket) => {
-  socket.on("editBoard", async (data) => {
-    new BoardController().editBoard(io, socket, data);
+  socket.on("updateBoard", async (data) => {
+    new BoardController().updateBoard(io, socket, data);
   });
 
   socket.on("createColumn", async (data) => {
     new ColumnController().createColumn(io, socket, data);
+  });
+
+  socket.on("moveColumn", async (data) => {
+    new ColumnController().moveColumn(io, socket, data);
   });
 
   socket.on("createTask", async (data) => {

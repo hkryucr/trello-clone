@@ -12,6 +12,7 @@
           type="text"
           @blur="updateBoard($event)"
           @keyup.enter="updateBoard($event)"
+          @keyup.esc="updateBoard($event)"
           v-bind:value="board.name"/>
       </div>
       <div class="flex flex-row items-start">
@@ -51,6 +52,7 @@ export default {
   data () {
     return {
       newColumnName: '',
+      boardName: '',
       nameInputClicked: false
     }
   },
@@ -93,10 +95,13 @@ export default {
       this.newColumnName = ''
     },
     updateBoard (e) {
-      if (!this.nameInputClicked) return
-      this.nameInputClicked = false
-      this.$refs.boardName.classList.remove('board-input-show')
-      this.$store.dispatch('updateBoard', { name: e.target.value })
+      if (!this.nameInputClicked || e.target.value.replace(/ /g, '').length === 0) {
+        this.nameInputClicked = false
+      } else {
+        this.nameInputClicked = false
+        this.$refs.boardName.classList.remove('board-input-show')
+        this.$store.dispatch('updateBoard', { name: e.target.value })
+      }
     }
   }
 }
@@ -117,6 +122,7 @@ export default {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
+  vertical-align: center;
 }
 .board-name:hover {
   background: rgba(255, 255, 255, 0.171);
@@ -139,7 +145,10 @@ export default {
 .board-main-header > input {
   @apply rounded;
   height: 100%;
-  min-width: 50px;
+  /* min-width: 50px; */
+  width: 100%;
+  /* max-width: 100%; */
+  box-sizing:border-box;
   outline: transparent;
   padding: 4px;
   margin: 4px;

@@ -53,21 +53,26 @@ export default new Vuex.Store({
       VueInstance.$socket.emit('createColumn', newColumn)
     },
     moveTask: ({ state, commit }, { fromColumn, fromTask, toColumn, toTask }) => {
-      /*
-        from one place(columnidx, taskIdx) to another (columnidx, taskIdx)
-      */
-      // const fromTasks = state.board.columns[fromColumn]
-      VueInstance.$socket.emit('moveTask', {
-        fromColumn,
-        fromTask,
-        toColumn,
-        toTask,
-        fromColumnId: state.board.columns[fromColumn],
-        toColumnId: state.board.columns[toColumn]
+      const fromColumnId = state.board.columns[fromColumn]._id
+      const toColumnId = state.board.columns[toColumn]._id
+      VueInstance.$socket.emit('moveTask', { fromColumn, fromTask, toColumn, toTask, fromColumnId, toColumnId })
+    },
+    moveColumn: ({ state, commit }, { fromColumnIndex, toColumnIndex }) => {
+      const boardId = state.board._id
+      VueInstance.$socket.emit('moveColumn', { fromColumnIndex, toColumnIndex, boardId })
+    },
+    updateBoard: ({ state, commit }, { name }) => {
+      const boardId = state.board._id
+      commit('UPDATE_BOARD_NAME', name)
+      VueInstance.$socket.emit('updateBoard', {
+        name, boardId
       })
     }
   },
   mutations: {
+    UPDATE_BOARD_NAME: (state, { name }) => {
+      state.board.name = name
+    },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -79,6 +84,9 @@ export default new Vuex.Store({
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
+    },
+    SOCKET_UPDATE_BOARD (state, { name }) {
+      this.state.board.name = name
     },
     SOCKET_CREATE_TASK (state, newTask) {
       const targetColumn = state.board.columns.find(column => column._id === newTask.column)
@@ -93,17 +101,13 @@ export default new Vuex.Store({
       const taskToMove = fromTasks.splice(fromTask, 1)[0]
       toTasks.splice(toTask, 0, taskToMove)
     },
-    UPDATE_TASK (state, { task, key, value }) {
-      task[key] = value
-    },
-    // MOVE_TASK (state, { fromTasks, toTasks, fromTaskIndex, toTaskIndex }) {
-    //   const taskToMove = fromTasks.splice(fromTaskIndex, 1)[0]
-    //   toTasks.splice(toTaskIndex, 0, taskToMove)
-    // },
-    MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
+    SOCKET_MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
+    },
+    UPDATE_TASK (state, { task, key, value }) {
+      task[key] = value
     }
   }
 })

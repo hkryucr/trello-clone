@@ -1,7 +1,7 @@
 const Board = require("../models/Board");
 
 class BoardController {
-  async editBoard(io, socket, data) {
+  async updateBoard(io, socket, data) {
     // EDIT_BOARD
     // edits name in Boards
     // removes name in Boards
@@ -18,16 +18,12 @@ class BoardController {
     //     user: (not populate)
     //   }
     //   */
-    const { _id, name } = data;
-    const board = await Board.findById(_id);
-    if (board == null) {
-      socket.emit("error", "Board not found!");
-    }
-
-    board.name = name;
-    board.save().then((board) => {
+    const { boardId, name } = data;
+    const boardObj = await Board.findById(boardId);
+    boardObj.name = name;
+    boardObj.save().then((board) => {
       console.log("board updated", board);
-      io.sockets.emit("newBoard", board);
+      io.sockets.emit("UPDATE_BOARD", board);
     });
   }
 }

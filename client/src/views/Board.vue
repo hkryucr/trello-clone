@@ -1,11 +1,18 @@
 <template>
-  <div class="board">``
+  <div class="board">
     <div class="board-header">
-      {{board.name}}
     </div>
     <div class="board-main flex flex-col items-start">
       <div class="board-main-header">
-        <input class="text-lg" type="text" v-on:change="updateBoard($event)" v-bind:value="board.name">
+        <h3 class="board-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
+        <input
+          ref="boardName"
+          class="text-lg board-input-hide"
+          v-bind:class="{'board-input-show': nameInputClicked}"
+          type="text"
+          @blur="updateBoard($event)"
+          @keyup.enter="updateBoard($event)"
+          v-bind:value="board.name"/>
       </div>
       <div class="flex flex-row items-start">
         <BoardColumn
@@ -25,10 +32,7 @@
           >
         </div>
       </div>
-      <div class="task-bg"
-        v-if="isTaskOpen"
-        @click.self="close"
-      >
+      <div class="task-bg" v-if="isTaskOpen" @click.self="close">
         <router-view></router-view>
       </div>
     </div>
@@ -47,7 +51,7 @@ export default {
   data () {
     return {
       newColumnName: '',
-      awaitingNameChange: false
+      nameInputClicked: false
     }
   },
   computed: {
@@ -63,7 +67,6 @@ export default {
     if (this.$route.params.id !== '1') {
       boardId = this.$route.params.id
     }
-
     fetchBoard(boardId)
       .then(res => {
         this.$store.commit('UPDATE_BOARD_STATE', {
@@ -72,6 +75,12 @@ export default {
       })
   },
   methods: {
+    clickBoardName () {
+      this.nameInputClicked = true
+      this.$refs.boardName.classList.add('board-input-show')
+      this.$refs.boardName.focus()
+      this.$refs.boardName.select()
+    },
     close () {
       this.$router.push({ name: 'board' })
     },
@@ -84,14 +93,10 @@ export default {
       this.newColumnName = ''
     },
     updateBoard (e) {
-      if (!this.awaitingNameChange) {
-        setTimeout(() => {
-          console.log('firing socket event')
-          this.$socket.emit('editBoard', { _id: '5f66c2e45e333316b0443e80', name: e.target.value })
-          this.awaitingNameChange = false
-        }, 1500) // 1 sec delay
-      }
-      this.awaitingNameChange = true
+      if (!this.nameInputClicked) return
+      this.nameInputClicked = false
+      this.$refs.boardName.classList.remove('board-input-show')
+      this.$store.dispatch('updateBoard', { name: e.target.value })
     }
   }
 }
@@ -107,6 +112,17 @@ export default {
 }
 .board {
   @apply bg-teal-dark h-full overflow-auto;
+}
+.board-name {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 2px;
+}
+.board-name:hover {
+  background: rgba(255, 255, 255, 0.171);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 2px;
 }
 .board-main {
   @apply p-2
@@ -124,18 +140,17 @@ export default {
   @apply rounded;
   height: 100%;
   min-width: 50px;
-  background: transparent;
   outline: transparent;
   padding: 4px;
   margin: 4px;
   font-weight: bolder;
-  color: white;
   white-space:nowrap;
-  display:block;
 }
-.board-main-header > input:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  color: white;
+.board-input-hide {
+  display: none;
+}
+.board-input-show {
+  display: block;
 }
 .task-bg {
   @apply pin absolute;

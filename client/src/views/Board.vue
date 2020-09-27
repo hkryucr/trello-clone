@@ -10,6 +10,7 @@
           class="text-lg board-input-hide"
           v-bind:class="{'board-input-show': nameInputClicked}"
           type="text"
+          v-on:input="updateWidth($event)"
           @blur="updateBoard($event)"
           @keyup.enter="updateBoard($event)"
           @keyup.esc="updateBoard($event)"
@@ -77,8 +78,13 @@ export default {
       })
   },
   methods: {
+    updateWidth () {
+      const inputLength = this.$refs.boardName.value.length * 8 + 30
+      this.$refs.boardName.style.width = inputLength.toString() + 'px'
+    },
     clickBoardName () {
       this.nameInputClicked = true
+      this.updateWidth()
       this.$refs.boardName.classList.add('board-input-show')
       this.$refs.boardName.focus()
       this.$refs.boardName.select()
@@ -137,7 +143,7 @@ export default {
   @apply h-10;
   padding: 4px;
   margin-bottom: 4px;
-  min-width: 50px;
+  /* min-width: 50px; */
   white-space:nowrap;
   display:inline-block;
   float: left;
@@ -146,8 +152,8 @@ export default {
   @apply rounded;
   height: 100%;
   /* min-width: 50px; */
-  width: 100%;
-  /* max-width: 100%; */
+  width: fit-content;
+  max-width: 80vw;
   box-sizing:border-box;
   outline: transparent;
   padding: 4px;

@@ -106,7 +106,7 @@ export default {
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
 }
 
-h1 {
+/* h1 {
     font-size: 1.777em;
     line-height: 1.2em;
     margin-top: 1.6em;
@@ -133,13 +133,13 @@ div {
 form {
     display: block;
     margin-top: 0em;
-}
+} */
 
 .inner-section .account-form input[type="text"] {
     width: 100%;
 }
 
-input[type="text"] {
+.inner-section > input[type="text"] {
     background: #EDEFF0;
     border-radius: 4px;
     border: 1px solid #CDD2D4;
@@ -150,13 +150,13 @@ input[type="text"] {
     width: 100%;
 }
 
-input {
+/* input {
     display: block;
     margin: 0 0 1.2em;
     line-height: normal;
     color: inherit;
     font: inherit;
-}
+} */
 
 .inner-section .form-field {
     font-size: 14px;
@@ -170,13 +170,13 @@ input {
     transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
 }
 
-* {
+/* * {
     border-width: 0;
     border-style: solid;
     border-color: #dae1e7;
-}
+} */
 
-input[type="password"] {
+/* input[type="password"] {
     background: #EDEFF0;
     border-radius: 4px;
     border: 1px solid #CDD2D4;
@@ -185,7 +185,7 @@ input[type="password"] {
     padding: .5em;
     max-width: 400px;
     width: 100%;
-}
+} */
 
 .inner-section .account-form .button-green:not(:disabled) {
     background: #5AAC44;
@@ -203,9 +203,9 @@ input[type="password"] {
     margin-bottom: 0.8em;
 }
 
-input[type="submit"] {
+/* input[type="submit"] {
     cursor: pointer;
-}
+} */
 
 .button-green {
     background: #61BD4F;
@@ -231,7 +231,7 @@ input[type="submit"] {
     border: 0px;
 }
 
-input[type="submit" i] {
+/* input[type="submit" i] {
     appearance: push-button;
     user-select: none;
     white-space: pre;
@@ -245,7 +245,7 @@ input[type="submit" i] {
     border-style: outset;
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
     border-image: initial;
-}
+} */
 
 .inner-section .account-form .login-method-separator {
     text-align: center;
@@ -288,10 +288,10 @@ input[type="submit" i] {
     color: #0052CC;
 }
 
-a {
+/* a {
     background: transparent;
     cursor: pointer;
-}
+} */
 
 .inner-section .bottom-form-link div:not(:first-child)::before {
     content: "\2022";

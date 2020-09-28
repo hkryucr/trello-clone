@@ -12,8 +12,8 @@
           </svg>
         </a>
         <div>
-          <a href="/login" class="login btn-sm text-white">Log In</a>
-          <a href="/signup" class="btn-sm text-trello bg-white">Sign Up</a>
+          <button class="login btn-sm text-white" v-show="!loggedIn">Log In</button>
+          <a href="/signup" class="btn-sm text-trello bg-white" v-show="!loggedIn">Sign Up</a>
         </div>
       </nav>
     </header>
@@ -70,10 +70,22 @@
 
 <script>
 import SplashBottom from '@/views/SplashBottom'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     SplashBottom
+  },
+  data () {
+    return {
+      loggedIn: false
+    }
+  },
+  computed: {
+    ...mapState(['board'])
+  },
+  mounted () {
+    console.log(this)
   }
 }
 </script>

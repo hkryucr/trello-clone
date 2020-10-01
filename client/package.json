@@ -17,7 +17,8 @@
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.10",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persistedstate": "^3.1.0"
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {

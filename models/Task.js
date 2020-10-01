@@ -2,26 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
-  description: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
   },
-  creator: {
-    type: Schema.Types.ObjectId,
-    required: true,
+  description: {
+    type: String
   },
   column: {
     type: Schema.Types.ObjectId,
     required: true,
   },
-  // userAssigned: {
-  //   type: Schema.Types.ObjectId,
-  //   default: null
-  // },
+  board: {
+    type: Schema.Types.ObjectId,
+    ref: "Board"
+  },
   createdAt: {
     type: Date,
     default: Date.now,

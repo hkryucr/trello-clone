@@ -1,11 +1,20 @@
 <template>
-  <div class="board">``
+  <div class="board">
     <div class="board-header">
-      {{board.name}}
     </div>
     <div class="board-main flex flex-col items-start">
       <div class="board-main-header">
-        <input class="text-lg" type="text" v-on:change="updateBoard($event)" v-bind:value="board.name">
+        <h3 class="board-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
+        <input
+          ref="boardName"
+          class="text-lg board-input-hide"
+          v-bind:class="{'board-input-show': nameInputClicked}"
+          type="text"
+          v-on:input="updateWidth($event)"
+          @blur="updateBoard($event)"
+          @keyup.enter="updateBoard($event)"
+          @keyup.esc="updateBoard($event)"
+          v-bind:value="board.name"/>
       </div>
       <div class="flex flex-row items-start">
         <BoardColumn
@@ -25,10 +34,7 @@
           >
         </div>
       </div>
-      <div class="task-bg"
-        v-if="isTaskOpen"
-        @click.self="close"
-      >
+      <div class="task-bg" v-if="isTaskOpen" @click.self="close">
         <router-view></router-view>
       </div>
     </div>
@@ -47,7 +53,8 @@ export default {
   data () {
     return {
       newColumnName: '',
-      awaitingNameChange: false
+      boardName: '',
+      nameInputClicked: false
     }
   },
   computed: {
@@ -56,54 +63,51 @@ export default {
     },
     ...mapState(['board'])
   },
-  sockets: {
-    connect () {
-      this.isConnected = true
-      console.log('socket is connected to the board')
-    }
-  },
   mounted () {
     // Original Fetch from the Backend
     // boardId should react based on state that is made by a user
     let boardId = '5f66c2e45e333316b0443e80'
+    if (this.$route.params.id !== '1') {
+      boardId = this.$route.params.id
+    }
     fetchBoard(boardId)
       .then(res => {
         this.$store.commit('UPDATE_BOARD_STATE', {
           board: res.data
         })
       })
-
-    // SOCKET.IO Subscription
-    this.sockets.subscribe('newColumn', (data) => {
-      console.log('receiving column')
-      const { name } = data
-      this.$store.commit('CREATE_COLUMN', {
-        name
-      })
-    })
-    this.sockets.subscribe('newBoard', (data) => {
-      this.$store.commit('UPDATE_BOARD', {
-        name: data.name
-      })
-    })
   },
   methods: {
+    updateWidth () {
+      const inputLength = this.$refs.boardName.value.length * 8 + 30
+      this.$refs.boardName.style.width = inputLength.toString() + 'px'
+    },
+    clickBoardName () {
+      this.nameInputClicked = true
+      this.updateWidth()
+      this.$refs.boardName.classList.add('board-input-show')
+      this.$refs.boardName.focus()
+      this.$refs.boardName.select()
+    },
     close () {
       this.$router.push({ name: 'board' })
     },
     createColumn () {
-      this.$socket.emit('createColumn', { name: this.newColumnName, board: '5f66c2e45e333316b0443e80' })
+      const data = {
+        name: this.newColumnName,
+        boardId: this.board._id
+      }
+      this.$store.dispatch('createColumn', data)
       this.newColumnName = ''
     },
     updateBoard (e) {
-      if (!this.awaitingNameChange) {
-        setTimeout(() => {
-          console.log('firing socket event')
-          this.$socket.emit('editBoard', { _id: '5f66c2e45e333316b0443e80', name: e.target.value })
-          this.awaitingNameChange = false
-        }, 1500) // 1 sec delay
+      if (!this.nameInputClicked || e.target.value.replace(/ /g, '').length === 0) {
+        this.nameInputClicked = false
+      } else {
+        this.nameInputClicked = false
+        this.$refs.boardName.classList.remove('board-input-show')
+        this.$store.dispatch('updateBoard', { name: e.target.value })
       }
-      this.awaitingNameChange = true
     }
   }
 }
@@ -120,6 +124,18 @@ export default {
 .board {
   @apply bg-teal-dark h-full overflow-auto;
 }
+.board-name {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 2px;
+  vertical-align: center;
+}
+.board-name:hover {
+  background: rgba(255, 255, 255, 0.171);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 2px;
+}
 .board-main {
   @apply p-2
 }
@@ -127,7 +143,7 @@ export default {
   @apply h-10;
   padding: 4px;
   margin-bottom: 4px;
-  min-width: 50px;
+  /* min-width: 50px; */
   white-space:nowrap;
   display:inline-block;
   float: left;
@@ -135,19 +151,21 @@ export default {
 .board-main-header > input {
   @apply rounded;
   height: 100%;
-  min-width: 50px;
-  background: transparent;
+  /* min-width: 50px; */
+  width: fit-content;
+  max-width: 80vw;
+  box-sizing:border-box;
   outline: transparent;
   padding: 4px;
   margin: 4px;
   font-weight: bolder;
-  color: white;
   white-space:nowrap;
-  display:block;
 }
-.board-main-header > input:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  color: white;
+.board-input-hide {
+  display: none;
+}
+.board-input-show {
+  display: block;
 }
 .task-bg {
   @apply pin absolute;

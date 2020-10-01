@@ -1,9 +1,23 @@
+const express = require("express");
+const router = express.Router();
 const Column = require("../../models/Column");
 
-export function createColumn({name, boardId}) {
-  const column = new Column({name, board: boardId});
+router.get("/", async (req, res) => {
+  const columns = await Column.find({})
+  res.json(columns)
+});
 
-  column.save().then( (col) => {
-    
-  })
-}
+router.get("/:id", async (req, res) => {
+  Column.findById(req.params.id)
+    .then(column => {
+      res.json(column);
+    });
+});
+
+// export function createColumn({name, boardId}) {
+//   const column = new Column({name, board: boardId});
+//   column.save().then( (col) => {    
+//   })
+// }
+
+module.exports = router;

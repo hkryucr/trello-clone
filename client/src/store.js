@@ -26,6 +26,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    UPDATE_BOARD_STATE (state, { board }) {
+      this.state.board = board
+    },
     CREATE_TASK (state, { tasks, name }) {
       // socket.emit('create task', {
       //   name,

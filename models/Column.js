@@ -6,10 +6,10 @@ const ColumnSchema = new Schema({
     type: String,
     required: true,
   },
-  tasks: {
-    type: [Schema.Types.ObjectId],
-    default: []
-  },
+  tasks: [{
+    type: Schema.Types.ObjectId,
+    ref: "Task"
+  }],
   board: {
     type: Schema.Types.ObjectId,
     required: true

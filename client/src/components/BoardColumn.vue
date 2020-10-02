@@ -7,7 +7,20 @@
     draggable
   >
       <div class="flex items-center mb-2 font-bold">
-          {{column.name}}
+        <div class="input-main-header">
+          <h3 class="input-name  column-name" @click.prevent="clickColumnName($event)" v-show="!nameInputClicked">{{column.name}}</h3>
+          <textarea
+            ref="columnName"
+            class="text-lg input-hide"
+            v-bind:class="{'input-show': nameInputClicked}"
+            type="text"
+            @blur="updateColumn($event)"
+            @keyup.enter="updateColumn($event)"
+            @keyup.esc="updateColumn($event)"
+            v-bind:value="column.name"
+          />
+        </div>
+
       </div>
       <div class="list-reset">
         <ColumnTask
@@ -39,10 +52,22 @@ export default {
   mixins: [movingTasksAndColumns],
   data () {
     return {
-      name: ''
+      name: '',
+      nameInputClicked: false
     }
   },
   methods: {
+    // updateWidth () {
+    //   const inputLength = this.$refs.columnName.value.length * 8 + 30
+    //   this.$refs.columnName.style.width = inputLength.toString() + 'px'
+    // },
+    clickColumnName () {
+      this.nameInputClicked = true
+      // this.updateWidth()
+      this.$refs.columnName.classList.add('input-show')
+      this.$refs.columnName.focus()
+      this.$refs.columnName.select()
+    },
     pickupColumn (e, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
@@ -54,9 +79,17 @@ export default {
         name: this.name,
         columnId: this.column._id
       }
-
       this.$store.dispatch('createTask', data)
       this.name = ''
+    },
+    updateColumn (e) {
+      if (!this.nameInputClicked || e.target.value.replace(/ /g, '').length === 0) {
+        this.nameInputClicked = false
+      } else {
+        this.nameInputClicked = false
+        this.$refs.columnName.classList.remove('input-show')
+        this.$store.dispatch('updateColumn', { name: e.target.value, columnId: this.column._id })
+      }
     }
   }
 }
@@ -66,5 +99,21 @@ export default {
 .column {
   @apply bg-grey-light p-2 mr-4 text-left shadow rounded;
   min-width: 350px;
+}
+.column-name {
+  width: 100%;
+}
+
+.input-main-header > textarea {
+  @apply rounded;
+  height: 100%;
+  width: 100%;
+  box-sizing:border-box;
+  outline: transparent;
+  padding: 4px;
+  padding-left: 4px;
+  font-weight: bolder;
+  white-space:wrap;
+  resize: none;
 }
 </style>

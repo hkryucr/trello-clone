@@ -1,7 +1,5 @@
 <script>
-import axios from 'axios'
-import * as io from 'socket.io-client'
-import AuthService from '../utils/AuthUtil'
+import { fetchUser } from '../utils/UserApiUtil'
 
 export default {
   components: {
@@ -12,21 +10,11 @@ export default {
       fullName: '',
       password: '',
       password2: '',
-      errors: [],
-      socket: io('http://localhost:5000')
+      errors: []
     }
   },
-  mounted () {
-    axios.get(`/api/users/`)
-      .then(response => console.log(response))
-      .catch(e => console.log(e))
-    // console.log('this is between axios and socket')
-    this.socket.on('connect', function () {
-      console.log('connected')
-    })
-  },
   methods: {
-    async signUp () {
+    async handleSubmit () {
       if (!this.checkForm()) {
         return console.log(this.error)
       }
@@ -41,12 +29,16 @@ export default {
         bio: ''
       }
 
-      AuthService.signUp(credentials)
-        .then(response => {
-          return response
+      await this.$store.dispatch('signup', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          fetchUser(res.data._id)
+            .then((user) => {
+              this.$store.commit('SET_USER', user.data)
+            })
         })
         .catch(err => {
-          console.log(err.data)
+          console.log(err.response, 'login error')
         })
     },
     checkForm: function (e) {
@@ -72,16 +64,16 @@ export default {
   <div class="signup-page">
     <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
     <div class="form-container">
-      <form @submit.prevent="signUp">
+      <form @submit.prevent="handleSubmit">
         <h1 class="signup-header">Sign up for your account</h1>
         <p v-if="errors.length">
           <ul>
             <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
           </ul>
         </p>
-        <input class="signup-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="text" name="name" id="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="password" name="password" id="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="email" name="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="text" name="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="password" name="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
         <p class="signup-policy" style="text-align: start">
           By signing up, you confirm that you've read and accepted our
           <a class="policy-link">Terms of Service</a>
@@ -89,7 +81,7 @@ export default {
           <a class="policy-link">Privacy Policy</a>
           .
         </p>
-        <input type="submit" class="signup-submit-button" value="Continue"/>
+        <input type="submit" class="signup-submit-button" value="Continue">
       </form>
       <!-- <div class="signup-or">OR</div>
       <div class="signup-link-container">

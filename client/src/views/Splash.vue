@@ -83,9 +83,6 @@ export default {
   },
   computed: {
     ...mapState(['board'])
-  },
-  mounted () {
-    console.log(this)
   }
 }
 </script>

@@ -6,24 +6,24 @@
         <div class="account-form">
           <h1>Log in to Trello</h1>
           <div class="login-password-container">
-            <form id="login-form">
+            <form v-on:submit.prevent="handleLogin">
               <div class="login-password-email-container">
                 <div class="email-password">
                   <div class="input-container">
-                    <input type="text" name="user" id="user" class="form-field" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" value="" autocomplete="username" inputmode="email">
-                    <div id="password-entry" class="show-when-password">
-                      <input type="password" name="password" id="password" class="form-field" placeholder="Enter password" autocomplete="current-password">
+                    <input type="text" name="user" class="form-field" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
+                    <div class="show-when-password">
+                      <input type="password" name="password" v-model="password" class="form-field" placeholder="Enter password" autocomplete="current-password">
                     </div>
                   </div>
-                  <input id="login" type="submit" class="button account-button button-green btn btn-success" value="Log in">
+                  <input type="submit" class="button account-button button-green btn btn-success" value="Log in">
                 </div>
               </div>
             </form>
             <div class="login-methods">
               <div class="login-methods-separtor">OR</div>
               <div class="login-oauth-container">
-                <div id="googleButton" class="google-button oauth-button" tabindex="0">
-                  <span id="google-icon" class="icon"></span>
+                <div class="google-button oauth-button" tabindex="0">
+                  <span class="icon"></span>
                   <span class="label" data-analytics-button="loginWithGmailButton">Continue with Google</span>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                 </li>
                 <li>
                   ::before
-                  <a class="register-link" href="/register">Sign up for an account</a>
+                  <a class="register-link" href="/signup">Sign up for an account</a>
                 </li>
               </ul>
             </div>
@@ -54,8 +54,26 @@
 </template>
 
 <script>
+import { fetchUser } from '../utils/UserApiUtil'
 export default {
-
+  data: () => ({
+    email: '',
+    password: ''
+  }),
+  methods: {
+    async handleLogin () {
+      const credentials = { email: this.email, password: this.password }
+      await this.$store.dispatch('login', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          fetchUser(res.data.user.id)
+            .then(user => this.$store.commit('SET_USER', user.data))
+        })
+        .catch(err => {
+          console.log(err.response, 'login error')
+        })
+    }
+  }
 }
 </script>
 
@@ -105,36 +123,6 @@ export default {
     padding: 25px 40px;
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
 }
-
-/* h1 {
-    font-size: 1.777em;
-    line-height: 1.2em;
-    margin-top: 1.6em;
-}
-
-h1 {
-    margin: 0.67em 0;
-}
-
-h1 {
-    display: block;
-    font-size: 2em;
-    margin-block-start: 0.67em;
-    margin-block-end: 0.67em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-}
-
-div {
-    display: block;
-}
-
-form {
-    display: block;
-    margin-top: 0em;
-} */
-
 .inner-section .account-form input[type="text"] {
     width: 100%;
 }
@@ -149,15 +137,6 @@ form {
     max-width: 400px;
     width: 100%;
 }
-
-/* input {
-    display: block;
-    margin: 0 0 1.2em;
-    line-height: normal;
-    color: inherit;
-    font: inherit;
-} */
-
 .inner-section .form-field {
     font-size: 14px;
     background-color: #FAFBFC;
@@ -169,24 +148,6 @@ form {
     -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
     transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
 }
-
-/* * {
-    border-width: 0;
-    border-style: solid;
-    border-color: #dae1e7;
-} */
-
-/* input[type="password"] {
-    background: #EDEFF0;
-    border-radius: 4px;
-    border: 1px solid #CDD2D4;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: .5em;
-    max-width: 400px;
-    width: 100%;
-} */
-
 .inner-section .account-form .button-green:not(:disabled) {
     background: #5AAC44;
 }
@@ -202,11 +163,6 @@ form {
 .inner-section .account-button {
     margin-bottom: 0.8em;
 }
-
-/* input[type="submit"] {
-    cursor: pointer;
-} */
-
 .button-green {
     background: #61BD4F;
     background: -webkit-gradient(linear, left top, left bottom, from(#61BD4F), to(#5AAC44));
@@ -230,23 +186,6 @@ form {
     text-decoration: none;
     border: 0px;
 }
-
-/* input[type="submit" i] {
-    appearance: push-button;
-    user-select: none;
-    white-space: pre;
-    align-items: flex-start;
-    text-align: center;
-    color: -internal-light-dark(buttontext, rgb(170, 170, 170));
-    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(74, 74, 74));
-    box-sizing: border-box;
-    padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
-    border-image: initial;
-} */
-
 .inner-section .account-form .login-method-separator {
     text-align: center;
     font-size: 12px;
@@ -287,12 +226,6 @@ form {
     text-decoration: none;
     color: #0052CC;
 }
-
-/* a {
-    background: transparent;
-    cursor: pointer;
-} */
-
 .inner-section .bottom-form-link div:not(:first-child)::before {
     content: "\2022";
     margin: 0 8px 0px 4px;

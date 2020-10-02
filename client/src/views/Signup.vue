@@ -63,7 +63,7 @@ export default {
 <template>
   <div class="signup-page">
     <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
-    <div class="form-container">
+    <div class="form-container-signup">
       <form @submit.prevent="handleSubmit">
         <h1 class="signup-header">Sign up for your account</h1>
         <p v-if="errors.length">
@@ -112,13 +112,12 @@ export default {
   margin-top: 40px;
   margin-bottom: 40px;
 }
-.form-container {
+.form-container-signup {
   background-color: #FFFFFF;
   border-radius: 3px;
-  padding: 25px 40px;
+  padding: 25px 40px 16px 40px;
   box-shadow: rgba(0,0,0,0.1) 0 0 10px;
   width: 400px;
-  height: 538px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 .signup-page{

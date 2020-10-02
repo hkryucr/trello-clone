@@ -52,20 +52,42 @@ export default new Vuex.Store({
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
     },
-    moveTask: ({ state, commit }, { fromColumn, fromTask, toColumn, toTask }) => {
+    moveTask: (
+      { state, commit },
+      { fromColumn, fromTask, toColumn, toTask }
+    ) => {
       const fromColumnId = state.board.columns[fromColumn]._id
       const toColumnId = state.board.columns[toColumn]._id
-      VueInstance.$socket.emit('moveTask', { fromColumn, fromTask, toColumn, toTask, fromColumnId, toColumnId })
+      VueInstance.$socket.emit('moveTask', {
+        fromColumn,
+        fromTask,
+        toColumn,
+        toTask,
+        fromColumnId,
+        toColumnId
+      })
     },
     moveColumn: ({ state, commit }, { fromColumnIndex, toColumnIndex }) => {
       const boardId = state.board._id
-      VueInstance.$socket.emit('moveColumn', { fromColumnIndex, toColumnIndex, boardId })
+      VueInstance.$socket.emit('moveColumn', {
+        fromColumnIndex,
+        toColumnIndex,
+        boardId
+      })
     },
     updateBoard: ({ state, commit }, { name }) => {
       const boardId = state.board._id
       commit('UPDATE_BOARD_NAME', name)
       VueInstance.$socket.emit('updateBoard', {
-        name, boardId
+        name,
+        boardId
+      })
+    },
+    updateColumn: ({ state, commit }, { name, columnId }) => {
+      // commit("UPDATE_COLUMN_NAME", name);
+      VueInstance.$socket.emit('updateColumn', {
+        name,
+        columnId
       })
     }
   },
@@ -88,8 +110,16 @@ export default new Vuex.Store({
     SOCKET_UPDATE_BOARD (state, { name }) {
       this.state.board.name = name
     },
+    SOCKET_UPDATE_COLUMN (state, newColumn) {
+      const targetColumn = state.board.columns.find(
+        column => column._id === newColumn._id
+      )
+      targetColumn.name = newColumn.name
+    },
     SOCKET_CREATE_TASK (state, newTask) {
-      const targetColumn = state.board.columns.find(column => column._id === newTask.column)
+      const targetColumn = state.board.columns.find(
+        column => column._id === newTask.column
+      )
       targetColumn.tasks.push(newTask)
     },
     SOCKET_CREATE_COLUMN (state, newColumn) {
@@ -106,6 +136,7 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
+
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     }

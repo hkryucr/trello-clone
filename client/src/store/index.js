@@ -2,20 +2,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { saveStatePlugin } from '../utils'
-import Axios from 'axios'
+// import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
-// import { signup } from '../utils/SessionApiUtil'
-Vue.use(Vuex)
+import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import router from '../router'
+const AUTH_TOKEN_KEY = 'authToken'
 
-// should eliminate this lin
-const board = JSON.parse(localStorage.getItem('board')) || []
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState(), saveStatePlugin],
   state: {
-    board,
+    board: {},
     token: '',
     user: {}
   },
@@ -37,11 +37,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login: ({ commit, dispatch }, { token, user }) => {
-      commit('SET_TOKEN', token)
-      commit('SET_USER', user)
-      // set auth header
-      Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    login: ({ commit }, credentials) => AuthUtil.login(credentials),
+    signup: async ({ commit }, credentials) => {
+      return AuthUtil.signup(credentials)
+        .then(res => {
+          commit('SET_TOKEN', res.data.token)
+          commit('SET_USER', res.data.user)
+          return res
+        })
+        .catch(err => err.response)
     },
     logout: ({ commit }) => {
       commit('RESET', '')
@@ -96,13 +100,24 @@ export default new Vuex.Store({
       state.board.name = name
     },
     SET_TOKEN: (state, token) => {
-      state.token = token
+      setAuthToken(token)
     },
     SET_USER: (state, user) => {
       state.user = user
+      router.push({ name: 'boards' }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+          err.name !== 'NavigationDuplicated' &&
+          !err.message.includes('Avoided redundant navigation to current location')
+        ) {
+          // But print any other errors to the console
+          console.log(err)
+        }
+      })
     },
     RESET: state => {
       Object.assign(state, { token: '', user: {} })
+      localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
@@ -142,42 +157,3 @@ export default new Vuex.Store({
     }
   }
 })
-
-// fro mern / full
-
-// backend -> entitity -> redux store -> display
-
-// frontend -> change state -> send the information to the backend
-
-// list
-
-// 1)
-
-// tasks = {
-//   1: [
-//     name:
-//     description:
-//   ],
-//   2: [
-//     name:
-//     description:
-//   ]
-// }
-// columns = {
-//   name: "col 1",
-//   tasks: [1,2]
-// }
-// "CREATE_TASK"
-// -> "add a task into task db", "update column database"
-// e.g)
-
-// -> "should work"
-// "CREATE_COLUMN" -> ""
-
-// 2) backend/frontend validation
-// 3)
-
-// tasks = [1,2,3,4,5,6]
-// tasks = [5,1,2,3,4,6]
-
-// task 1 -> 5

@@ -47,8 +47,26 @@
 </template>
 
 <script>
+import { fetchUser } from '../utils/UserApiUtil'
 export default {
-
+  data: () => ({
+    email: '',
+    password: ''
+  }),
+  methods: {
+    async handleLogin () {
+      const credentials = { email: this.email, password: this.password }
+      await this.$store.dispatch('login', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          fetchUser(res.data.user.id)
+            .then(user => this.$store.commit('SET_USER', user.data))
+        })
+        .catch(err => {
+          console.log(err.response, 'login error')
+        })
+    }
+  }
 }
 </script>
 

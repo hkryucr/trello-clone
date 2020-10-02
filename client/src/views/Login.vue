@@ -1,11 +1,11 @@
 <template>
   <div class="login-page">
-    <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
+    <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
     <div class="form-container">
-      <form>
+      <form @submit.prevent="handleLogin">
         <h1 class="login-header">Log in to Trello</h1>
-        <input class="login-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" value="" autocomplete="username" inputmode="email">
-        <input class="login-input" type="password" name="password" id="password" placeholder="Enter Password" autocomplete="current-password">
+        <input class="login-input" type="email" name="email" v-model="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" value="" autocomplete="username" inputmode="email">
+        <input class="login-input" type="password" name="password" v-model="password" placeholder="Enter Password" autocomplete="current-password">
         <input type="submit" class="login-submit-button" value="Log in">
       </form>
       <div class="login-or">OR</div>
@@ -82,10 +82,9 @@ export default {
   .form-container {
     background-color: #FFFFFF;
     border-radius: 3px;
-    padding: 25px 40px;
+    padding: 25px 40px 32px 40px;
     box-shadow: rgba(0,0,0,0.1) 0 0 10px;
     width: 400px;
-    height: 538px;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
   }
   .login-page {

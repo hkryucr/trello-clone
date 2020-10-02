@@ -145,9 +145,9 @@ export default {
   padding: 4px;
   margin-bottom: 4px;
   /* min-width: 50px; */
+  padding-left: 0;
   white-space:nowrap;
   display:inline-block;
-  float: left;
 }
 .input-main-header > input {
   @apply rounded;
@@ -158,7 +158,7 @@ export default {
   box-sizing:border-box;
   outline: transparent;
   padding: 4px;
-  margin: 4px;
+  padding-left: 4px;
   font-weight: bolder;
   white-space:nowrap;
 }

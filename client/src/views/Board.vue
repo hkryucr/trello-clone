@@ -3,18 +3,19 @@
     <div class="board-header">
     </div>
     <div class="board-main flex flex-col items-start">
-      <div class="board-main-header">
-        <h3 class="board-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
+      <div class="input-main-header">
+        <h3 class="input-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
         <input
           ref="boardName"
-          class="text-lg board-input-hide"
-          v-bind:class="{'board-input-show': nameInputClicked}"
+          class="text-lg input-hide"
+          v-bind:class="{'input-show': nameInputClicked}"
           type="text"
           v-on:input="updateWidth($event)"
           @blur="updateBoard($event)"
           @keyup.enter="updateBoard($event)"
           @keyup.esc="updateBoard($event)"
-          v-bind:value="board.name"/>
+          v-bind:value="board.name"
+          />
       </div>
       <div class="flex flex-row items-start">
         <BoardColumn
@@ -85,7 +86,7 @@ export default {
     clickBoardName () {
       this.nameInputClicked = true
       this.updateWidth()
-      this.$refs.boardName.classList.add('board-input-show')
+      this.$refs.boardName.classList.add('input-show')
       this.$refs.boardName.focus()
       this.$refs.boardName.select()
     },
@@ -105,7 +106,7 @@ export default {
         this.nameInputClicked = false
       } else {
         this.nameInputClicked = false
-        this.$refs.boardName.classList.remove('board-input-show')
+        this.$refs.boardName.classList.remove('input-show')
         this.$store.dispatch('updateBoard', { name: e.target.value })
       }
     }
@@ -124,13 +125,13 @@ export default {
 .board {
   @apply bg-teal-dark h-full overflow-auto;
 }
-.board-name {
+.input-name {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
   vertical-align: center;
 }
-.board-name:hover {
+.input-name:hover {
   background: rgba(255, 255, 255, 0.171);
   cursor: pointer;
   padding: 5px;
@@ -139,16 +140,16 @@ export default {
 .board-main {
   @apply p-2
 }
-.board-main-header {
+.input-main-header {
   @apply h-10;
   padding: 4px;
   margin-bottom: 4px;
   /* min-width: 50px; */
+  padding-left: 0;
   white-space:nowrap;
   display:inline-block;
-  float: left;
 }
-.board-main-header > input {
+.input-main-header > input {
   @apply rounded;
   height: 100%;
   /* min-width: 50px; */
@@ -157,14 +158,14 @@ export default {
   box-sizing:border-box;
   outline: transparent;
   padding: 4px;
-  margin: 4px;
+  padding-left: 4px;
   font-weight: bolder;
   white-space:nowrap;
 }
-.board-input-hide {
+.input-hide {
   display: none;
 }
-.board-input-show {
+.input-show {
   display: block;
 }
 .task-bg {

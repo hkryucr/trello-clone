@@ -12,7 +12,7 @@
           </svg>
         </a>
         <div>
-          <button class="login btn-sm text-white" v-show="!loggedIn">Log In</button>
+          <a href="/login" class="login btn-sm text-white" v-show="!loggedIn">Log In</a>
           <a href="/signup" class="btn-sm text-trello bg-white" v-show="!loggedIn">Sign Up</a>
         </div>
       </nav>
@@ -27,10 +27,10 @@
           <div class="section-container-row-right">
             <img src="../assets/hero-a.svg" alt="">
           </div>
-          <form class="quick-signup">
-            <input name="email" class="quick-signup-email" type="email" placeholder="Email">
-            <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-success px-4">Sign Up – It’s Free!</button>
-            <button type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-guest px-4">Log In as a Demo User</button>
+          <form class="quick-signup" @submit.prevent="handleClick('email-signup')">
+            <input name="email" class="quick-signup-email" type="email" placeholder="Email" v-model="email">
+            <input type="submit" data-analytics-button="greenSignupHeroButton" value="Sign Up – It’s Free!" class="quick-signup-email-btn btn btn-success px-4"/>
+            <button type="click" @click.prevent="handleClick('demo-login')" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-demo-user px-4">Log In as a Demo User</button>
           </form>
         </div>
       </div>
@@ -63,23 +63,54 @@
         </div>
       </div>
     </section>
-
-    <splash-bottom></splash-bottom>
+    <!-- <splash-bottom></splash-bottom> -->
   </div>
 </template>
 
 <script>
-import SplashBottom from '@/views/SplashBottom'
+// import SplashBottom from '@/views/SplashBottom'
 import { mapState } from 'vuex'
+import { fetchUser } from '../utils/UserApiUtil'
 
 export default {
-  components: {
-    SplashBottom
-  },
+  // components: {
+  //   SplashBottom
+  // },
   data () {
     return {
-      loggedIn: false
+      loggedIn: false,
+      email: ''
     }
+  },
+  methods: {
+    handleClick: function (target) {
+      switch (target) {
+        case 'email-signup':
+          this.$router.push({ name: 'signup', params: { 'email': this.email } }).catch(err => {
+            if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
+              console.log(err)
+            }
+          })
+          break
+        case 'demo-login':
+          const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
+          this.$store.dispatch('login', credentials)
+            .then(async (res) => {
+              await this.$store.commit('SET_TOKEN', res.data.token)
+              fetchUser(res.data.user.id)
+                .then(user => this.$store.commit('SET_USER', user.data))
+            })
+            .catch(err => {
+              console.log(err.response, 'login error')
+            })
+          break
+        default:
+          break
+      }
+    }
+  },
+  navigateRoute (targetRoute, params) {
+
   },
   computed: {
     ...mapState(['board'])
@@ -209,10 +240,10 @@ export default {
   background-color: #61BD4F;
   border-color: #61BD4F;
 }
-.btn-guest{
+.btn-demo-user{
   color: #fff;
-  background-color: #0062a0;
-  border-color: #0062a0;
+  background-color: #6dc4fa;
+  border-color: #6dc4fa;
 }
 .px-4 {
   padding-left: 1.5rem !important;
@@ -242,8 +273,8 @@ export default {
   border-color: #32921f;
   background-color: #32921f;
 }
-.btn-guest:hover{
-  border-color: #063858;
-  background-color: #063858;
+.btn-demo-user:hover{
+  border-color: #6c9cb9;
+  background-color: #3c8abb;
 }
 </style>

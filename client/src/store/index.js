@@ -105,12 +105,7 @@ export default new Vuex.Store({
     SET_USER: (state, user) => {
       state.user = user
       router.push({ name: 'boards' }).catch(err => {
-        // Ignore the vuex err regarding  navigating to the page they are already on.
-        if (
-          err.name !== 'NavigationDuplicated' &&
-          !err.message.includes('Avoided redundant navigation to current location')
-        ) {
-          // But print any other errors to the console
+        if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
           console.log(err)
         }
       })

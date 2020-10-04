@@ -1,68 +1,8 @@
-<script>
-import { fetchUser } from '../utils/UserApiUtil'
-
-export default {
-  components: {
-  },
-  data () {
-    return {
-      email: '',
-      fullName: '',
-      password: '',
-      password2: '',
-      errors: []
-    }
-  },
-  methods: {
-    async handleSubmit () {
-      if (!this.checkForm()) {
-        return console.log(this.error)
-      }
-      const credentials = {
-        email: this.email,
-        password: this.password,
-        // need to update this one
-        fullName: this.fullName,
-        password2: this.password,
-        // need to update this one
-        initials: this.fullName,
-        bio: ''
-      }
-
-      await this.$store.dispatch('signup', credentials)
-        .then(async (res) => {
-          await this.$store.commit('SET_TOKEN', res.data.token)
-          fetchUser(res.data._id)
-            .then((user) => {
-              this.$store.commit('SET_USER', user.data)
-            })
-        })
-        .catch(err => {
-          console.log(err.response, 'login error')
-        })
-    },
-    checkForm: function (e) {
-      if (this.email && this.fullName && this.password) {
-        return true
-      }
-      this.errors = []
-      if (!this.email) {
-        this.errors.push('Email field is required')
-      }
-      if (!this.fullName) {
-        this.errors.push('Full name field is required')
-      }
-      if (!this.password) {
-        this.errors.push('Password field is required')
-      }
-    }
-  }
-}
-</script>
-
 <template>
   <div class="signup-page">
-    <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
+    <a href="/">
+      <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    </a>
     <div class="form-container-signup">
       <form @submit.prevent="handleSubmit">
         <h1 class="signup-header">Sign up for your account</h1>
@@ -81,29 +21,101 @@ export default {
           <a class="policy-link">Privacy Policy</a>
           .
         </p>
-        <input type="submit" class="signup-submit-button" value="Continue">
+        <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up">
       </form>
-      <!-- <div class="signup-or">OR</div>
+      <div class="signup-or">OR</div>
       <div class="signup-link-container">
         <div class="signup-link">
           <span id="google-icon"></span>
           <span class="signup-link-text">Continue with Google</span>
         </div>
-        <div class="signup-link">
+        <!-- <div class="signup-link">
           <span id="microsoft-icon"></span>
           <span class="signup-link-text">Continue with Microsoft</span>
         </div>
         <div class="signup-link">
           <span id="apple-icon"></span>
           <span class="signup-link-text">Continue with Apple</span>
-        </div>
-      </div> -->
+        </div> -->
+      </div>
       <a class="login-link" href="/login">Already have an account? Log In</a>
     </div>
+    <splashBottom></splashBottom>
+    <background></background>
   </div>
 </template>
+<script>
+import { fetchUser } from '../utils/UserApiUtil'
+import Background from '../components/Background'
+import SplashBottom from '@/views/SplashBottom'
 
+export default {
+  components: {
+    Background,
+    SplashBottom
+  },
+  data () {
+    return {
+      email: '',
+      fullName: '',
+      password: '',
+      password2: '',
+      errors: []
+    }
+  },
+  mounted () {
+    this.email = this.$router.history.current.params.email
+  },
+  methods: {
+    async handleSubmit () {
+      const credentials = {
+        email: this.email,
+        password: this.password,
+        password2: this.password,
+        fullName: this.fullName,
+        initials: this.getInitials(this.fullName),
+        bio: ''
+      }
+
+      await this.$store.dispatch('signup', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          fetchUser(res.data._id)
+            .then((user) => {
+              this.$store.commit('SET_USER', user.data)
+            })
+        })
+        .catch(err => {
+          console.log(err.response, 'login error')
+        })
+    },
+    getInitials (fullName) {
+      let initials = fullName.match(/\b\w/g) || []
+      initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+      return initials
+    },
+    checkForm: function () {
+      if (this.email && this.fullName && this.password) {
+        return true
+      }
+      this.errors = []
+      if (!this.email) {
+        this.errors.push('Email field is required')
+      }
+      if (!this.fullName) {
+        this.errors.push('Full name field is required')
+      }
+      if (!this.password) {
+        this.errors.push('Password field is required')
+      }
+    }
+  }
+}
+</script>
 <style lang="css">
+.hello{
+  border: 2px solid red;
+}
 .trello-main-logo {
   display: block;
   height: 43px;
@@ -137,6 +149,7 @@ export default {
   padding: 7px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  margin: 0 0 1.2em;
 }
 .signup-link-container{
   display: flex;
@@ -160,8 +173,8 @@ export default {
   margin-bottom: 12px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  cursor: pointer;
 }
-
 .signup-header{
   text-align: center;
   color: #5E6C84;
@@ -172,7 +185,6 @@ export default {
   margin-bottom: 25px;
   font-weight: bold;
 }
-
 .signup-policy{
   text-align: start;
   margin-top: 20px;
@@ -198,6 +210,7 @@ export default {
   width: 100%;
   cursor: default;
   font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
 }
 
 .signup-or{
@@ -248,12 +261,14 @@ export default {
   display: block;
   padding: 20px;
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .policy-link{
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
 }
 
 .login-link:hover, .policy-link:hover{

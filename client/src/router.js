@@ -8,41 +8,37 @@ import Login from './views/Login.vue'
 import Boards from './views/Boards.vue'
 Vue.use(Router)
 
+const routes = [
+  {
+    path: '/',
+    name: 'splash',
+    component: Splash
+  }, {
+    path: '/signup',
+    name: 'signup',
+    component: Signup
+  }, {
+    path: '/login',
+    name: 'login',
+    component: Login
+  }, {
+    path: '/boards',
+    name: 'boards',
+    component: Boards
+  }, {
+    path: '/board/:id',
+    name: 'board',
+    component: Board,
+    children: [{
+      path: '/:id',
+      name: 'task',
+      component: Task
+    }]
+  }
+]
+
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'splash',
-      component: Splash
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: Signup
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/boards',
-      name: 'boards',
-      component: Boards
-    },
-    {
-      path: '/board/:id',
-      name: 'board',
-      component: Board,
-      children: [
-        {
-          path: '/:id',
-          name: 'task',
-          component: Task
-        }
-      ]
-    }
-  ]
+  routes
 })

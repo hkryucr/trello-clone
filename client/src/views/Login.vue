@@ -1,6 +1,8 @@
 <template>
   <div class="login-page">
-    <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    <a href="/">
+      <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    </a>
     <div class="form-container">
       <form @submit.prevent="handleLogin">
         <h1 class="login-header">Log in to Trello</h1>
@@ -14,14 +16,14 @@
           <span id="google-icon"></span>
           <span class="login-method-text">Continue with Google</span>
         </div>
-        <div class="login-method">
+        <!-- <div class="login-method">
           <span id="microsoft-icon"></span>
           <span class="login-method-text">Continue with Microsoft</span>
         </div>
         <div class="login-method">
           <span id="apple-icon"></span>
           <span class="login-method-text">Continue with Apple</span>
-        </div>
+        </div> -->
         <p class="sso-link-container">
           <a class="sso-login">Log in with SSO</a>
         </p>
@@ -35,20 +37,29 @@
         </div>
       </div>
     </div>
-    <div class="bottom-form-smaller-links">
+    <!-- <div class="bottom-form-smaller-links">
       <div>
         <a class="privacy-policy" href="">Privacy Policy</a>
       </div>
       <div>
         <a class="terms-of-service" href="">Terms of Service</a>
       </div>
-    </div>
+    </div> -->
+    <splashBottom></splashBottom>
+    <background></background>
   </div>
 </template>
 
 <script>
 import { fetchUser } from '../utils/UserApiUtil'
+import Background from '../components/Background'
+import SplashBottom from '@/views/SplashBottom'
+
 export default {
+  components: {
+    Background,
+    SplashBottom
+  },
   data: () => ({
     email: '',
     password: ''
@@ -69,7 +80,6 @@ export default {
   }
 }
 </script>
-
 <style lang="css">
   .trello-main-logo {
     display: block;

@@ -5,8 +5,15 @@ import { saveStatePlugin } from '../utils'
 import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import { signup } from '../utils/SessionApiUtil'
 Vue.use(Vuex)
+
+library.add(faUserSecret)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // should eliminate this lin
 const board = JSON.parse(localStorage.getItem('board')) || []

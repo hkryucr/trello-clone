@@ -5,6 +5,7 @@ import Splash from './views/Splash.vue'
 // import Task from './views/Task.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
+import NavBar from './views/NavBar.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       //     component: Board
       //   }
       // ]
+    },
+    {
+      path: '/navbar',
+      name: 'navbar',
+      component: NavBar
     }
   ]
 })

@@ -34,6 +34,15 @@ export default new Vuex.Store({
           }
         }
       }
+    },
+    getColumn (state) {
+      return id => {
+        for (const column of state.board.columns) {
+          for (const task of column.tasks) {
+            if (task._id === id) return column
+          }
+        }
+      }
     }
   },
   actions: {

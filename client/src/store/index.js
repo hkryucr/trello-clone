@@ -2,27 +2,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { saveStatePlugin } from '../utils'
-import Axios from 'axios'
+// import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// import { signup } from '../utils/SessionApiUtil'
+import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import router from '../router'
+const AUTH_TOKEN_KEY = 'authToken'
+
 Vue.use(Vuex)
-
-library.add(faUserSecret)
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-// should eliminate this lin
-const board = JSON.parse(localStorage.getItem('board')) || []
 
 export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState(), saveStatePlugin],
   state: {
-    board,
+    board: {},
     token: '',
     user: {}
   },
@@ -44,11 +37,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login: ({ commit, dispatch }, { token, user }) => {
-      commit('SET_TOKEN', token)
-      commit('SET_USER', user)
-      // set auth header
-      Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    login: ({ commit }, credentials) => AuthUtil.login(credentials),
+    signup: async ({ commit }, credentials) => {
+      return AuthUtil.signup(credentials)
+        .then(res => {
+          commit('SET_TOKEN', res.data.token)
+          commit('SET_USER', res.data.user)
+          return res
+        })
+        .catch(err => err.response)
     },
     logout: ({ commit }) => {
       commit('RESET', '')
@@ -59,20 +56,42 @@ export default new Vuex.Store({
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
     },
-    moveTask: ({ state, commit }, { fromColumn, fromTask, toColumn, toTask }) => {
+    moveTask: (
+      { state, commit },
+      { fromColumn, fromTask, toColumn, toTask }
+    ) => {
       const fromColumnId = state.board.columns[fromColumn]._id
       const toColumnId = state.board.columns[toColumn]._id
-      VueInstance.$socket.emit('moveTask', { fromColumn, fromTask, toColumn, toTask, fromColumnId, toColumnId })
+      VueInstance.$socket.emit('moveTask', {
+        fromColumn,
+        fromTask,
+        toColumn,
+        toTask,
+        fromColumnId,
+        toColumnId
+      })
     },
     moveColumn: ({ state, commit }, { fromColumnIndex, toColumnIndex }) => {
       const boardId = state.board._id
-      VueInstance.$socket.emit('moveColumn', { fromColumnIndex, toColumnIndex, boardId })
+      VueInstance.$socket.emit('moveColumn', {
+        fromColumnIndex,
+        toColumnIndex,
+        boardId
+      })
     },
     updateBoard: ({ state, commit }, { name }) => {
       const boardId = state.board._id
       commit('UPDATE_BOARD_NAME', name)
       VueInstance.$socket.emit('updateBoard', {
-        name, boardId
+        name,
+        boardId
+      })
+    },
+    updateColumn: ({ state, commit }, { name, columnId }) => {
+      // commit("UPDATE_COLUMN_NAME", name);
+      VueInstance.$socket.emit('updateColumn', {
+        name,
+        columnId
       })
     }
   },
@@ -81,13 +100,19 @@ export default new Vuex.Store({
       state.board.name = name
     },
     SET_TOKEN: (state, token) => {
-      state.token = token
+      setAuthToken(token)
     },
     SET_USER: (state, user) => {
       state.user = user
+      router.push({ name: 'boards' }).catch(err => {
+        if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
+          console.log(err)
+        }
+      })
     },
     RESET: state => {
       Object.assign(state, { token: '', user: {} })
+      localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
@@ -95,8 +120,16 @@ export default new Vuex.Store({
     SOCKET_UPDATE_BOARD (state, { name }) {
       this.state.board.name = name
     },
+    SOCKET_UPDATE_COLUMN (state, newColumn) {
+      const targetColumn = state.board.columns.find(
+        column => column._id === newColumn._id
+      )
+      targetColumn.name = newColumn.name
+    },
     SOCKET_CREATE_TASK (state, newTask) {
-      const targetColumn = state.board.columns.find(column => column._id === newTask.column)
+      const targetColumn = state.board.columns.find(
+        column => column._id === newTask.column
+      )
       targetColumn.tasks.push(newTask)
     },
     SOCKET_CREATE_COLUMN (state, newColumn) {
@@ -113,47 +146,9 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
+
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     }
   }
 })
-
-// fro mern / full
-
-// backend -> entitity -> redux store -> display
-
-// frontend -> change state -> send the information to the backend
-
-// list
-
-// 1)
-
-// tasks = {
-//   1: [
-//     name:
-//     description:
-//   ],
-//   2: [
-//     name:
-//     description:
-//   ]
-// }
-// columns = {
-//   name: "col 1",
-//   tasks: [1,2]
-// }
-// "CREATE_TASK"
-// -> "add a task into task db", "update column database"
-// e.g)
-
-// -> "should work"
-// "CREATE_COLUMN" -> ""
-
-// 2) backend/frontend validation
-// 3)
-
-// tasks = [1,2,3,4,5,6]
-// tasks = [5,1,2,3,4,6]
-
-// task 1 -> 5

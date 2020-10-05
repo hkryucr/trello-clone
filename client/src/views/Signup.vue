@@ -1,10 +1,58 @@
+<template>
+  <div class="signup-page">
+    <a href="/">
+      <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    </a>
+    <div class="form-container-signup">
+      <form @submit.prevent="handleSubmit">
+        <h1 class="signup-header">Sign up for your account</h1>
+        <p v-if="errors.length">
+          <ul>
+            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+          </ul>
+        </p>
+        <input class="signup-input" type="email" name="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="text" name="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="password" name="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
+        <p class="signup-policy" style="text-align: start">
+          By signing up, you confirm that you've read and accepted our
+          <a class="policy-link">Terms of Service</a>
+          and
+          <a class="policy-link">Privacy Policy</a>
+          .
+        </p>
+        <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up">
+      </form>
+      <div class="signup-or">OR</div>
+      <div class="signup-link-container">
+        <div class="signup-link">
+          <span id="google-icon"></span>
+          <span class="signup-link-text">Continue with Google</span>
+        </div>
+        <!-- <div class="signup-link">
+          <span id="microsoft-icon"></span>
+          <span class="signup-link-text">Continue with Microsoft</span>
+        </div>
+        <div class="signup-link">
+          <span id="apple-icon"></span>
+          <span class="signup-link-text">Continue with Apple</span>
+        </div> -->
+      </div>
+      <a class="login-link" href="/login">Already have an account? Log In</a>
+    </div>
+    <splashBottom></splashBottom>
+    <background></background>
+  </div>
+</template>
 <script>
-import axios from 'axios'
-import * as io from 'socket.io-client'
-import AuthService from '../utils/AuthUtil'
+import { fetchUser } from '../utils/UserApiUtil'
+import Background from '../components/Background'
+import SplashBottom from '@/views/SplashBottom'
 
 export default {
   components: {
+    Background,
+    SplashBottom
   },
   data () {
     return {
@@ -12,44 +60,41 @@ export default {
       fullName: '',
       password: '',
       password2: '',
-      errors: [],
-      socket: io('http://localhost:5000')
+      errors: []
     }
   },
   mounted () {
-    axios.get(`/api/users/`)
-      .then(response => console.log(response))
-      .catch(e => console.log(e))
-    // console.log('this is between axios and socket')
-    this.socket.on('connect', function () {
-      console.log('connected')
-    })
+    this.email = this.$router.history.current.params.email
   },
   methods: {
-    async signUp () {
-      if (!this.checkForm()) {
-        return console.log(this.error)
-      }
+    async handleSubmit () {
       const credentials = {
         email: this.email,
         password: this.password,
-        // need to update this one
-        fullName: this.fullName,
         password2: this.password,
-        // need to update this one
-        initials: this.fullName,
+        fullName: this.fullName,
+        initials: this.getInitials(this.fullName),
         bio: ''
       }
 
-      AuthService.signUp(credentials)
-        .then(response => {
-          return response
+      await this.$store.dispatch('signup', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          fetchUser(res.data._id)
+            .then((user) => {
+              this.$store.commit('SET_USER', user.data)
+            })
         })
         .catch(err => {
-          console.log(err.data)
+          console.log(err.response, 'login error')
         })
     },
-    checkForm: function (e) {
+    getInitials (fullName) {
+      let initials = fullName.match(/\b\w/g) || []
+      initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+      return initials
+    },
+    checkForm: function () {
       if (this.email && this.fullName && this.password) {
         return true
       }
@@ -67,51 +112,10 @@ export default {
   }
 }
 </script>
-
-<template>
-  <div class="signup-page">
-    <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
-    <div class="form-container">
-      <form @submit.prevent="signUp">
-        <h1 class="signup-header">Sign up for your account</h1>
-        <p v-if="errors.length">
-          <ul>
-            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-          </ul>
-        </p>
-        <input class="signup-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="text" name="name" id="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="password" name="password" id="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
-        <p class="signup-policy" style="text-align: start">
-          By signing up, you confirm that you've read and accepted our
-          <a class="policy-link">Terms of Service</a>
-          and
-          <a class="policy-link">Privacy Policy</a>
-          .
-        </p>
-        <input type="submit" class="signup-submit-button" value="Continue"/>
-      </form>
-      <!-- <div class="signup-or">OR</div>
-      <div class="signup-link-container">
-        <div class="signup-link">
-          <span id="google-icon"></span>
-          <span class="signup-link-text">Continue with Google</span>
-        </div>
-        <div class="signup-link">
-          <span id="microsoft-icon"></span>
-          <span class="signup-link-text">Continue with Microsoft</span>
-        </div>
-        <div class="signup-link">
-          <span id="apple-icon"></span>
-          <span class="signup-link-text">Continue with Apple</span>
-        </div>
-      </div> -->
-      <a class="login-link" href="/login">Already have an account? Log In</a>
-    </div>
-  </div>
-</template>
-
 <style lang="css">
+.hello{
+  border: 2px solid red;
+}
 .trello-main-logo {
   display: block;
   height: 43px;
@@ -120,13 +124,12 @@ export default {
   margin-top: 40px;
   margin-bottom: 40px;
 }
-.form-container {
+.form-container-signup {
   background-color: #FFFFFF;
   border-radius: 3px;
-  padding: 25px 40px;
+  padding: 25px 40px 16px 40px;
   box-shadow: rgba(0,0,0,0.1) 0 0 10px;
   width: 400px;
-  height: 538px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 .signup-page{
@@ -146,6 +149,7 @@ export default {
   padding: 7px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  margin: 0 0 1.2em;
 }
 .signup-link-container{
   display: flex;
@@ -169,8 +173,8 @@ export default {
   margin-bottom: 12px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  cursor: pointer;
 }
-
 .signup-header{
   text-align: center;
   color: #5E6C84;
@@ -181,7 +185,6 @@ export default {
   margin-bottom: 25px;
   font-weight: bold;
 }
-
 .signup-policy{
   text-align: start;
   margin-top: 20px;
@@ -207,6 +210,7 @@ export default {
   width: 100%;
   cursor: default;
   font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
 }
 
 .signup-or{
@@ -257,12 +261,14 @@ export default {
   display: block;
   padding: 20px;
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .policy-link{
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
 }
 
 .login-link:hover, .policy-link:hover{

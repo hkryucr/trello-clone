@@ -5,7 +5,6 @@ export const createUser = (user) => {
 }
 
 export const fetchUser = (userId) => {
-  // fetch user should fetch all populated data
   return axios.get(`/api/users/${userId}`)
 }
 

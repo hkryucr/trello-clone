@@ -33,6 +33,15 @@ class ColumnController {
       socket.emit("error", err);
     })
   }
+
+  async updateColumn (io, socket, data) {
+    const { columnId, name } = data;
+    const columnObj = await Column.findById(columnId);
+    columnObj.name = name; 
+    columnObj.save().then((column) => {
+      io.sockets.emit("UPDATE_COLUMN", columnObj);
+    })
+  }
   // async createTask(io, socket, data) {
   //   const { name, columnId } = data;
   //   const column = await Column.findById(columnId);

@@ -2,10 +2,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { saveStatePlugin } from '../utils'
-// import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
 const AUTH_TOKEN_KEY = 'authToken'
 
@@ -16,15 +16,18 @@ export default new Vuex.Store({
   plugins: [createPersistedState(), saveStatePlugin],
   state: {
     board: {},
-    token: '',
+    session: {
+      isLoggedIn: false,
+      currentUser: {}
+    },
     user: {}
   },
   getters: {
-    isLoggedIn: state => {
-      return state.token
+    isCurrentUser: state => {
+      return state.session.isLoggedIn
     },
     getUser: state => {
-      return state.user
+      return state.session.currentUser
     },
     getTask (state) {
       return id => {
@@ -38,18 +41,11 @@ export default new Vuex.Store({
   },
   actions: {
     login: ({ commit }, credentials) => AuthUtil.login(credentials),
-    signup: async ({ commit }, credentials) => {
-      return AuthUtil.signup(credentials)
-        .then(res => {
-          commit('SET_TOKEN', res.data.token)
-          commit('SET_USER', res.data.user)
-          return res
-        })
-        .catch(err => err.response)
-    },
+    signup: ({ commit }, credentials) => AuthUtil.signup(credentials),
     logout: ({ commit }) => {
       commit('RESET', '')
     },
+    fetchUser: ({ commit }, userId) => fetchUser(userId),
     createTask: ({ state, commit }, { name, columnId }) => {
       VueInstance.$socket.emit('createTask', { name, columnId })
     },
@@ -88,7 +84,6 @@ export default new Vuex.Store({
       })
     },
     updateColumn: ({ state, commit }, { name, columnId }) => {
-      // commit("UPDATE_COLUMN_NAME", name);
       VueInstance.$socket.emit('updateColumn', {
         name,
         columnId
@@ -103,15 +98,27 @@ export default new Vuex.Store({
       setAuthToken(token)
     },
     SET_USER: (state, user) => {
-      state.user = user
+      state.session.currentUser = user
+      state.session.isLoggedIn = true
       router.push({ name: 'boards' }).catch(err => {
         if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
           console.log(err)
         }
       })
     },
+    UPDATE_USER: (state, user) => {
+      // console.log(user, ' in mutations')
+      state.user = user
+      // console.log(user, ' in mutations')
+    },
     RESET: state => {
-      Object.assign(state, { token: '', user: {} })
+      Object.assign(state, {
+        session: {
+          isLoggedIn: false,
+          currentUser: {}
+        },
+        board: {}
+      })
       localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {

@@ -72,8 +72,6 @@
 .modal-menu-header-container {
   margin-bottom: 8px;
   padding: 0 12px;
-  position: relative;
-  text-align: center;
   display: grid;
   grid-template-columns: 12px 1fr 12px;
 }
@@ -83,12 +81,8 @@
   font-weight: 400;
   border-bottom: 1px solid rgba(9,30,66,.13);
   color: #5e6c84;
-  height: 40px;
-  display: block;
   line-height: 40px;
   margin: 0;
-  position: relative;
-  white-space: nowrap;
   grid-column: 1/span 3;
   grid-row: 1
 }
@@ -98,7 +92,7 @@
   line-height: 40px;
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
 }
 .modal-menu-body {
   display: flex;
@@ -147,6 +141,7 @@
 .modal-icon-container:hover, .modal-menu-discover-item-container:hover, .modal-menu-discover-more-container:hover {
   background-color: rgb(224, 226, 229);
   border-radius: 3px;
+  cursor: pointer;
 }
 .modal-menu-switch, .modal-menu-discover {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;

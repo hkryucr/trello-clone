@@ -2,19 +2,18 @@
   <div class="task-view">
     <div class="flex flex-col flex-grow items-start justify-between px-4">
       <input type="text" :value="task.name" class="p-2 w-full mr-2 flex-grow text-xl font-bold" @change="updateTaskProperty($event, 'name')" @keyup.enter="updateTaskProperty($event, 'name')">
-      <!-- {{ task.name }} -->
       <textarea class="relative bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal" :value="task.description" @change="updateTaskProperty($event, 'description')"/>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapGetters(['getTask']),
+    // ...mapGetters(['getTask']),
     task () {
-      return this.getTask(this.$route.params.id)
+      return this.$store.getters.getTask(this.$route.params.taskId)
     }
   },
   methods: {

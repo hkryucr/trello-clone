@@ -35,7 +35,7 @@ export default {
   mixins: [movingTasksAndColumns],
   methods: {
     goToTask (task) {
-      this.$router.push({ name: 'task', params: { id: task.id } })
+      this.$router.push({ name: 'task', params: { taskId: task._id } })
     },
     pickupTask (e, taskIndex, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'

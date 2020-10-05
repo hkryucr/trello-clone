@@ -7,11 +7,24 @@ const User = require("../../models/User");
 const passport = require("passport");
 const validateRegisterInput = require("../../validations/register");
 const validateLoginInput = require("../../validations/login");
+const { use } = require("passport");
 
 router.get("/", async (req, res) => {
   const users = await User.find({})
   res.json(users)
 });
+
+const selectFields = (user) => {
+  return {
+    _id: user._id,
+    email: user.email,
+    fullName: user.fullName,
+    password: user.password,
+    boards: user.boards,
+    bio: user.bi,
+    city: user.city,
+  };
+}
 
 router.post('/signup', (req, res) => {
   const {
@@ -27,7 +40,7 @@ router.post('/signup', (req, res) => {
     email: req.body.email
   }).then(user => {
     if (user) {
-      return res.status(400).json({ email: "A user is already registered with that email" })
+      return res.status(400).json({ email: "There is an account associated with this email" })
     } else {
       const newUser = new User({
         email: req.body.email,
@@ -42,7 +55,22 @@ router.post('/signup', (req, res) => {
           if (err) throw err;
           newUser.password = hash;
           newUser.save()
-            .then((user) => res.json(user))
+            .then((user) => {
+              console.log(user, 'user')
+              const payload = selectFields(user);
+              console.log(payload, 'payload')
+              jwt.sign(payload, keys.secretOrKey, {
+                expiresIn: 3600
+              }, (err, token) => {
+
+                return res.json({
+                  success: true,
+                  token: "Bearer " + token,
+                  user
+                });
+              });
+              // res.json(newUser)
+            })
             .catch(err => res.status(404).json(err));
         })
       })
@@ -65,16 +93,13 @@ router.post("/login", (req, res) => {
 		password
 	} = req.body
 
-  var user = User.findOne({ email });
-  user.exec().then(function (user) {
+  var userWithEmail = User.findOne({ email });
+  userWithEmail.exec().then(function (user) {
     // handle success
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // const payload = selectFields(user);
-        const payload = {
-          id: user.id,
-          email: user.email
-        };
+        const payload = selectFields(user)
 
         jwt.sign(payload, keys.secretOrKey, {
           expiresIn: 3600
@@ -93,7 +118,7 @@ router.post("/login", (req, res) => {
     });
   }).catch(function (err) {
     // handle error
-    errors.email = "This email does not exist";
+    errors.email = "There isn't an account for this username";
     return res.status(404).json(errors);
   });
 });

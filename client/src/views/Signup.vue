@@ -5,15 +5,13 @@
     </a>
     <div class="form-container-signup">
       <form @submit.prevent="handleSubmit">
+        <div :class="[errors.length ? 'quick-switch' : '', 'errors']">
+          <div class="error-message" v-for="(error, $index) in errors.slice(0, 2)" :key="$index">{{error}}</div>
+        </div>
         <h1 class="signup-header">Sign up for your account</h1>
-        <p v-if="errors.length">
-          <ul>
-            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-          </ul>
-        </p>
-        <input class="signup-input" type="email" name="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="text" name="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="password" name="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="email" name="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-on:input="updateInput($event, 'email')" :value="email" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="text" name="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-on:input="updateInput($event, 'fullName')" :value="fullName" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="password" name="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-on:input="updateInput($event, 'password')" :value="password" autocomplete="username" inputmode="email">
         <p class="signup-policy" style="text-align: start">
           By signing up, you confirm that you've read and accepted our
           <a class="policy-link">Terms of Service</a>
@@ -21,7 +19,7 @@
           <a class="policy-link">Privacy Policy</a>
           .
         </p>
-        <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up">
+        <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up"/>
       </form>
       <div class="signup-or">OR</div>
       <div class="signup-link-container">
@@ -60,13 +58,24 @@ export default {
       fullName: '',
       password: '',
       password2: '',
-      errors: []
+      errors: [],
+      validated: false
     }
   },
   mounted () {
     this.email = this.$router.history.current.params.email
   },
   methods: {
+    updateInput (e, target) {
+      this.errors = []
+      if (target === 'email') {
+        this.email = e.target.value
+      } else if (target === 'password') {
+        this.password = e.target.value
+      } else if (target === 'fullName') {
+        this.fullName = e.target.value
+      }
+    },
     async handleSubmit () {
       const credentials = {
         email: this.email,
@@ -80,13 +89,13 @@ export default {
       await this.$store.dispatch('signup', credentials)
         .then(async (res) => {
           await this.$store.commit('SET_TOKEN', res.data.token)
-          fetchUser(res.data._id)
-            .then((user) => {
-              this.$store.commit('SET_USER', user.data)
-            })
+          await this.$store.commit('SET_USER', res.data.user)
         })
         .catch(err => {
-          console.log(err.response, 'login error')
+          this.errors = []
+          for (let key in err.response.data) {
+            this.errors.push(err.response.data[key])
+          }
         })
     },
     getInitials (fullName) {
@@ -113,6 +122,28 @@ export default {
 }
 </script>
 <style lang="css">
+.errors{
+  display: none;
+  margin: 1em 0 1.2em 0;
+  flex-direction: column;
+  /* justify-content: left; */
+  align-items: flex-start;
+}
+.form-container-signup .error-message {
+  background: #eb5a46;
+  color: #fbedeb;
+  font-size: 14px;
+  line-height: 1.333;
+  border-radius: 4px;
+  border: 1px solid #EB5A46;
+  padding: .5em 1em;
+  display: inline-block;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+.quick-switch {
+  display: flex;
+}
 .hello{
   border: 2px solid red;
 }
@@ -138,6 +169,7 @@ export default {
   align-items: center;
 }
 .signup-input{
+  font-weight: 500;
   font-size: 14px;
   width: 100%;
   background-color: #FAFBFC;
@@ -178,7 +210,7 @@ export default {
 .signup-header{
   text-align: center;
   color: #5E6C84;
-  font-size: 16px;
+  font-size: 17px;
   letter-spacing: -0.01em;
   line-height: 28px;
   margin-top: 10px;
@@ -197,9 +229,9 @@ export default {
 }
 
 .signup-submit-button{
-  background: #E2E4E6;
+  background: rgb(0, 82, 204);
   border-radius: .3em;
-  color: hsl(0,0%,55%);
+  color:white;
   display: inline-block;
   font-weight: bold;
   margin-bottom: .8em;
@@ -212,7 +244,9 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
-
+.signup-submit-button:hover{
+  background: rgb(0, 101, 255);
+}
 .signup-or{
   text-align: center;
   font-size: 12px;

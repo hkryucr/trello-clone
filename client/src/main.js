@@ -28,6 +28,8 @@ if (savedAuthToken) {
     store.commit('RESET')
     window.location.href = '/'
   }
+} else {
+  axios.defaults.headers.common['Authorization'] = ''
 }
 
 var SocketInstance = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)

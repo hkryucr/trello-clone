@@ -4,10 +4,9 @@ import Vuex from 'vuex'
 import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
-import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import AuthUtil, { setAuthToken, logoutUser } from '../utils/AuthUtil.js'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
-const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.use(Vuex)
 
@@ -107,9 +106,7 @@ export default new Vuex.Store({
       })
     },
     UPDATE_USER: (state, user) => {
-      // console.log(user, ' in mutations')
       state.user = user
-      // console.log(user, ' in mutations')
     },
     RESET: state => {
       Object.assign(state, {
@@ -119,7 +116,7 @@ export default new Vuex.Store({
         },
         board: {}
       })
-      localStorage.setItem(AUTH_TOKEN_KEY, '')
+      logoutUser()
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board

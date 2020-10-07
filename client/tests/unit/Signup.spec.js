@@ -1,6 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import Signup from '../../src/views/Signup.vue'
+import VueRouter from 'vue-router'
+const router = new VueRouter()
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -21,10 +23,10 @@ describe('Signup', () => {
   it('calls store action "signup" when button is clicked', () => {
     const wrapper = shallowMount(Signup, {
       store,
-      localVue
+      localVue,
+      router
     })
     wrapper.find('form').trigger('submit')
-    // expect(actions.signup.mock.calls).toHaveLength(1)
     expect(actions.signup).toHaveBeenCalled()
   })
 })

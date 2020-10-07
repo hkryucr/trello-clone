@@ -3,6 +3,7 @@
     <div class="flex flex-row flex-grow items-start justify-between px-4">
       <div class="w-4/5">
         <div class="input-main-header">
+          <span class="icon-lg icon-clock"></span>
           <span class="window-header-icon icon-lg js-card-header-icon icon-card"></span>
           <h3 class="input-name  task-name" @click.prevent="clickTaskName($event)" v-show="!nameInputClicked">
             {{task.name}}

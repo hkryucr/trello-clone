@@ -1,10 +1,56 @@
+<template>
+  <div class="signup-page">
+    <a href="/">
+      <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    </a>
+    <div class="form-container-signup">
+      <form @submit.prevent="handleSubmit">
+        <div :class="[errors.length ? 'quick-switch' : '', 'errors']">
+          <div class="error-message" v-for="(error, $index) in errors.slice(0, 2)" :key="$index">{{error}}</div>
+        </div>
+        <h1 class="signup-header">Sign up for your account</h1>
+        <input class="signup-input" type="email" name="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-on:input="updateInput($event, 'email')" :value="email" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="text" name="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-on:input="updateInput($event, 'fullName')" :value="fullName" autocomplete="username" inputmode="email">
+        <input class="signup-input" type="password" name="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-on:input="updateInput($event, 'password')" :value="password" autocomplete="username" inputmode="email">
+        <p class="signup-policy" style="text-align: start">
+          By signing up, you confirm that you've read and accepted our
+          <a class="policy-link">Terms of Service</a>
+          and
+          <a class="policy-link">Privacy Policy</a>
+          .
+        </p>
+        <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up"/>
+      </form>
+      <div class="signup-or">OR</div>
+      <div class="signup-link-container">
+        <div class="signup-link">
+          <span id="google-icon"></span>
+          <span class="signup-link-text">Continue with Google</span>
+        </div>
+        <!-- <div class="signup-link">
+          <span id="microsoft-icon"></span>
+          <span class="signup-link-text">Continue with Microsoft</span>
+        </div>
+        <div class="signup-link">
+          <span id="apple-icon"></span>
+          <span class="signup-link-text">Continue with Apple</span>
+        </div> -->
+      </div>
+      <a class="login-link" href="/login">Already have an account? Log In</a>
+    </div>
+    <splashBottom></splashBottom>
+    <background></background>
+  </div>
+</template>
 <script>
-import axios from 'axios'
-import * as io from 'socket.io-client'
-import AuthService from '../utils/AuthUtil'
+import { fetchUser } from '../utils/UserApiUtil'
+import Background from '../components/Background'
+import SplashBottom from '@/views/SplashBottom'
 
 export default {
   components: {
+    Background,
+    SplashBottom
   },
   data () {
     return {
@@ -13,43 +59,51 @@ export default {
       password: '',
       password2: '',
       errors: [],
-      socket: io('http://localhost:5000')
+      validated: false
     }
   },
   mounted () {
-    axios.get(`/api/users/`)
-      .then(response => console.log(response))
-      .catch(e => console.log(e))
-    // console.log('this is between axios and socket')
-    this.socket.on('connect', function () {
-      console.log('connected')
-    })
+    this.email = this.$router.history.current.params.email
   },
   methods: {
-    async signUp () {
-      if (!this.checkForm()) {
-        return console.log(this.error)
+    updateInput (e, target) {
+      this.errors = []
+      if (target === 'email') {
+        this.email = e.target.value
+      } else if (target === 'password') {
+        this.password = e.target.value
+      } else if (target === 'fullName') {
+        this.fullName = e.target.value
       }
+    },
+    async handleSubmit () {
       const credentials = {
         email: this.email,
         password: this.password,
-        // need to update this one
-        fullName: this.fullName,
         password2: this.password,
-        // need to update this one
-        initials: this.fullName,
+        fullName: this.fullName,
+        initials: this.getInitials(this.fullName),
         bio: ''
       }
 
-      AuthService.signUp(credentials)
-        .then(response => {
-          return response
+      await this.$store.dispatch('signup', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          await this.$store.commit('SET_USER', res.data.user)
         })
         .catch(err => {
-          console.log(err.data)
+          this.errors = []
+          for (let key in err.response.data) {
+            this.errors.push(err.response.data[key])
+          }
         })
     },
-    checkForm: function (e) {
+    getInitials (fullName) {
+      let initials = fullName.match(/\b\w/g) || []
+      initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+      return initials
+    },
+    checkForm: function () {
       if (this.email && this.fullName && this.password) {
         return true
       }
@@ -67,51 +121,32 @@ export default {
   }
 }
 </script>
-
-<template>
-  <div class="signup-page">
-    <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
-    <div class="form-container">
-      <form @submit.prevent="signUp">
-        <h1 class="signup-header">Sign up for your account</h1>
-        <p v-if="errors.length">
-          <ul>
-            <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-          </ul>
-        </p>
-        <input class="signup-input" type="text" name="email" id="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" v-model="email" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="text" name="name" id="name" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter full name" v-model="fullName" autocomplete="username" inputmode="email">
-        <input class="signup-input" type="password" name="password" id="password" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Create password" v-model="password" autocomplete="username" inputmode="email">
-        <p class="signup-policy" style="text-align: start">
-          By signing up, you confirm that you've read and accepted our
-          <a class="policy-link">Terms of Service</a>
-          and
-          <a class="policy-link">Privacy Policy</a>
-          .
-        </p>
-        <input type="submit" class="signup-submit-button" value="Continue"/>
-      </form>
-      <!-- <div class="signup-or">OR</div>
-      <div class="signup-link-container">
-        <div class="signup-link">
-          <span id="google-icon"></span>
-          <span class="signup-link-text">Continue with Google</span>
-        </div>
-        <div class="signup-link">
-          <span id="microsoft-icon"></span>
-          <span class="signup-link-text">Continue with Microsoft</span>
-        </div>
-        <div class="signup-link">
-          <span id="apple-icon"></span>
-          <span class="signup-link-text">Continue with Apple</span>
-        </div>
-      </div> -->
-      <a class="login-link" href="/login">Already have an account? Log In</a>
-    </div>
-  </div>
-</template>
-
 <style lang="css">
+.errors{
+  display: none;
+  margin: 1em 0 1.2em 0;
+  flex-direction: column;
+  /* justify-content: left; */
+  align-items: flex-start;
+}
+.form-container-signup .error-message {
+  background: #eb5a46;
+  color: #fbedeb;
+  font-size: 14px;
+  line-height: 1.333;
+  border-radius: 4px;
+  border: 1px solid #EB5A46;
+  padding: .5em 1em;
+  display: inline-block;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+.quick-switch {
+  display: flex;
+}
+.hello{
+  border: 2px solid red;
+}
 .trello-main-logo {
   display: block;
   height: 43px;
@@ -120,13 +155,12 @@ export default {
   margin-top: 40px;
   margin-bottom: 40px;
 }
-.form-container {
+.form-container-signup {
   background-color: #FFFFFF;
   border-radius: 3px;
-  padding: 25px 40px;
+  padding: 25px 40px 16px 40px;
   box-shadow: rgba(0,0,0,0.1) 0 0 10px;
   width: 400px;
-  height: 538px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 .signup-page{
@@ -135,6 +169,7 @@ export default {
   align-items: center;
 }
 .signup-input{
+  font-weight: 500;
   font-size: 14px;
   width: 100%;
   background-color: #FAFBFC;
@@ -146,6 +181,7 @@ export default {
   padding: 7px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  margin: 0 0 1.2em;
 }
 .signup-link-container{
   display: flex;
@@ -169,19 +205,18 @@ export default {
   margin-bottom: 12px;
   -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
   transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  cursor: pointer;
 }
-
 .signup-header{
   text-align: center;
   color: #5E6C84;
-  font-size: 16px;
+  font-size: 17px;
   letter-spacing: -0.01em;
   line-height: 28px;
   margin-top: 10px;
   margin-bottom: 25px;
   font-weight: bold;
 }
-
 .signup-policy{
   text-align: start;
   margin-top: 20px;
@@ -194,9 +229,9 @@ export default {
 }
 
 .signup-submit-button{
-  background: #E2E4E6;
+  background: rgb(0, 82, 204);
   border-radius: .3em;
-  color: hsl(0,0%,55%);
+  color:white;
   display: inline-block;
   font-weight: bold;
   margin-bottom: .8em;
@@ -207,8 +242,11 @@ export default {
   width: 100%;
   cursor: default;
   font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
 }
-
+.signup-submit-button:hover{
+  background: rgb(0, 101, 255);
+}
 .signup-or{
   text-align: center;
   font-size: 12px;
@@ -257,12 +295,14 @@ export default {
   display: block;
   padding: 20px;
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .policy-link{
   text-decoration: none;
-  color: blue;
+  color: #0052cc;
 }
 
 .login-link:hover, .policy-link:hover{

@@ -1,300 +1,311 @@
 <template>
-  <div>
-    <img alt="Trello" class="trello-main-logo" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/76ceb1faa939ede03abacb6efacdde16/trello-logo-blue.svg">
-    <section class="inner-section">
-      <div class="section-wrapper">
-        <div class="account-form">
-          <h1>Log in to Trello</h1>
-          <div class="login-password-container">
-            <form id="login-form">
-              <div class="login-password-email-container">
-                <div class="email-password">
-                  <div class="input-container">
-                    <input type="text" name="user" id="user" class="form-field" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" value="" autocomplete="username" inputmode="email">
-                    <div id="password-entry" class="show-when-password">
-                      <input type="password" name="password" id="password" class="form-field" placeholder="Enter password" autocomplete="current-password">
-                    </div>
-                  </div>
-                  <input id="login" type="submit" class="button account-button button-green btn btn-success" value="Log in">
-                </div>
-              </div>
-            </form>
-            <div class="login-methods">
-              <div class="login-methods-separtor">OR</div>
-              <div class="login-oauth-container">
-                <div id="googleButton" class="google-button oauth-button" tabindex="0">
-                  <span id="google-icon" class="icon"></span>
-                  <span class="label" data-analytics-button="loginWithGmailButton">Continue with Google</span>
-                </div>
-              </div>
-              <ul class="bottom-form-link">
-                <li>
-                  <a class="forgot-password-link" href="">Can't log in?</a>
-                </li>
-                <li>
-                  ::before
-                  <a class="register-link" href="/register">Sign up for an account</a>
-                </li>
-              </ul>
-            </div>
-            <ul class="smaller-links">
-              <li>
-                <a href="">Privacy Policy</a>
-              </li>
-              <li>
-                ::before
-                <a href="">Terms of Service</a>
-              </li>
-            </ul>
-          </div>
+  <div class="login-page">
+    <a href="/">
+      <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
+    </a>
+    <div class="form-container">
+      <form @submit.prevent="handleLogin">
+        <div :class="[errors.length ? 'quick-switch' : '', 'errors']">
+          <div class="error-message" v-for="(error, $index) in errors" :key="$index">{{error}}</div>
+        </div>
+        <h1 class="login-header">Log in to Trello</h1>
+        <input class="login-input" type="email" name="email" v-on:input="updateInput($event, 'email')" :value="email" autocorrect="off" spellcheck="false" autocapitalize="off" autofocus="autofocus" placeholder="Enter email" autocomplete="username" inputmode="email">
+        <input class="login-input" type="password" v-on:input="updateInput($event, 'password')" :value="password" name="password" placeholder="Enter Password" autocomplete="current-password">
+        <input type="submit" class="login-submit-button" value="Log in">
+      </form>
+      <div class="login-or">OR</div>
+      <div class="login-link-container">
+        <div class="login-method">
+          <span id="google-icon"></span>
+          <span class="login-method-text">Continue with Google</span>
+        </div>
+        <!-- <div class="login-method">
+          <span id="microsoft-icon"></span>
+          <span class="login-method-text">Continue with Microsoft</span>
+        </div>
+        <div class="login-method">
+          <span id="apple-icon"></span>
+          <span class="login-method-text">Continue with Apple</span>
+        </div> -->
+        <p class="sso-link-container">
+          <a class="sso-login">Log in with SSO</a>
+        </p>
+      </div>
+      <div class="bottom-form-links">
+        <div class="forgot-password">
+          <a class="forgot-password-link" href="">Can't log in?</a>
+        </div>
+        <div class="register-account">
+          <a class="register-link" href="/signup">Sign up for an account</a>
         </div>
       </div>
-    </section>
     </div>
+    <!-- <div class="bottom-form-smaller-links">
+      <div>
+        <a class="privacy-policy" href="">Privacy Policy</a>
+      </div>
+      <div>
+        <a class="terms-of-service" href="">Terms of Service</a>
+      </div>
+    </div> -->
+    <splashBottom></splashBottom>
+    <background></background>
+  </div>
 </template>
 
 <script>
-export default {
+import Background from '../components/Background'
+import SplashBottom from '@/views/SplashBottom'
 
+export default {
+  components: {
+    Background,
+    SplashBottom
+  },
+  data: () => ({
+    email: '',
+    password: '',
+    errors: []
+  }),
+  methods: {
+    updateInput (e, target) {
+      this.errors = []
+      if (target === 'email') {
+        this.email = e.target.value
+      } else if (target === 'password') {
+        this.password = e.target.value
+      }
+    },
+    async handleLogin () {
+      if (this.email.length === 0) {
+        this.errors.push('Missing email')
+        return
+      }
+      const credentials = { email: this.email, password: this.password }
+      await this.$store.dispatch('login', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          await this.$store.commit('SET_USER', res.data.user)
+        })
+        .catch(err => {
+          this.errors = []
+          for (let key in err.response.data) {
+            this.errors.push(err.response.data[key])
+          }
+        })
+    }
+  }
 }
 </script>
-
 <style lang="css">
+.errors{
+  display: none;
+  margin: 1em 0 1.2em 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.form-container .error-message {
+  background: #eb5a46;
+  color: #fbedeb;
+  font-size: 14px;
+  line-height: 1.333;
+  border-radius: 4px;
+  border: 1px solid #EB5A46;
+  padding: .5em 1em;
+  display: inline-block;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+.quick-switch {
+  display: flex;
+}
 .trello-main-logo {
-    display: block;
-    height: 43px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
-    margin-bottom: 40px;
+  display: block;
+  height: 43px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
-
-.trello-main-logo {
-    display: block;
-    height: 43px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
-    margin-bottom: 40px;
+.form-container {
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  padding: 25px 40px 32px 40px;
+  box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+  width: 400px;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
-
-.inner-section .section-wrapper {
-    max-width: 400px;
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.inner-section {
-    width: 100%;
-    padding: 0px;
-    overflow: visible;
-    margin-bottom: 30px;
+.login-input {
+  font-weight: 500;
+  font-size: 14px;
+  width: 100%;
+  background-color: #FAFBFC;
+  border: 2px solid #DFE1E6;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 3px;
+  height: 44px;
+  padding: 7px;
+  -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  margin: 0 0 1.2em;
 }
-
-.section-wrapper {
-    max-width: 540px;
-    margin: 0 auto;
+.login-link-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgrey;
 }
-
-.section-wrapper {
-    max-width: 540px;
-    margin: 0 auto;
+.login-method {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: rgba(0,0,0,0.54);
+  box-shadow: rgba(0,0,0,0.2) 1px 1px 5px 0;
+  border-color: transparent;
+  text-align: center;
+  border-radius: 3px;
+  width: 99%;
+  height: 39px;
+  padding-top: 0;
+  margin-bottom: 12px;
+  -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+  cursor: pointer;
 }
-
-.inner-section .account-form {
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    padding: 25px 40px;
-    box-shadow: rgba(0,0,0,0.1) 0 0 10px;
+.login-method:hover {
+  background-color: #F9FAFC;
 }
-
-/* h1 {
-    font-size: 1.777em;
-    line-height: 1.2em;
-    margin-top: 1.6em;
+.login-method-text {
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: bold;
+  color: #505f79;
+  padding-left: .5em;
+  height: 32px;
+  line-height: 32px;
 }
-
-h1 {
-    margin: 0.67em 0;
+.login-header {
+  text-align: center;
+  color: #5E6C84;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  line-height: 28px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  font-weight: bold;
 }
-
-h1 {
-    display: block;
-    font-size: 2em;
-    margin-block-start: 0.67em;
-    margin-block-end: 0.67em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
+.login-submit-button {
+  background: #5AAC44;
+  border-radius: .3em;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  margin-bottom: .8em;
+  padding: .6em 1.3em !important;
+  position: relative;
+  text-decoration: none;
+  border: 0px;
+  width: 100%;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
 }
-
-div {
-    display: block;
+.login-submit-button:hover {
+  background-color: #61BD4F;
 }
-
-form {
-    display: block;
-    margin-top: 0em;
-} */
-
-.inner-section .account-form input[type="text"] {
-    width: 100%;
+.login-or {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
-
-.inner-section > input[type="text"] {
-    background: #EDEFF0;
-    border-radius: 4px;
-    border: 1px solid #CDD2D4;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: .5em;
-    max-width: 400px;
-    width: 100%;
+#google-icon{
+  background: url('../assets/google.png');
+  display: inline-block;
+  border-radius: 1px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
-
-/* input {
-    display: block;
-    margin: 0 0 1.2em;
-    line-height: normal;
-    color: inherit;
-    font: inherit;
-} */
-
-.inner-section .form-field {
-    font-size: 14px;
-    background-color: #FAFBFC;
-    border: 2px solid #DFE1E6;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-radius: 3px;
-    height: 44px;
-    -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
-    transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+#microsoft-icon{
+  background: url('../assets/microsoft.png');
+  display: inline-block;
+  border-radius: 1px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
-
-/* * {
-    border-width: 0;
-    border-style: solid;
-    border-color: #dae1e7;
-} */
-
-/* input[type="password"] {
-    background: #EDEFF0;
-    border-radius: 4px;
-    border: 1px solid #CDD2D4;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: .5em;
-    max-width: 400px;
-    width: 100%;
-} */
-
-.inner-section .account-form .button-green:not(:disabled) {
-    background: #5AAC44;
+#apple-icon{
+  background: url('../assets/apple.png');
+  display: inline-block;
+  border-radius: 1px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
-
-.inner-section .account-form input[type="submit"] {
-    width: 100%;
+.sso-link-container {
+  display: block;
+  text-align: center;
+  line-height: 1.333;
+  margin-bottom: 14px;
 }
-
-.inner-section .account-form .button-green {
-    box-shadow: none;
+.sso-login {
+  text-decoration: none;
+  color: #0052CC;
+  font-size: 14px;
 }
-
-.inner-section .account-button {
-    margin-bottom: 0.8em;
+.bottom-form-links {
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  padding: 0;
+  justify-content: center;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
 }
-
-/* input[type="submit"] {
-    cursor: pointer;
-} */
-
-.button-green {
-    background: #61BD4F;
-    background: -webkit-gradient(linear, left top, left bottom, from(#61BD4F), to(#5AAC44));
-    background: linear-gradient(to bottom, #61BD4F 0%, #5AAC44 100%);
-    box-shadow: 0 2px 0 #3F6F21;
-    color: #fff;
+.forgot-password-link {
+  text-decoration: none;
+  color: #0052CC;
 }
-
-.button {
-    background: #CDD2D4;
-    background: -webkit-gradient(linear, left top, left bottom, from(#CDD2D4), to(#C4C9CC));
-    background: linear-gradient(to bottom, #CDD2D4 0%, #C4C9CC 100%);
-    border-radius: .3em;
-    box-shadow: 0 2px 0 hsl(0,0%,30%);
-    /* color: hsl(0,0%,30%); */
-    display: inline-block;
-    font-weight: bold;
-    margin-bottom: .8em;
-    padding: .6em 1.3em;
-    position: relative;
-    text-decoration: none;
-    border: 0px;
+.register-link {
+  text-decoration: none;
+  color: #0052CC;
 }
-
-/* input[type="submit" i] {
-    appearance: push-button;
-    user-select: none;
-    white-space: pre;
-    align-items: flex-start;
-    text-align: center;
-    color: -internal-light-dark(buttontext, rgb(170, 170, 170));
-    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(74, 74, 74));
-    box-sizing: border-box;
-    padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
-    border-image: initial;
-} */
-
-.inner-section .account-form .login-method-separator {
-    text-align: center;
-    font-size: 12px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+.register-link::before {
+  content: "\2022";
+  margin: 0 8px 0px 8px;
 }
-
-.inner-section .account-form .oauth-button {
-    background: #fff;
-    color: rgba(0,0,0,0.54);
-    box-shadow: rgba(0,0,0,0.2) 1px 1px 5px 0;
-    border-color: transparent;
-    text-align: center;
-    border-radius: 3px;
-    width: 99%;
-    height: 39px;
-    padding-top: 0;
-    margin-bottom: 12px;
-    -webkit-transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
-    transition: background-color .2s ease-in-out 0s,border-color .2s ease-in-out 0s;
+.bottom-form-smaller-links {
+  display: flex;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
 }
-
-.bottom-form-link-container {
-    font-size: 14px;
-    display: flex;
+.privacy-policy {
+  text-decoration: none;
+  color: #0052CC;
+  font-size: 12px;
 }
-
-.inner-section .bottom-form-link {
-    width: 100%;
-    margin: 0 auto;
+.terms-of-service {
+  text-decoration: none;
+  color: #0052CC;
+  font-size: 12px;
 }
-
-.bottom-form-link {
-    flex-direction: row;
-}
-
-.inner-section a {
-    text-decoration: none;
-    color: #0052CC;
-}
-
-/* a {
-    background: transparent;
-    cursor: pointer;
-} */
-
-.inner-section .bottom-form-link div:not(:first-child)::before {
-    content: "\2022";
-    margin: 0 8px 0px 4px;
+.terms-of-service::before {
+  content: "\2022";
+  margin: 0 8px 0px 8px;
 }
 </style>

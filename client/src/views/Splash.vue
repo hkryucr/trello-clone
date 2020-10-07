@@ -63,19 +63,13 @@
         </div>
       </div>
     </section>
-    <!-- <splash-bottom></splash-bottom> -->
   </div>
 </template>
 
 <script>
-// import SplashBottom from '@/views/SplashBottom'
 import { mapState } from 'vuex'
-import { fetchUser } from '../utils/UserApiUtil'
 
 export default {
-  // components: {
-  //   SplashBottom
-  // },
   data () {
     return {
       loggedIn: false,
@@ -97,20 +91,14 @@ export default {
           this.$store.dispatch('login', credentials)
             .then(async (res) => {
               await this.$store.commit('SET_TOKEN', res.data.token)
-              fetchUser(res.data.user.id)
-                .then(user => this.$store.commit('SET_USER', user.data))
+              await this.$store.commit('SET_USER', res.data.user)
             })
             .catch(err => {
               console.log(err.response, 'login error')
             })
           break
-        default:
-          break
       }
     }
-  },
-  navigateRoute (targetRoute, params) {
-
   },
   computed: {
     ...mapState(['board'])
@@ -171,7 +159,6 @@ export default {
   flex-wrap: wrap;
   align-items: center !important;
   margin-bottom: 48px;
-  /* justify-content: ; */
 }
 .section-container-row-left {
   -webkit-box-flex: 0;

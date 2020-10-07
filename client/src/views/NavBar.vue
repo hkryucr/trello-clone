@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <div class="navbar-container">
             <div class='navbar-left'>
                 <div v-on:click="openmodal('modalmenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
@@ -44,6 +44,14 @@ import ModalCreate from '../components/modal/ModalCreate'
 import ModalInformation from '../components/modal/ModalInformation'
 import ModalNotification from '../components/modal/ModalNotification'
 import ModalAccount from '../components/modal/ModalAccount'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Vue from 'vue'
+
+library.add(faUserSecret)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 export default {
   components: {
@@ -100,7 +108,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(111, 184, 111);
+  background-color: hsla(0,0%,100%,.3);
   height: 90%;
   width: 32px;
   height: 32px;
@@ -115,7 +123,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(111, 184, 111);
+  background-color: hsla(0,0%,100%,.3);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -148,9 +156,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(111, 184, 111);
-  height: 90%;
+  background-color: hsla(0,0%,100%,.3);
   width: 110px;
+  min-width: 110px;
   height: 32px;
   margin: 0 5px;
   padding: 5px;

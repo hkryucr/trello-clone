@@ -57,13 +57,8 @@ export default {
     }
   },
   methods: {
-    // updateWidth () {
-    //   const inputLength = this.$refs.columnName.value.length * 8 + 30
-    //   this.$refs.columnName.style.width = inputLength.toString() + 'px'
-    // },
     clickColumnName () {
       this.nameInputClicked = true
-      // this.updateWidth()
       this.$refs.columnName.classList.add('input-show')
       this.$refs.columnName.focus()
       this.$refs.columnName.select()

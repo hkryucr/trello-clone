@@ -13,7 +13,7 @@
     <p
       v-if="task.description"
       class="w-full flex-no-shrink mt-1 text-sm">
-      {{task.description}}
+        <span class="icon-description icon-lg window-module-title-icon"></span>
     </p>
   </div>
 </template>

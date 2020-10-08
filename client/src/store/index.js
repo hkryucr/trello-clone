@@ -7,20 +7,18 @@ import VueInstance from '../main'
 import AuthUtil, { setAuthToken, logoutUser } from '../utils/AuthUtil.js'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
+<<<<<<< HEAD
+=======
+import { initialState } from '../utils/InitialState'
+const AUTH_TOKEN_KEY = 'authToken'
+>>>>>>> master
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState(), saveStatePlugin],
-  state: {
-    board: {},
-    session: {
-      isLoggedIn: false,
-      currentUser: {}
-    },
-    user: {}
-  },
+  state: initialState(),
   getters: {
     isCurrentUser: state => {
       return state.session.isLoggedIn
@@ -28,11 +26,23 @@ export default new Vuex.Store({
     getUser: state => {
       return state.session.currentUser
     },
+    getNavModal: state => {
+      return state.ui && state.ui.navModal
+    },
     getTask (state) {
       return id => {
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
-            if (task.id === id) return task
+            if (task._id === id) return task
+          }
+        }
+      }
+    },
+    getColumn (state) {
+      return id => {
+        for (const column of state.board.columns) {
+          for (const task of column.tasks) {
+            if (task._id === id) return column
           }
         }
       }
@@ -87,6 +97,13 @@ export default new Vuex.Store({
         name,
         columnId
       })
+    },
+    updateTask: ({ state, commit }, { body, taskId, type }) => {
+      VueInstance.$socket.emit('updateTask', {
+        body,
+        taskId,
+        type
+      })
     }
   },
   mutations: {
@@ -109,14 +126,8 @@ export default new Vuex.Store({
       state.user = user
     },
     RESET: state => {
-      Object.assign(state, {
-        session: {
-          isLoggedIn: false,
-          currentUser: {}
-        },
-        board: {}
-      })
-      logoutUser()
+      Object.assign(state, initialState())
+      localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
@@ -129,6 +140,17 @@ export default new Vuex.Store({
         column => column._id === newColumn._id
       )
       targetColumn.name = newColumn.name
+    },
+    SOCKET_UPDATE_TASK (state, newTask) {
+      for (const column of state.board.columns) {
+        for (let task of column.tasks) {
+          if (task._id === newTask._id) {
+            task.name = newTask.name
+            task.description = newTask.description
+            return
+          }
+        }
+      }
     },
     SOCKET_CREATE_TASK (state, newTask) {
       const targetColumn = state.board.columns.find(
@@ -150,9 +172,15 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
-
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
+    },
+    OPEN_MODAL (state, modal) {
+      console.log(state)
+      state.ui.navModal = modal
+    },
+    CLOSE_MODAL (state) {
+      state.ui.navModal = 'empty'
     }
   }
 })

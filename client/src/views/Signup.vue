@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import { fetchUser } from '../utils/UserApiUtil'
+// import { fetchUser } from '../utils/UserApiUtil'
 import Background from '../components/Background'
 import SplashBottom from '@/views/SplashBottom'
 

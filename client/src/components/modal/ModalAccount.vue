@@ -31,7 +31,7 @@
         <div class='modal-account-3-link'>Shortcuts</div>
     </div>
     <div class='modal-account-logout-container'>
-        <div class='modal-account-logout-link'>Log Out</div>
+        <div class='modal-account-logout-link' @click.prevent="logout">Log Out</div>
     </div>
   </div>
 </template>
@@ -51,8 +51,9 @@ export default {
     ...mapGetters(['getUser'])
   },
   methods: {
-    handleClick: function () {
-      console.log(this)
+    async logout () {
+      await this.$store.commit('RESET')
+      this.$router.push({ name: 'login' })
     }
   }
 }

@@ -7,6 +7,7 @@ import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
+import { initialState } from '../utils/InitialState'
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.use(Vuex)
@@ -14,20 +15,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState(), saveStatePlugin],
-  state: {
-    board: {},
-    session: {
-      isLoggedIn: false,
-      currentUser: {}
-    },
-    user: {}
-  },
+  state: initialState(),
   getters: {
     isCurrentUser: state => {
       return state.session.isLoggedIn
     },
     getUser: state => {
       return state.session.currentUser
+    },
+    getNavModal: state => {
+      return state.ui && state.ui.navModal
     },
     getTask (state) {
       return id => {
@@ -112,13 +109,7 @@ export default new Vuex.Store({
       // console.log(user, ' in mutations')
     },
     RESET: state => {
-      Object.assign(state, {
-        session: {
-          isLoggedIn: false,
-          currentUser: {}
-        },
-        board: {}
-      })
+      Object.assign(state, initialState())
       localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {
@@ -156,6 +147,13 @@ export default new Vuex.Store({
 
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
+    },
+    OPEN_MODAL (state, modal) {
+      console.log(state)
+      state.ui.navModal = modal
+    },
+    CLOSE_MODAL (state) {
+      state.ui.navModal = 'empty'
     }
   }
 })

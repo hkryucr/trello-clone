@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="board" v-on:click="closeModal()" >
     <NavBar />
     <!-- <div class="board-header">
     </div> -->
@@ -58,8 +58,7 @@ export default {
     return {
       newColumnName: '',
       boardName: '',
-      nameInputClicked: false
-    }
+      nameInputClicked: false }
   },
   computed: {
     isTaskOpen () {
@@ -112,6 +111,9 @@ export default {
         this.$refs.boardName.classList.remove('input-show')
         this.$store.dispatch('updateBoard', { name: e.target.value })
       }
+    },
+    closeModal () {
+      this.modal = 'empty'
     }
   }
 }

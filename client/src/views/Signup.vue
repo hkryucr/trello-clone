@@ -43,7 +43,6 @@
   </div>
 </template>
 <script>
-import { fetchUser } from '../utils/UserApiUtil'
 import Background from '../components/Background'
 import SplashBottom from '@/views/SplashBottom'
 
@@ -63,7 +62,7 @@ export default {
     }
   },
   mounted () {
-    this.email = this.$router.history.current.params.email
+    if (this.$router) this.email = this.$router.history.current.params.email
   },
   methods: {
     updateInput (e, target) {

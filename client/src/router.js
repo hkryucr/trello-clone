@@ -24,7 +24,8 @@ const routes = [
         next()
       }
     }
-  }, {
+  },
+  {
     path: '/signup',
     name: 'signup',
     component: Signup,
@@ -37,7 +38,8 @@ const routes = [
         next()
       }
     }
-  }, {
+  },
+  {
     path: '/login',
     name: 'login',
     component: Login,
@@ -50,7 +52,8 @@ const routes = [
         next()
       }
     }
-  }, {
+  },
+  {
     path: '/boards',
     name: 'boards',
     component: Boards,
@@ -61,15 +64,18 @@ const routes = [
         next()
       }
     }
-  }, {
+  },
+  {
     path: '/board/:id',
     name: 'board',
     component: Board,
-    children: [{
-      path: '/:id',
-      name: 'task',
-      component: Task
-    }]
+    children: [
+      {
+        path: 'task/:taskId',
+        name: 'task',
+        component: Task
+      }
+    ]
   }
 ]
 

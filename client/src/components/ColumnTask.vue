@@ -13,7 +13,7 @@
     <p
       v-if="task.description"
       class="w-full flex-no-shrink mt-1 text-sm">
-      {{task.description}}
+        <span class="icon-description icon-lg window-module-title-icon"></span>
     </p>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
   mixins: [movingTasksAndColumns],
   methods: {
     goToTask (task) {
-      this.$router.push({ name: 'task', params: { id: task.id } })
+      this.$router.push({ name: 'task', params: { taskId: task._id } })
     },
     pickupTask (e, taskIndex, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'

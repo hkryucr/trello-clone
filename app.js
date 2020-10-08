@@ -73,6 +73,10 @@ io.on("connection", (socket) => {
     new ColumnController().updateColumn(io, socket, data);
   })
 
+  socket.on("updateTask", async (data) => {
+    new TaskController().updateTask(io, socket, data);
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected");
   });

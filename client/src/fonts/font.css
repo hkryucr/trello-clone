@@ -1,0 +1,581 @@
+@font-face {
+  font-family: "trellicons";
+  src: url(./trellicons.b7f2b0f63f5350ea6a92.eot);
+  src: url(./trellicons.b7f2b0f63f5350ea6a92.eot#iefix)
+      format("embedded-opentype"),
+    url(./trellicons.a5e8d9167bd7a616df00.ttf)
+      format("truetype"),
+    url(./trellicons.3739b349b6c9d034ec34.woff)
+      format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+.icon-lg,
+.icon-md,
+.icon-sm {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: trellicons;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: bottom;
+}
+.icon-lg.mod-quiet,
+.icon-md.mod-quiet,
+.icon-sm.mod-quiet {
+  color: #6b778c;
+}
+.icon-lg.tight,
+.icon-md.tight,
+.icon-sm.tight {
+  height: auto;
+  width: auto;
+  line-height: 1;
+}
+.icon-lg {
+  font-size: 24px;
+}
+.icon-lg,
+.icon-md {
+  height: 32px;
+  line-height: 32px;
+  width: 32px;
+}
+.icon-md {
+  font-size: 20px;
+}
+.icon-sm {
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  width: 20px;
+}
+.flip-icon .icon-sm {
+  transform: scaleX(-1);
+}
+.icon-activity:before {
+  content: "\E900";
+}
+.icon-add:before {
+  content: "\E901";
+}
+.icon-add-member:before {
+  content: "\E902";
+}
+.icon-add-reaction:before {
+  content: "\E903";
+}
+.icon-admin-chevron:before {
+  content: "\E904";
+}
+.icon-app-store:before {
+  content: "\E905";
+}
+.icon-application-switcher:before {
+  content: "\E906";
+}
+.icon-archive:before {
+  content: "\E907";
+}
+.icon-attachment:before {
+  content: "\E908";
+}
+.icon-back:before {
+  content: "\E909";
+}
+.icon-board:before {
+  content: "\E90A";
+}
+.icon-box:before {
+  content: "\E90B";
+}
+.icon-business-class:before {
+  content: "\E90C";
+}
+.icon-butler-bot:before {
+  content: "\E90D";
+}
+.icon-calendar:before {
+  content: "\E90E";
+}
+.icon-camera:before {
+  content: "\E90F";
+}
+.icon-card:before {
+  content: "\E910";
+}
+.icon-card-aging:before {
+  content: "\E912";
+}
+.icon-card-cover:before {
+  content: "\E913";
+}
+.icon-card-recurring:before {
+  content: "\E914";
+}
+.icon-check:before {
+  content: "\E915";
+}
+.icon-checkbox-checked:before {
+  content: "\E916";
+}
+.icon-checkbox-unchecked:before {
+  content: "\E917";
+}
+.icon-checklist:before {
+  content: "\E918";
+}
+.icon-clock:before {
+  content: "\E919";
+}
+.icon-close:before {
+  content: "\E91A";
+}
+.icon-collection:before {
+  content: "\E91B";
+}
+.icon-comment:before {
+  content: "\E91C";
+}
+.icon-copy:before {
+  content: "\E91D";
+}
+.icon-custom-field:before {
+  content: "\E91E";
+}
+.icon-description:before {
+  content: "\E91F";
+}
+.icon-documents:before {
+  content: "\E920";
+}
+.icon-down:before {
+  content: "\E921";
+}
+.icon-download:before {
+  content: "\E922";
+}
+.icon-dropbox:before {
+  content: "\E923";
+}
+.icon-dropdown-options:before {
+  content: "\E924";
+}
+.icon-edit:before {
+  content: "\E925";
+}
+.icon-email:before {
+  content: "\E926";
+}
+.icon-emoji:before {
+  content: "\E927";
+}
+.icon-enterprise:before {
+  content: "\E928";
+}
+.icon-external-link:before {
+  content: "\E929";
+}
+.icon-facebook:before {
+  content: "\E92A";
+}
+.icon-filter:before {
+  content: "\E92B";
+}
+.icon-fogbugz:before {
+  content: "\E92C";
+}
+.icon-forward:before {
+  content: "\E92D";
+}
+.icon-gear:before {
+  content: "\E92E";
+}
+.icon-github:before {
+  content: "\E92F";
+}
+.icon-google:before {
+  content: "\E930";
+}
+.icon-google-drive:before {
+  content: "\E931";
+}
+.icon-heart:before {
+  content: "\E932";
+}
+.icon-help:before {
+  content: "\E933";
+}
+.icon-home:before {
+  content: "\E934";
+}
+.icon-house:before {
+  content: "\E935";
+}
+.icon-image:before {
+  content: "\E936";
+}
+.icon-information:before {
+  content: "\E937";
+}
+.icon-instagram:before {
+  content: "\E938";
+}
+.icon-key:before {
+  content: "\E939";
+}
+.icon-kiln:before {
+  content: "\E93A";
+}
+.icon-label:before {
+  content: "\E93B";
+}
+.icon-leave-board:before {
+  content: "\E93C";
+}
+.icon-lightbulb:before {
+  content: "\E93D";
+}
+.icon-lightbulb-lit:before {
+  content: "\E93E";
+}
+.icon-list:before {
+  content: "\E93F";
+}
+.icon-location:before {
+  content: "\E940";
+}
+.icon-log-out:before {
+  content: "\E941";
+}
+.icon-member:before {
+  content: "\E942";
+}
+.icon-mention:before {
+  content: "\E943";
+}
+.icon-microphone:before {
+  content: "\E944";
+}
+.icon-microphone-off:before {
+  content: "\E945";
+}
+.icon-move:before {
+  content: "\E946";
+}
+.icon-nearby:before {
+  content: "\E947";
+}
+.icon-notification:before {
+  content: "\E948";
+}
+.icon-number:before {
+  content: "\E949";
+}
+.icon-onedrive:before {
+  content: "\E94A";
+}
+.icon-open-source:before {
+  content: "\E94B";
+}
+.icon-organization:before {
+  content: "\E94C";
+}
+.icon-organization-visible:before {
+  content: "\E94D";
+}
+.icon-overflow-menu-horizontal:before {
+  content: "\E94E";
+}
+.icon-overflow-menu-vertical:before {
+  content: "\E94F";
+}
+.icon-password-manager:before {
+  content: "\E950";
+}
+.icon-power-up:before {
+  content: "\E951";
+}
+.icon-preferences:before {
+  content: "\E952";
+}
+.icon-private:before {
+  content: "\E953";
+}
+.icon-public:before {
+  content: "\E954";
+}
+.icon-refresh:before {
+  content: "\E955";
+}
+.icon-remove:before {
+  content: "\E956";
+}
+.icon-remove-member:before {
+  content: "\E957";
+}
+.icon-reply:before {
+  content: "\E958";
+}
+.icon-screenshare:before {
+  content: "\E959";
+}
+.icon-search:before {
+  content: "\E95A";
+}
+.icon-selection-mode:before {
+  content: "\E95B";
+}
+.icon-send:before {
+  content: "\E95C";
+}
+.icon-share:before {
+  content: "\E95D";
+}
+.icon-sparkle:before {
+  content: "\E95E";
+}
+.icon-star:before {
+  content: "\E95F";
+}
+.icon-starred:before {
+  content: "\E960";
+}
+.icon-sticker:before {
+  content: "\E961";
+}
+.icon-subscribe:before {
+  content: "\E962";
+}
+.icon-sync:before {
+  content: "\E963";
+}
+.icon-taco:before {
+  content: "\E964";
+}
+.icon-template-board:before {
+  content: "\E965";
+}
+.icon-template-card:before {
+  content: "\E966";
+}
+.icon-template-create:before {
+  content: "\E967";
+}
+.icon-text:before {
+  content: "\E968";
+}
+.icon-trash:before {
+  content: "\E969";
+}
+.icon-trello-gold:before {
+  content: "\E96A";
+}
+.icon-twitter:before {
+  content: "\E96B";
+}
+.icon-up:before {
+  content: "\E96C";
+}
+.icon-upload:before {
+  content: "\E96D";
+}
+.icon-video:before {
+  content: "\E96E";
+}
+.icon-video-off:before {
+  content: "\E96F";
+}
+.icon-vote:before {
+  content: "\E970";
+}
+.icon-warning:before {
+  content: "\E971";
+}
+.icon-custom {
+  text-align: center;
+  vertical-align: middle;
+}
+.icon-custom:before {
+  content: "";
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+}
+.icon-custom.icon-sm {
+  padding: 2px;
+}
+.icon-custom.icon-sm,
+.icon-custom.icon-sm:before {
+  height: 16px;
+  width: 16px;
+}
+.icon-custom.icon-lg {
+  padding: 4px;
+}
+.icon-custom.icon-lg,
+.icon-custom.icon-lg:before {
+  height: 24px;
+  width: 24px;
+}
+.icon-custom.icon-checkbox-indeterminate:before {
+  background-image: url(https://a.trellocdn.com/prgb/dist/images/icon_checkbox_indeterminate.8f60248d6982b1489b6d.svg);
+}
+.icon-lg,
+.icon-md,
+.icon-sm {
+  color: #42526e;
+}
+.dark-hover:hover .icon-lg,
+.dark-hover:hover .icon-md,
+.dark-hover:hover .icon-sm,
+.icon-lg.dark,
+.icon-lg.dark-hover:hover,
+.icon-md.dark,
+.icon-md.dark-hover:hover,
+.icon-sm.dark,
+.icon-sm.dark-hover:hover {
+  color: #172b4d;
+  text-decoration: none;
+}
+.icon-lg.light,
+.icon-lg.light-hover:hover,
+.icon-md.light,
+.icon-md.light-hover:hover,
+.icon-sm.light,
+.icon-sm.light-hover:hover,
+.light-hover:hover .icon-lg,
+.light-hover:hover .icon-md,
+.light-hover:hover .icon-sm {
+  color: #fff;
+  text-decoration: none;
+}
+.dark-background-hover:hover .icon-lg,
+.dark-background-hover:hover .icon-md,
+.dark-background-hover:hover .icon-sm,
+.icon-lg.dark-background-hover:hover,
+.icon-md.dark-background-hover:hover,
+.icon-sm.dark-background-hover:hover {
+  background-color: rgba(9, 30, 66, 0.08);
+  color: #172b4d;
+  border-radius: 3px;
+  text-decoration: none;
+}
+.dark-background-hover:active .icon-lg,
+.dark-background-hover:active .icon-md,
+.dark-background-hover:active .icon-sm,
+.icon-lg.dark-background-hover:active,
+.icon-md.dark-background-hover:active,
+.icon-sm.dark-background-hover:active {
+  background-color: rgba(9, 30, 66, 0.13);
+  color: #172b4d;
+  border-radius: 3px;
+  text-decoration: none;
+}
+.icon-private {
+  color: #eb5a46;
+}
+.dark-hover:hover .icon-private,
+.icon-private.dark-hover:hover {
+  color: #cf513d;
+}
+.icon-organization-visible {
+  color: #f2d600;
+}
+.dark-hover:hover .icon-organization-visible,
+.icon-organization-visible.dark-hover:hover {
+  color: #e6c60d;
+}
+.icon-public {
+  color: #61bd4f;
+}
+.dark-hover:hover .icon-public,
+.icon-public.dark-hover:hover {
+  color: #5aac44;
+}
+.icon-star-active {
+  color: #f2d600;
+}
+.icon-business-class-color {
+  color: #6c547b;
+}
+.icon-trello-gold-color {
+  color: #d9b51c;
+}
+.icon-facebook-color {
+  color: #3b5998;
+}
+.icon-google-color {
+  color: #e11a31;
+}
+.icon-twitter-color {
+  color: #00aced;
+}
+.spinner {
+  background-size: 30px 30px;
+  display: block;
+  height: 30px;
+  width: 30px;
+}
+.spinner.centered {
+  margin: 0 auto;
+}
+.spinner.small {
+  background-size: 18px 18px;
+  height: 18px;
+  width: 18px;
+}
+.spinner.spinner--inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+.spinner.mod-left {
+  margin-right: 3px;
+}
+.spinner.is-hidden {
+  visibility: hidden;
+}
+.tooltip-container {
+  display: block;
+  margin: 4px 0;
+  max-width: 200px;
+  position: absolute;
+  z-index: 100;
+}
+.tooltip-close-button {
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.tooltip-close-button .icon-sm {
+  color: #fff;
+}
+.tooltip-trigger {
+  text-decoration: none;
+  color: #0079bf;
+  cursor: pointer;
+}
+.tooltip-trigger .icon-sm {
+  color: #0079bf;
+}
+.tooltip-trigger:hover,
+.tooltip-trigger:hover .icon-sm {
+  color: #026aa7;
+}
+.selected:not(.disabled) .tooltip-trigger {
+  color: #fff;
+}
+.selected:not(.disabled) .tooltip-trigger .icon-sm {
+  color: hsla(0, 0%, 100%, 0.5);
+}
+.selected:not(.disabled) .tooltip-trigger:hover,
+.selected:not(.disabled) .tooltip-trigger:hover .icon-sm {
+  color: #fff;
+}

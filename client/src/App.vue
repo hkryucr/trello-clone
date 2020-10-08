@@ -1,10 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" v-on:click.prevent="closeModal()">
     <router-view/>
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    closeModal () {
+      this.$store.commit('CLOSE_MODAL')
+    }
+  }
+}
+</script>
 <style>
 @import 'assets/styles/tailwind.postcss';
+@import 'fonts/font.css';
 
 body, html {
   height: 100%;

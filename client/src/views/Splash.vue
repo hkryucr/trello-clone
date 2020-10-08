@@ -1,6 +1,55 @@
+<script>
+import { mapState } from 'vuex'
+export default {
+  data () {
+    return {
+      loggedIn: false,
+      email: '',
+      scrollPosition: null,
+      splashHeaderFixed: false
+    }
+  },
+  methods: {
+    handleClick: function (target) {
+      switch (target) {
+        case 'email-signup':
+          this.$router.push({ name: 'signup', params: { 'email': this.email } }).catch(err => {
+            if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) console.log(err)
+          })
+          break
+        case 'demo-login':
+          const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
+          this.$store.dispatch('login', credentials)
+            .then(async (res) => {
+              await this.$store.commit('SET_TOKEN', res.data.token)
+              await this.$store.commit('SET_USER', res.data.user)
+            })
+            .catch(err => {
+              console.log(err.response, 'login error')
+            })
+          break
+      }
+    },
+    updateScroll () {
+      this.scrollPosition = window.scrollY
+      if (this.scrollPosition > 40) {
+        this.splashHeaderFixed = true
+      } else {
+        this.splashHeaderFixed = false
+      }
+    }
+  },
+  computed: {
+    ...mapState(['board'])
+  },
+  mounted () {
+    window.addEventListener('scroll', this.updateScroll)
+  }
+}
+</script>
 <template>
   <div class="splash">
-    <header class="splash-header">
+    <header class="splash-header" :class="splashHeaderFixed ? 'splash-header-fixed' : ''">
       <nav class="splash-header-nav">
         <a href="/">
           <svg class="d-block" width="130" height="40" viewBox="0 0 885 272" alt="Trello">
@@ -12,8 +61,8 @@
           </svg>
         </a>
         <div>
-          <a href="/login" class="login btn-sm text-white" v-show="!loggedIn">Log In</a>
-          <a href="/signup" class="btn-sm text-trello bg-white" v-show="!loggedIn">Sign Up</a>
+          <a data-testid="login" href="/login" class="login btn-sm text-white">Log In</a>
+          <a data-testid="signup" href="/signup" class="signup btn-sm text-trello bg-white">Sign Up</a>
         </div>
       </nav>
     </header>
@@ -27,10 +76,10 @@
           <div class="section-container-row-right">
             <img src="../assets/hero-a.svg" alt="">
           </div>
-          <form class="quick-signup" @submit.prevent="handleClick('email-signup')">
-            <input name="email" class="quick-signup-email" type="email" placeholder="Email" v-model="email">
-            <input type="submit" data-analytics-button="greenSignupHeroButton" value="Sign Up – It’s Free!" class="quick-signup-email-btn btn btn-success px-4"/>
-            <button type="click" @click.prevent="handleClick('demo-login')" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-demo-user px-4">Log In as a Demo User</button>
+          <form data-testid="quick-signup-form" class="quick-signup" @submit.prevent="handleClick('email-signup')">
+            <input data-testid="quick-signup-input" name="email" class="quick-signup-email" type="email" placeholder="Email" v-model="email">
+            <button data-testid="quick-signup-button" type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-success px-4">Sign Up – It’s Free!</button>
+            <button data-testid="demo-login" @click.prevent="handleClick('demo-login')" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-demo-user px-4">Log In as a Demo User</button>
           </form>
         </div>
       </div>
@@ -65,56 +114,28 @@
     </section>
   </div>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-
-export default {
-  data () {
-    return {
-      loggedIn: false,
-      email: ''
-    }
-  },
-  methods: {
-    handleClick: function (target) {
-      switch (target) {
-        case 'email-signup':
-          this.$router.push({ name: 'signup', params: { 'email': this.email } }).catch(err => {
-            if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
-              console.log(err)
-            }
-          })
-          break
-        case 'demo-login':
-          const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
-          this.$store.dispatch('login', credentials)
-            .then(async (res) => {
-              await this.$store.commit('SET_TOKEN', res.data.token)
-              await this.$store.commit('SET_USER', res.data.user)
-            })
-            .catch(err => {
-              console.log(err.response, 'login error')
-            })
-          break
-      }
-    }
-  },
-  computed: {
-    ...mapState(['board'])
-  }
-}
-</script>
-
 <style lang="css">
 .splash-header{
+  position: fixed;
+  top: 0;
   height: 72px;
   background-color: transparent;
   position: fixed;
   box-sizing:border-box;
   width: 100%;
+  transition: background-color .9s;
   @apply p-4;
 }
+.splash-header-fixed{
+  height: 72px;
+  background-color: #0079bf;
+  position: fixed;
+  box-sizing:border-box;
+  width: 100%;
+  transition: background-color .9s;
+  @apply p-4;
+}
+
 .splash-header-nav{
   display: flex;
   justify-content: space-between;

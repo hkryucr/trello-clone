@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:unit:debug": "concurrently \"export VUE_CLI_BABEL_TARGET_NODE=true\" \"export VUE_CLI_BABEL_TRANSPILE_MODULES=true\" \"./node_modules/jest/bin/jest.js --clearCache/node\" \"--inspect-brk node_modules/.bin/jest --runInBand\"",
     "lint": "vue-cli-service lint",
     "start": "vue-cli-service serve"
   },

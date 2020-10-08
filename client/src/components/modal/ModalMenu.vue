@@ -125,7 +125,7 @@
 .modal-switch-container, .modal-menu-bottom-container {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   padding-left: 15px;
 }
 .modal-icon-container, .modal-menu-discover-item-container {

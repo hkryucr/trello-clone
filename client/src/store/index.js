@@ -1,17 +1,13 @@
-// import { createColumn } from "./socket"
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
-import AuthUtil, { setAuthToken, logoutUser } from '../utils/AuthUtil.js'
+import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
-<<<<<<< HEAD
-=======
 import { initialState } from '../utils/InitialState'
 const AUTH_TOKEN_KEY = 'authToken'
->>>>>>> master
 
 Vue.use(Vuex)
 

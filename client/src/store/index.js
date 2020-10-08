@@ -30,7 +30,16 @@ export default new Vuex.Store({
       return id => {
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
-            if (task.id === id) return task
+            if (task._id === id) return task
+          }
+        }
+      }
+    },
+    getColumn (state) {
+      return id => {
+        for (const column of state.board.columns) {
+          for (const task of column.tasks) {
+            if (task._id === id) return column
           }
         }
       }
@@ -85,6 +94,13 @@ export default new Vuex.Store({
         name,
         columnId
       })
+    },
+    updateTask: ({ state, commit }, { body, taskId, type }) => {
+      VueInstance.$socket.emit('updateTask', {
+        body,
+        taskId,
+        type
+      })
     }
   },
   mutations: {
@@ -124,6 +140,17 @@ export default new Vuex.Store({
       )
       targetColumn.name = newColumn.name
     },
+    SOCKET_UPDATE_TASK (state, newTask) {
+      for (const column of state.board.columns) {
+        for (let task of column.tasks) {
+          if (task._id === newTask._id) {
+            task.name = newTask.name
+            task.description = newTask.description
+            return
+          }
+        }
+      }
+    },
     SOCKET_CREATE_TASK (state, newTask) {
       const targetColumn = state.board.columns.find(
         column => column._id === newTask.column
@@ -144,7 +171,6 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
-
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     },

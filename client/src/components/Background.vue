@@ -16,7 +16,7 @@ export default {
 
 <style lang="css">
 .background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
@@ -24,7 +24,7 @@ export default {
   z-index: -999;
 }
 .leftLarge {
-  position: absolute;
+  position: fixed;
   width: 400px;
   bottom: 0;
   left: 0;
@@ -32,7 +32,7 @@ export default {
   max-width: 30%;
 }
 .rightLarge {
-  position: absolute;
+  position: fixed;
   width: 400px;
   bottom: 0;
   right: 0;

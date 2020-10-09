@@ -1,8 +1,8 @@
 <template>
   <div class="login-page">
-    <a href="/">
+    <router-link to="/">
       <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
-    </a>
+    </router-link>
     <div class="form-container">
       <form @submit.prevent="handleLogin">
         <div :class="[errors.length ? 'quick-switch' : '', 'errors']">
@@ -36,7 +36,7 @@
           <a class="forgot-password-link" href="">Can't log in?</a>
         </div>
         <div class="register-account">
-          <a class="register-link" href="/signup">Sign up for an account</a>
+          <router-link class="register-link" to="/signup">Sign up for an account</router-link>
         </div>
       </div>
     </div>
@@ -48,6 +48,7 @@
         <a class="terms-of-service" href="">Terms of Service</a>
       </div>
     </div> -->
+    <div class="space-holder"></div>
     <splashBottom></splashBottom>
     <background></background>
   </div>
@@ -98,6 +99,9 @@ export default {
 }
 </script>
 <style lang="css">
+.space-holder {
+  flex-grow: 100
+}
 .errors{
   display: none;
   margin: 1em 0 1.2em 0;
@@ -139,6 +143,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
 }
 .login-input {
   font-weight: 500;

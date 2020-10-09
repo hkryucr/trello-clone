@@ -1,7 +1,8 @@
 <template>
   <div class="board">
-    <div class="board-header">
-    </div>
+    <NavBar />
+    <!-- <div class="board-header">
+    </div> -->
     <div class="board-main flex flex-col items-start">
       <div class="input-main-header">
         <h3 class="input-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
@@ -46,17 +47,18 @@
 import { mapState } from 'vuex'
 import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
+import NavBar from './NavBar'
 
 export default {
   components: {
-    BoardColumn
+    BoardColumn,
+    NavBar
   },
   data () {
     return {
       newColumnName: '',
       boardName: '',
-      nameInputClicked: false
-    }
+      nameInputClicked: false }
   },
   computed: {
     isTaskOpen () {

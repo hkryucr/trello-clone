@@ -56,9 +56,7 @@ router.post('/signup', (req, res) => {
           newUser.password = hash;
           newUser.save()
             .then((user) => {
-              console.log(user, 'user')
               const payload = selectFields(user);
-              console.log(payload, 'payload')
               jwt.sign(payload, keys.secretOrKey, {
                 expiresIn: 3600
               }, (err, token) => {
@@ -69,7 +67,6 @@ router.post('/signup', (req, res) => {
                   user
                 });
               });
-              // res.json(newUser)
             })
             .catch(err => res.status(404).json(err));
         })

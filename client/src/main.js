@@ -7,6 +7,7 @@ import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
+import { initialState } from './utils/InitialState'
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.config.productionTip = false
@@ -15,12 +16,10 @@ const savedAuthToken = localStorage.getItem(AUTH_TOKEN_KEY)
 if (savedAuthToken) {
   axios.defaults.headers.common['Authorization'] = savedAuthToken
   const decodedUser = jwtDecode(savedAuthToken)
-  const preloadedState = {
-    board: {},
-    session: {
-      isLoggedIn: true,
-      currentUser: decodedUser
-    }
+  const preloadedState = initialState()
+  preloadedState.session = {
+    isLoggedIn: true,
+    currentUser: decodedUser
   }
   store.replaceState(preloadedState)
   const currentTime = Date.now() / 1000
@@ -28,6 +27,8 @@ if (savedAuthToken) {
     store.commit('RESET')
     window.location.href = '/'
   }
+} else {
+  axios.defaults.headers.common['Authorization'] = ''
 }
 
 var SocketInstance = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)

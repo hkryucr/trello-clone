@@ -77,10 +77,6 @@
         </div>
       </div>
       <button class="boards-signout" @click.prevent="signout">SIGN OUT</button>
-      <!-- <h1>this is boards</h1>
-      <div v-for="(board, $boardIndex) of boards" :key="$boardIndex">
-        {{$boardIndex}}-{{board.name}}
-      </div> -->
     </div>
   </div>
 </template>

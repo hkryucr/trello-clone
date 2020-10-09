@@ -1,12 +1,12 @@
 <template>
-  <div class="column"
+  <div class="column flex flex-col max-h-full"
     @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
     @dragover.prevent
     @dragenter.prevent
     @dragstart.self="pickupColumn($event, columnIndex)"
     draggable
   >
-      <div class="flex items-center mb-2 font-bold">
+    <div class="flex items-center mb-2 font-bold">
         <div class="input-main-header">
           <h3 class="input-name  column-name" @click.prevent="clickColumnName($event)" v-show="!nameInputClicked">{{column.name}}</h3>
           <textarea
@@ -20,9 +20,8 @@
             v-bind:value="column.name"
           />
         </div>
-
       </div>
-      <div class="list-reset">
+      <div class="list-reset overflow-y-auto">
         <ColumnTask
           v-for="(task, $taskIndex) of column.tasks"
           :key="$taskIndex"
@@ -32,14 +31,14 @@
           :board="board"
           :columnIndex="columnIndex"
         />
-        <input
-          type="text"
-          class="block p-2 w-full bg-transparent"
-          placeholder="+ Enter new task"
-          v-model='name'
-          @keyup.enter="createTask($event)"
-        >
       </div>
+      <input
+        type="text"
+        class="block p-2 w-full bg-transparent"
+        placeholder="+ Enter new task"
+        v-model='name'
+        @keyup.enter="createTask($event)"
+      >
   </div>
 </template>
 
@@ -92,8 +91,15 @@ export default {
 
 <style lang="css">
 .column {
-  @apply bg-grey-light p-2 mr-4 text-left shadow rounded;
-  min-width: 350px;
+  @apply bg-grey-light p-2 text-left shadow rounded;
+  width: 272px;
+  margin: 0 4px;
+}
+.column:first-child {
+  margin-left: 8px;
+}
+.column:last-child {
+  margin-right: 8px;
 }
 .column-name {
   width: 100%;
@@ -107,7 +113,8 @@ export default {
   outline: transparent;
   padding: 4px;
   padding-left: 4px;
-  font-weight: bolder;
+  font-size: 14px;
+  font-weight: 600;
   white-space:wrap;
   resize: none;
 }

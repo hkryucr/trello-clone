@@ -1,6 +1,6 @@
 <template>
   <div >
-    <div class="navbar-container">
+    <div class="navbar-container flex flex-row">
       <div class='navbar-left'>
           <div @click.stop.prevent="openmodal('modalmenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
           <div class='navbar-icon'><font-awesome-icon icon="home" :style="{ color: '#fff' }" /></div>
@@ -103,16 +103,14 @@ export default {
   display: flex;
   flex-direction: row;
   left: 0;
-  width: 33%;
 }
 .navbar-right{
   display: flex;
   flex-direction: row;
-  width: 33%;
   justify-content: flex-end;
 }
 .navbar-header {
-  width: 33%;
+  text-align: center;
 }
 .navbar-icon{
   display: flex;

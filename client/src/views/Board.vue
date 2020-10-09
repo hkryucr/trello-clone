@@ -1,46 +1,49 @@
 <template>
-  <div class="board">
+  <div class="board flex flex-col">
     <NavBar />
     <!-- <div class="board-header">
     </div> -->
-    <div class="board-main flex flex-col items-start">
-      <div class="input-main-header">
-        <h3 class="input-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
-        <input
-          ref="boardName"
-          class="text-lg input-hide"
-          v-bind:class="{'input-show': nameInputClicked}"
-          type="text"
-          v-on:input="updateWidth($event)"
-          @blur="updateBoard($event)"
-          @keyup.enter="updateBoard($event)"
-          @keyup.esc="updateBoard($event)"
-          v-bind:value="board.name"
-          />
-      </div>
-      <div class="flex flex-row items-start">
-        <BoardColumn
-          v-for="(column, $columnIndex) of board.columns"
-          :key="$columnIndex"
-          :column="column"
-          :columnIndex="$columnIndex"
-          :board="board"
+    <div class="input-main-header border-main-header">
+      <h3 class="input-name board-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
+      <input
+        ref="boardName"
+        class="text-lg input-hide"
+        v-bind:class="{'input-show': nameInputClicked}"
+        type="text"
+        v-on:input="updateWidth($event)"
+        @blur="updateBoard($event)"
+        @keyup.enter="updateBoard($event)"
+        @keyup.esc="updateBoard($event)"
+        v-bind:value="board.name"
         />
-        <div class="column flex">
-          <input
-            type="text"
-            v-model="newColumnName"
-            class="p-2 mr-2 flex-grow"
-            placeholder="New Column Name"
-            @keyup.enter="createColumn"
-          >
+    </div>
+    <div class="relative">
+      <div class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden">
+        <div class="flex flex-row items-start h-full">
+          <BoardColumn
+            v-for="(column, $columnIndex) of board.columns"
+            :key="$columnIndex"
+            :column="column"
+            :columnIndex="$columnIndex"
+            :board="board"
+          />
+          <div class="column">
+            <input
+              type="text"
+              v-model="newColumnName"
+              class="p-2 mr-2 flex-grow"
+              placeholder="New Column Name"
+              @keyup.enter="createColumn"
+            >
+          </div>
         </div>
-      </div>
-      <div class="task-bg" v-if="isTaskOpen" @click.self="close">
-        <router-view></router-view>
+        <div class="task-bg" v-if="isTaskOpen" @click.self="close">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -131,7 +134,12 @@ export default {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
+  font-size: 14px;
+  font-weight: 600;
   vertical-align: center;
+}
+.board-name {
+  font-size: 18px;
 }
 .input-name:hover {
   background: rgba(255, 255, 255, 0.171);
@@ -140,16 +148,16 @@ export default {
   border-radius: 2px;
 }
 .board-main {
-  @apply p-2
+  padding-bottom: 20px;
+  height: calc(100vh - 80px);
 }
 .input-main-header {
   @apply h-10;
-  padding: 4px;
-  margin-bottom: 4px;
-  /* min-width: 50px; */
-  padding-left: 0;
   white-space:nowrap;
   display:inline-block;
+}
+.border-main-header {
+  padding: 8px 4px 4px 8px;
 }
 .input-main-header > input {
   @apply rounded;

@@ -1,5 +1,6 @@
 <template>
   <div class="home-container">
+    <NavBar />
     <div class="home-content-container">
       <div class="home-content-wrapper">
         <nav class="home-left-sidebar-container">
@@ -63,28 +64,30 @@
             <h3 class="boards-page-header-name">Personal Boards</h3>
           </div>
           <div class="boards-container">
-            <div class="boards-index">
-              <a class="board-tile" href="">
-                <span class="board-tile-fade"></span>
+            <div class="boards-index" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+              <router-link class="board-tile" :to="{ name: 'board', params: { id: board._id} }">
                 <div class="board-tile-details">
-                  <div class="board-tile-details-name" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                  <div class="board-tile-details-name" >
                     {{board.name}}
                   </div>
                 </div>
-              </a>
+              </router-link>
             </div>
           </div>
         </div>
       </div>
-      <button class="boards-signout" @click.prevent="signout">SIGN OUT</button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import NavBar from './NavBar'
 
 export default {
+  components: {
+    NavBar
+  },
   computed: {
     ...mapGetters(['getUser'])
   },
@@ -97,12 +100,6 @@ export default {
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
       })
-  },
-  methods: {
-    async signout () {
-      await this.$store.commit('RESET')
-      this.$router.push({ name: 'login' })
-    }
   },
   data () {
     return {
@@ -310,12 +307,7 @@ export default {
 .boards-index {
   display: flex;
 }
-.board-tile-fade {
-  /* background-color: rgba(0,0,0,.15); */
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
+.board-title {
+  background-color: red;
 }
 </style>

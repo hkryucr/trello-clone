@@ -93,26 +93,27 @@ export default {
 .navbar-container{
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
     background-color: #20504f;
+    align-items: center;
     height: 2.5rem;
-    left: 0;
 }
 .navbar-left{
   display: flex;
   flex-direction: row;
   left: 0;
-  width: 33%;
+  position: fixed;
 }
 .navbar-right{
   display: flex;
   flex-direction: row;
-  width: 33%;
   justify-content: flex-end;
+  position: fixed;
+  right: 0;
 }
 .navbar-header {
-  width: 33%;
+  position: fixed;
+  left: 46%;
 }
 .navbar-icon{
   display: flex;

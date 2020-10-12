@@ -3,81 +3,89 @@
     <NavBar />
     <div class='boards-page-container'>
       <nav class="home-left-sidebar-container">
-        <div class="nav-user-info-container">
-          <ul class="nav-user-info">
-            <li class="user-boards">
-              <a class="boards-link" href="">
-                <span class="icon-container">
-                  <span class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
-                </span>
-                <span class="boards-link-text">Boards</span>
-              </a>
-            </li>
-            <div class="template-link-container">
-              <li class="templates">
-                <a class="templates-link" href="">
-                  <span class="icon-container">
-                    <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
-                  </span>
-                  <span class="templates-link-text">Templates</span>
-                </a>
-              </li>
-            </div>
-            <li class="to-homepage">
-              <a class="homepage-link" href="">
-                <span class="icon-container">
-                  <span class="icon-wrapper">
-                    <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
-                  </span>
-                </span>
-                <span class="homepage-link-text">Home</span>
-              </a>
-            </li>
-          </ul>
+        <div class='boards-side-menu-option-selected'>
+          <span class="icon-container">
+            <span style='color: #0079bf;' class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Boards</div>
         </div>
-        <div class="create-team-nav">
-          <div class="create-team-nav-header">
-            <div class="NC6qaILF7dGKjb">
-              <div class="_2zEdWKjwDvxZHR dG8NJxS20S4HJ2">
-                <div class="_mtkwfAlvk6O3f">TEAMS</div>
-              </div>
-            </div>
-          </div>
-          <div class="create-team">
-            <button class="_33CvMKqfH4Yf0j _3SBHBJq0AAxzqg" data-test-id="home-navigation-create-team-button" aria-label="Create a team">
-              <span class="_12-5x14JSgUact">
-                <span class="_2aV_KY1gTq1qWc">
-                  <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
-                </span>
-              </span>
-              <span class="_3qwe2tMMFonNvf">Create a team</span>
-            </button>
-          </div>
+        <div class='boards-side-menu-option'>
+          <span class="icon-container">
+            <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Templates</div>
         </div>
-      </nav>
-      <div class="my-boards">
-        <div class="my-boards-section-header">
-          <div class="boards-page-icon">
-            <span class="icon-lg icon-member"></span>
-          </div>
-          <h3 class="boards-page-header-name">Personal Boards</h3>
+        <div class='boards-side-menu-option'>
+          <span class="icon-container">
+            <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Home</div>
         </div>
-        <div class="boards-container">
-          <div class="boards-index">
-            <a class="board-tile" href="">
-              <span class="board-tile-fade"></span>
-              <div class="board-tile-details">
-                <div class="board-tile-details-name" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
-                  {{board.name}}
-                </div>
-              </div>
-            </a>
-          </div>
+        <div class='boards-side-menu-teams'>Teams</div>
+      <div class='boards-side-menu-create-team'>
+        <div class='icon-wrapper'>
+          <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
         </div>
-        <button class="boards-signout" @click.prevent="signout">SIGN OUT</button>
+        <div class='boards-side-menu-create-text'>Create a team</div>
       </div>
-
-    </div>
+      </nav>
+      <div class='boards-section-container'>
+        <div class="my-boards">
+          <div class="my-boards-section-header">
+            <div class="boards-page-icon">
+              <span class="icon-lg icon-star"></span>
+            </div>
+            <h3 class="boards-page-header-name">Starred Boards</h3>
+          </div>
+          <div class="boards-container">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        <div class="my-boards">
+          <div class="my-boards-section-header">
+            <div class="boards-page-icon">
+              <span class="icon-lg icon-clock"></span>
+            </div>
+            <h3 class="boards-page-header-name">Recently Viewed</h3>
+          </div>
+          <div class="boards-container">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        <div class="my-boards">
+          <div class="my-boards-section-header">
+            <div class="boards-page-icon">
+              <span class="icon-lg icon-member"></span>
+            </div>
+            <h3 class="boards-page-header-name">Personal Boards</h3>
+          </div>
+          <div class="boards-container">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+          </div>
+      </div>
+      </div>
   </div>
 </template>
 
@@ -125,40 +133,23 @@ export default {
 }
 .boards-page-container {
   display: flex;
+  flex-direction: row;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
+  padding-left: 200px;
 }
-
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
 .home-left-sidebar-container {
   margin: 40px 0 0;
   padding: 0 16px;
   width: 272px;
   top: 10;
-  transform: translateX(200px);
-}
-.nav-user-info-container {
-  display: block;
-}
-.nav-user-info {
-  margin-bottom: 12px;
-  list-style: none;
-  padding: 0;
-}
-.user-boards {
-  margin-bottom: 4px;
-  display: block;
-  align-items: center;
-  background-color: transparent;
-  border-radius: 4px;
-  box-shadow: none;
-  display: flex;
-  font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
 }
 .boards-link {
   background-color: #e4f0f6;
@@ -174,57 +165,65 @@ export default {
 .icon-link::before {
   content: "\E90A";
 }
-.template-link-container {
-  display: block;
-  align-items: center;
-  background-color: transparent;
-  border-radius: 4px;
-  box-shadow: none;
+
+.boards-side-menu-option-selected {
   display: flex;
-  font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-}
-.templates-link {
-  text-decoration: none;
-}
-.templates {
-  margin-bottom: 4px;
-}
-.templates-link-text {
-  font-size: 14px;
-  color: #172b4d;
-}
-.to-homepage {
-  margin-bottom: 4px;
-}
-.homepage-link {
-  align-items: center;
-  background-color: transparent;
+  padding: 6px 8px;
+  width: 100%;
+  background-color: #e4f0f6;
+  color: #0079bf;
   border-radius: 4px;
-  box-shadow: none;
-  display: flex;
+  margin-bottom: 5px;
+}
+.boards-side-menu-option-selected:hover {
+  cursor: pointer;
+}
+.boards-side-menu-text {
+  padding: 3px;
   font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-  color: #172b4d;
-}
-.homepage-link-text {
   font-size: 14px;
-  color: #172b4d;
 }
+.boards-side-menu-option {
+  display: flex;
+  padding: 6px 8px;
+  width: 100%;
+  color: #172b4d;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+.boards-side-menu-create-team {
+  display: flex;
+  margin: 15px;
+  width: 100%;
+  margin-left: 6px;
+  padding: 6px 8px;
+  color: #172b4d;
+  border-radius: 4px;
+}
+.boards-side-menu-create-text {
+  padding-left: 10px;
+  color: rgba(9,30,66,.66);
+  font-weight: 500;
+  font-size: 14px;
+}
+.boards-side-menu-option:hover, .boards-side-menu-create-team:hover {
+  background-color: #eeeded;
+  cursor: pointer;
+}
+.boards-side-menu-teams {
+  color: #5e6c84;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  line-height: 16px;
+  margin-top: 16px;
+  text-transform: uppercase;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 6px 12px;
+  text-align: left;
+}
+
 .create-team-nav {
   display: block;
 }
@@ -264,7 +263,7 @@ export default {
   font-weight: 400;
   color: rgba(9,30,66,.66);
 }
-._33CvMKqfH4Yf0j {
+/* ._33CvMKqfH4Yf0j {
   margin: 0;
   margin-top: 6px;
   justify-content: center;
@@ -281,7 +280,7 @@ export default {
   transition-timing-function: ease;
   cursor: pointer;
   text-align: left;
-}
+} */
 .my-boards-section-header {
   display: flex;
 }
@@ -305,80 +304,47 @@ export default {
 .boards-index {
   display: flex;
 }
-.board-tile-fade {
-  /* background-color: rgba(0,0,0,.15); */
+.my-boards {
+  margin: 40px 16px;
+  width: 100%;
+  max-width: 825px;
+  min-width: 288px;
+  margin-bottom: 0;
+}
+.boards-container {
+  display: flex;
+}
+.board-tile-container {
+  display: flex;
+  height: 96px;
+  width: 193.875px;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: darkgreen;
+  border-radius: 3px;
+  margin: 8px;
+}
+.boards-listing-container {
+  display: flex;
+}
+.board-tile-name {
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+  font-size: 16px;
+}
+/* .board-tile-fade {
+  background-color: rgba(0,0,0,.15);
   bottom: 0;
   left: 0;
   position: absolute;
   right: 0;
   top: 0;
+} */
+.boards-section-container {
+  display: flex;
+  flex-direction: column;
 }
 
-/* .boards-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
-}
-.boards-side-menu {
-  margin: 40px 0 0;
-  padding: 0 16px;
-  width: 272px;
-  top: 10;
-  transform: translateX(200px);
-}
-.boards-side-menu-option-selected {
-  display: flex;
-  padding: 6px 8px;
-  width: 100%;
-  background-color: #e4f0f6;
-  color: #0079bf;
-  border-radius: 4px;
-  margin-bottom: 5px;
-}
-.boards-side-menu-option-selected:hover {
-  cursor: pointer;
-}
-.boards-side-menu-option {
-  display: flex;
-  padding: 6px 8px;
-  width: 100%;
-  color: #172b4d;
-  border-radius: 4px;
-  margin-bottom: 5px;
-}
-.boards-side-menu-option:hover {
-  background-color: #eeeded;
-  cursor: pointer;
-}
-.boards-icon-background {
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  padding: 4px;
-}
-.boards-side-menu-text {
-  padding: 3px;
-  font-weight: 700;
-  font-size: 14px;
-}
-.boards-side-menu-teams {
-  color: #5e6c84;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: .04em;
-  line-height: 16px;
-  margin-top: 16px;
-  text-transform: uppercase;
-  flex: 1 1 auto;
-  margin: 0;
-  padding: 6px 12px;
-  text-align: left;
-}
-.boards-side-menu-create-text {
-  color: rgba(9,30,66,.77);
-}
-.boards-trello-icon {
-  fill:#0079bf;
-} */
 </style>

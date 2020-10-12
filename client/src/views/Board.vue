@@ -1,22 +1,9 @@
 <template>
   <div class="board flex flex-col">
     <NavBar />
-    <!-- <div class="board-header">
-    </div> -->
-    <div class="input-main-header border-main-header">
-      <h3 class="input-name board-name" @click.prevent="clickBoardName($event)" v-show="!nameInputClicked">{{board.name}}</h3>
-      <input
-        ref="boardName"
-        class="text-lg input-hide"
-        v-bind:class="{'input-show': nameInputClicked}"
-        type="text"
-        v-on:input="updateWidth($event)"
-        @blur="updateBoard($event)"
-        @keyup.enter="updateBoard($event)"
-        @keyup.esc="updateBoard($event)"
-        v-bind:value="board.name"
-        />
-    </div>
+    <BoardHeader
+      :board="board"
+    />
     <div class="relative">
       <div class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden">
         <div class="flex flex-row items-start h-full">
@@ -51,17 +38,19 @@ import { mapState } from 'vuex'
 import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
+import BoardHeader from '@/components/BoardHeader'
 
 export default {
   components: {
     BoardColumn,
-    NavBar
+    NavBar,
+    BoardHeader
   },
   data () {
     return {
       newColumnName: '',
-      boardName: '',
-      nameInputClicked: false }
+      boardName: ''
+    }
   },
   computed: {
     isTaskOpen () {
@@ -84,17 +73,6 @@ export default {
       })
   },
   methods: {
-    updateWidth () {
-      const inputLength = this.$refs.boardName.value.length * 8 + 30
-      this.$refs.boardName.style.width = inputLength.toString() + 'px'
-    },
-    clickBoardName () {
-      this.nameInputClicked = true
-      this.updateWidth()
-      this.$refs.boardName.classList.add('input-show')
-      this.$refs.boardName.focus()
-      this.$refs.boardName.select()
-    },
     close () {
       this.$router.push({ name: 'board' })
     },
@@ -105,15 +83,6 @@ export default {
       }
       this.$store.dispatch('createColumn', data)
       this.newColumnName = ''
-    },
-    updateBoard (e) {
-      if (!this.nameInputClicked || e.target.value.replace(/ /g, '').length === 0) {
-        this.nameInputClicked = false
-      } else {
-        this.nameInputClicked = false
-        this.$refs.boardName.classList.remove('input-show')
-        this.$store.dispatch('updateBoard', { name: e.target.value })
-      }
     }
   }
 }
@@ -123,60 +92,13 @@ export default {
 .task {
   @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
 }
-.board-header {
-  @apply h-10 bg-teal-darker;
-  opacity: 50%;
-}
 .board {
   @apply bg-teal-dark h-full overflow-auto;
-}
-.input-name {
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 2px;
-  font-size: 14px;
-  font-weight: 600;
-  vertical-align: center;
-}
-.board-name {
-  font-size: 18px;
-}
-.input-name:hover {
-  background: rgba(255, 255, 255, 0.171);
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 2px;
+  background-color: #40d9ac;
 }
 .board-main {
   padding-bottom: 20px;
   height: calc(100vh - 80px);
-}
-.input-main-header {
-  @apply h-10;
-  white-space:nowrap;
-  display:inline-block;
-}
-.border-main-header {
-  padding: 8px 4px 4px 8px;
-}
-.input-main-header > input {
-  @apply rounded;
-  height: 100%;
-  /* min-width: 50px; */
-  width: fit-content;
-  max-width: 80vw;
-  box-sizing:border-box;
-  outline: transparent;
-  padding: 4px;
-  padding-left: 4px;
-  font-weight: bolder;
-  white-space:nowrap;
-}
-.input-hide {
-  display: none;
-}
-.input-show {
-  display: block;
 }
 .task-bg {
   @apply pin absolute;

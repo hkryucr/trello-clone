@@ -334,6 +334,10 @@ export default {
   font-weight: 700;
   font-size: 16px;
 }
+a {
+  text-decoration: none;
+
+}
 /* .board-tile-fade {
   background-color: rgba(0,0,0,.15);
   bottom: 0;

@@ -1,90 +1,94 @@
 <template>
   <div class="home-container">
-    <div class="home-content-container">
-      <div class="home-content-wrapper">
-        <nav class="home-left-sidebar-container">
-          <div class="nav-user-info-container">
-            <ul class="nav-user-info">
-              <li class="user-boards">
-                <a class="boards-link" href="">
+    <NavBar />
+    <div class='boards-page-container'>
+      <nav class="home-left-sidebar-container">
+        <div class="nav-user-info-container">
+          <ul class="nav-user-info">
+            <li class="user-boards">
+              <a class="boards-link" href="">
+                <span class="icon-container">
+                  <span class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
+                </span>
+                <span class="boards-link-text">Boards</span>
+              </a>
+            </li>
+            <div class="template-link-container">
+              <li class="templates">
+                <a class="templates-link" href="">
                   <span class="icon-container">
-                    <span class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
+                    <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
                   </span>
-                  <span class="boards-link-text">Boards</span>
+                  <span class="templates-link-text">Templates</span>
                 </a>
               </li>
-              <div class="template-link-container">
-                <li class="templates">
-                  <a class="templates-link" href="">
-                    <span class="icon-container">
-                      <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
-                    </span>
-                    <span class="templates-link-text">Templates</span>
-                  </a>
-                </li>
-              </div>
-              <li class="to-homepage">
-                <a class="homepage-link" href="">
-                  <span class="icon-container">
-                    <span class="icon-wrapper">
-                      <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
-                    </span>
-                  </span>
-                  <span class="homepage-link-text">Home</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="create-team-nav">
-            <div class="create-team-nav-header">
-              <div class="NC6qaILF7dGKjb">
-                <div class="_2zEdWKjwDvxZHR dG8NJxS20S4HJ2">
-                  <div class="_mtkwfAlvk6O3f">TEAMS</div>
-                </div>
-              </div>
             </div>
-            <div class="create-team">
-              <button class="_33CvMKqfH4Yf0j _3SBHBJq0AAxzqg" data-test-id="home-navigation-create-team-button" aria-label="Create a team">
-                <span class="_12-5x14JSgUact">
-                  <span class="_2aV_KY1gTq1qWc">
-                    <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
+            <li class="to-homepage">
+              <a class="homepage-link" href="">
+                <span class="icon-container">
+                  <span class="icon-wrapper">
+                    <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
                   </span>
                 </span>
-                <span class="_3qwe2tMMFonNvf">Create a team</span>
-              </button>
-            </div>
-          </div>
-        </nav>
-        <div class="my-boards">
-          <div class="my-boards-section-header">
-            <div class="boards-page-icon">
-              <span class="icon-lg icon-member"></span>
-            </div>
-            <h3 class="boards-page-header-name">Personal Boards</h3>
-          </div>
-          <div class="boards-container">
-            <div class="boards-index">
-              <a class="board-tile" href="">
-                <span class="board-tile-fade"></span>
-                <div class="board-tile-details">
-                  <div class="board-tile-details-name" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
-                    {{board.name}}
-                  </div>
-                </div>
+                <span class="homepage-link-text">Home</span>
               </a>
+            </li>
+          </ul>
+        </div>
+        <div class="create-team-nav">
+          <div class="create-team-nav-header">
+            <div class="NC6qaILF7dGKjb">
+              <div class="_2zEdWKjwDvxZHR dG8NJxS20S4HJ2">
+                <div class="_mtkwfAlvk6O3f">TEAMS</div>
+              </div>
             </div>
+          </div>
+          <div class="create-team">
+            <button class="_33CvMKqfH4Yf0j _3SBHBJq0AAxzqg" data-test-id="home-navigation-create-team-button" aria-label="Create a team">
+              <span class="_12-5x14JSgUact">
+                <span class="_2aV_KY1gTq1qWc">
+                  <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
+                </span>
+              </span>
+              <span class="_3qwe2tMMFonNvf">Create a team</span>
+            </button>
           </div>
         </div>
+      </nav>
+      <div class="my-boards">
+        <div class="my-boards-section-header">
+          <div class="boards-page-icon">
+            <span class="icon-lg icon-member"></span>
+          </div>
+          <h3 class="boards-page-header-name">Personal Boards</h3>
+        </div>
+        <div class="boards-container">
+          <div class="boards-index">
+            <a class="board-tile" href="">
+              <span class="board-tile-fade"></span>
+              <div class="board-tile-details">
+                <div class="board-tile-details-name" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                  {{board.name}}
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button class="boards-signout" @click.prevent="signout">SIGN OUT</button>
       </div>
-      <button class="boards-signout" @click.prevent="signout">SIGN OUT</button>
+
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import NavBar from '../views/NavBar'
 
 export default {
+  components: {
+    NavBar
+  },
   computed: {
     ...mapGetters(['getUser'])
   },
@@ -118,26 +122,17 @@ export default {
 }
 .home-container {
   min-height: calc(100vh - 40px);
-  background-color: #fafbfc;
-  margin: auto;
-  flex-grow: 1;
-  width: 100%;
 }
-.home-content-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-}
-.home-content-wrapper {
-  position: sticky;
-  top: 0px;
+.boards-page-container {
   display: flex;
 }
+
 .home-left-sidebar-container {
   margin: 40px 0 0;
   padding: 0 16px;
-  width: 240px;
+  width: 272px;
+  top: 10;
+  transform: translateX(200px);
 }
 .nav-user-info-container {
   display: block;
@@ -318,4 +313,72 @@ export default {
   right: 0;
   top: 0;
 }
+
+/* .boards-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
+}
+.boards-side-menu {
+  margin: 40px 0 0;
+  padding: 0 16px;
+  width: 272px;
+  top: 10;
+  transform: translateX(200px);
+}
+.boards-side-menu-option-selected {
+  display: flex;
+  padding: 6px 8px;
+  width: 100%;
+  background-color: #e4f0f6;
+  color: #0079bf;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+.boards-side-menu-option-selected:hover {
+  cursor: pointer;
+}
+.boards-side-menu-option {
+  display: flex;
+  padding: 6px 8px;
+  width: 100%;
+  color: #172b4d;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+.boards-side-menu-option:hover {
+  background-color: #eeeded;
+  cursor: pointer;
+}
+.boards-icon-background {
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
+.boards-side-menu-text {
+  padding: 3px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.boards-side-menu-teams {
+  color: #5e6c84;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  line-height: 16px;
+  margin-top: 16px;
+  text-transform: uppercase;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 6px 12px;
+  text-align: left;
+}
+.boards-side-menu-create-text {
+  color: rgba(9,30,66,.77);
+}
+.boards-trello-icon {
+  fill:#0079bf;
+} */
 </style>

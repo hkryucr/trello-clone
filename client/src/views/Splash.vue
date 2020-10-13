@@ -129,7 +129,6 @@ export default {
         </div>
       </div>
     </section>
-
     <div class="bottom-gradient">
       <section class="work-smarter">
         <div class="work-smarter-container">
@@ -156,10 +155,10 @@ export default {
         </div>
       </section>
       <section class="splash-footer">
-        <p class="global-footer-detail">
-          <img class="atlassian-logo-small white" src="../assets/Log in to Trello-4.svg" width="150">
+        <div class="global-footer-detail">
+          <img class="atlassian-logo-small white" src="../assets/Log in to Trello-4.svg">
           <div>&nbsp;© Copyright 2020. All rights reserved.</div>
-        </p>
+        </div>
       </section>
     </div>
   </div>
@@ -174,14 +173,20 @@ export default {
   margin: 4em 1em;
 }
 .splash-footer > .global-footer-detail {
-  font-size: .8em;
+  font-size: 1rem;
   text-align: center;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.5;
   color: #172B4D;
 }
 .global-footer-detail > div {
   margin-bottom: 1rem;
+}
+.global-footer-detail > img {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 17px;
 }
 #get-started {
   background-image: url('../assets/trellians-splash-footer.png');
@@ -298,8 +303,6 @@ export default {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   justify-content: center;
-  /* margin-right: -15px; */
-  /* margin-left: -15px; */
 }
 .get-started-container > .row h3 {
   font-size: 2.1875rem;
@@ -543,5 +546,4 @@ export default {
   margin-right: -15px;
   margin-left: -15px;
 }
-
 </style>

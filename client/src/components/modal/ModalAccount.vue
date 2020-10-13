@@ -67,6 +67,7 @@ export default {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   font-size: 14px;
   font-weight: 400;
+  color: #172b4d;
 }
 .modal-account-header-container {
   margin-bottom: 8px;

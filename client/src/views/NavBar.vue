@@ -169,7 +169,17 @@ export default {
   background-color: #fff;
   z-index: 10;
 }
-
+.modalcreate {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  box-sizing: border-box;
+  outline: 0;
+  overflow: hidden;
+}
 .navbar-board-link {
   display: flex;
   justify-content: center;

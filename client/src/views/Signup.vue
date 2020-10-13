@@ -37,7 +37,7 @@
         </div> -->
       </div>
       <router-link class="login-link" to="/login">Already have an account? Log In</router-link>
-    </div>
+    </div> ㅇㄴ
     <div class="space-holder"></div>
     <splashBottom></splashBottom>
     <background></background>

@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="navbar-outer-container">
     <div class="navbar-container">
       <div class='navbar-left'>
           <div @click.stop.prevent="openmodal('modalmenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
@@ -90,12 +90,17 @@ export default {
 </script>
 
 <style lang="css">
+.navbar-outer-container {
+  background-color: #20504f;
+  padding: 2px;
+  height: 2.5rem;
+  /* display: flex; */
+}
 .navbar-container{
-    display: flex;
-    flex-direction: row;
-    background-color: #20504f;
-    align-items: center;
-    height: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
 }
 .navbar-left{
   display: flex;

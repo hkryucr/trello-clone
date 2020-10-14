@@ -1,21 +1,22 @@
 <template>
+<div>
+  <NavBar />
   <div class="home-container">
-    <NavBar />
     <div class='boards-page-container'>
       <nav class="home-left-sidebar-container">
-        <div class='boards-side-menu-option-selected'>
+        <div :class="[activeTab === 'boards' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'boards')" >
           <span class="icon-container">
             <span style='color: #0079bf;' class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
           </span>
           <div class='boards-side-menu-text'>Boards</div>
         </div>
-        <div class='boards-side-menu-option'>
+        <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'templates')">
           <span class="icon-container">
             <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
           </span>
           <div class='boards-side-menu-text'>Templates</div>
         </div>
-        <div class='boards-side-menu-option'>
+        <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'home')">
           <span class="icon-container">
             <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
           </span>
@@ -82,11 +83,27 @@
                   </div>
                 </router-link>
               </div>
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+              </div>
+              <div class="boards-listing-container">
+                <div class='board-create-tile-container'>
+                  <span>Create new board</span>
+                  <!-- <div class='board-tile-name'>Create New Board</div>
+                  <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
+                  </div>
+              </div>
             </div>
           </div>
       </div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -114,11 +131,15 @@ export default {
     async signout () {
       await this.$store.commit('RESET')
       this.$router.push({ name: 'login' })
+    },
+    changeTab ($event, target) {
+      if (this.activeTab !== target) this.activeTab = target
     }
   },
   data () {
     return {
-      boards: []
+      boards: [],
+      activeTab: 'boards'
     }
   }
 }
@@ -134,8 +155,8 @@ export default {
 .boards-page-container {
   display: flex;
   flex-direction: row;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
-  padding-left: 200px;
+  align-items: flex-start;
+  justify-content: center;
 }
 .icon-container {
   display: flex;
@@ -166,6 +187,11 @@ export default {
   content: "\E90A";
 }
 
+.boards-side-menu-text {
+  padding: 3px;
+  font-weight: 700;
+  font-size: 14px;
+}
 .boards-side-menu-option-selected {
   display: flex;
   padding: 6px 8px;
@@ -177,11 +203,6 @@ export default {
 }
 .boards-side-menu-option-selected:hover {
   cursor: pointer;
-}
-.boards-side-menu-text {
-  padding: 3px;
-  font-weight: 700;
-  font-size: 14px;
 }
 .boards-side-menu-option {
   display: flex;
@@ -263,24 +284,6 @@ export default {
   font-weight: 400;
   color: rgba(9,30,66,.66);
 }
-/* ._33CvMKqfH4Yf0j {
-  margin: 0;
-  margin-top: 6px;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  background-color: transparent;
-  border-radius: 4px;
-  display: flex;
-  overflow: hidden;
-  text-decoration: none;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-  cursor: pointer;
-  text-align: left;
-} */
 .my-boards-section-header {
   display: flex;
 }
@@ -325,6 +328,21 @@ export default {
   border-radius: 3px;
   margin: 8px;
 }
+.board-create-tile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96px;
+  width: 193.875px;
+  position: relative;
+  background-color: rgba(9,30,66,.04);
+  border-radius: 3px;
+  margin: 8px;
+  cursor: pointer;
+}
+.board-create-tile-container:hover {
+  background-color: #afafaf48;
+}
 .boards-listing-container {
   display: flex;
 }
@@ -333,22 +351,29 @@ export default {
   padding: 10px;
   font-weight: 700;
   font-size: 16px;
+  word-wrap: break-word;
 }
 a {
   text-decoration: none;
-
 }
-/* .board-tile-fade {
-  background-color: rgba(0,0,0,.15);
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-} */
 .boards-section-container {
   display: flex;
   flex-direction: column;
+}
+.board-tile.mod-add{
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  color: #172b4d;
+  display: table-cell;
+  height: 80px;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  width: inherit;
+  transition-property: background-color,border-color,box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
 }
 
 </style>

@@ -30,3 +30,26 @@ describe('Signup', () => {
     expect(actions.signup).toHaveBeenCalled()
   })
 })
+
+// test('dispatches fetchListData with $route.params.type', async () => {
+//   expect.assertions(1)
+//   const store = createStore()
+//   store.dispatch = jest.fn(() => Promise.resolve())
+//   const type = 'a type'
+//   const mocks = {
+//     $route: {
+//       params: {
+//         type
+//       }
+//     }
+//   }
+//   createWrapper({
+//     store,
+//     mocks
+//   })
+//   await flushPromises() 
+//   expect(store.dispatch).toHaveBeenCalledWith('fetchListData', {
+//   type
+//   })
+  
+// })

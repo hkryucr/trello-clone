@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
   const user = await User.findById(req.body.user);
   const board = new Board({
     name: req.body.name,
-    user: user
+    user: user, 
   });
 
   board.save().then((board) => {
@@ -52,8 +52,6 @@ router.post("/", async (req, res) => {
 
 // create a board the belongs to users 
 router.post("/", async (req, res) => {
-  console.log(req.user);
-  console.log(req.body);
 
   const user = await User.findById(req.body.user); 
 

@@ -100,6 +100,12 @@ export default new Vuex.Store({
         taskId,
         type
       })
+    },
+    starBoard: ({ state, commit }, { user, board }) => {
+      VueInstance.$socket.emit('starBoard', {
+        user,
+        board
+      })
     }
   },
   mutations: {
@@ -167,6 +173,10 @@ export default new Vuex.Store({
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
+    },
+    SOCKET_UPDATE_USER_STARRED_BOARDS (state, { user }) {
+      // state.session.currentUser = user ???
+      // state.starred = user.starred ???
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value

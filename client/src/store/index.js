@@ -20,7 +20,13 @@ export default new Vuex.Store({
       return state.session.isLoggedIn
     },
     getUser: state => {
+      return state.user
+    },
+    getCurrentUser: state => {
       return state.session.currentUser
+    },
+    getBoards: state => {
+      return state.user && state.user.boards
     },
     getNavModal: state => {
       return state.ui && state.ui.navModal
@@ -101,10 +107,10 @@ export default new Vuex.Store({
         type
       })
     },
-    starBoard: ({ state, commit }, { user, board }) => {
+    starBoard: ({ state, commit }, { userId, boardId }) => {
       VueInstance.$socket.emit('starBoard', {
-        user,
-        board
+        userId,
+        boardId
       })
     }
   },
@@ -174,15 +180,13 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
-    SOCKET_UPDATE_USER_STARRED_BOARDS (state, { user }) {
-      // state.session.currentUser = user ???
-      // state.starred = user.starred ???
+    SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, boolean }) {
+      state.user.starredBoards[boardId] = boolean
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     },
     OPEN_MODAL (state, modal) {
-      console.log(state)
       state.ui.navModal = modal
     },
     CLOSE_MODAL (state) {

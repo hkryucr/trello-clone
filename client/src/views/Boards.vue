@@ -39,13 +39,16 @@
             <h3 class="boards-page-header-name">Starred Boards</h3>
           </div>
           <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
                 <router-link to='board/:board.id'>
                   <div class='board-tile-container'>
                     <div class='board-tile-name'>{{board.name}}</div>
                     <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
                   </div>
                 </router-link>
+                <div @click.prevent="toggleStar(getUser.id, board._id)">
+                  {{getUser.starredBoards[board._id]}}
+                </div>
               </div>
             </div>
           </div>
@@ -57,7 +60,7 @@
             <h3 class="boards-page-header-name">Recently Viewed</h3>
           </div>
           <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
                 <router-link to='board/:board.id'>
                   <div class='board-tile-container'>
                     <div class='board-tile-name'>{{board.name}}</div>
@@ -75,15 +78,7 @@
             <h3 class="boards-page-header-name">Personal Boards</h3>
           </div>
           <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
-                <router-link to='board/:board.id'>
-                  <div class='board-tile-container'>
-                    <div class='board-tile-name'>{{board.name}}</div>
-                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
-                  </div>
-                </router-link>
-              </div>
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
                 <router-link to='board/:board.id'>
                   <div class='board-tile-container'>
                     <div class='board-tile-name'>{{board.name}}</div>
@@ -115,13 +110,14 @@ export default {
     NavBar
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards'])
   },
   mounted () {
-    this.$store.dispatch('fetchUser', this.getUser._id)
+    this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
-        this.boards = res.data.boards
+        // this.boards = res.data.boards
+        console.log(this.getUser)
       })
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
@@ -134,11 +130,15 @@ export default {
     },
     changeTab ($event, target) {
       if (this.activeTab !== target) this.activeTab = target
+    },
+    toggleStar (userId, boardId) {
+      console.log('fireing', userId, boardId)
+      this.$store.dispatch('starBoard', { userId, boardId })
     }
   },
   data () {
     return {
-      boards: [],
+      // boards: [],
       activeTab: 'boards'
     }
   }

@@ -10,6 +10,7 @@ const tasks = require("./routes/api/tasks");
 const BoardController = require("./controllers/BoardController");
 const ColumnController = require("./controllers/ColumnController");
 const TaskController = require("./controllers/TaskController");
+const UserController = require("./controllers/UserController");
 
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
@@ -52,6 +53,10 @@ io.on("connection", (socket) => {
   socket.on("updateBoard", async (data) => {
     new BoardController().updateBoard(io, socket, data);
   });
+
+  socket.on("starBoard", async(data) => {
+    new UserController().starBoard(io, socket, data);
+  })
 
   socket.on("createColumn", async (data) => {
     new ColumnController().createColumn(io, socket, data);

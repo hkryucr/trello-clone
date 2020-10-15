@@ -1,4 +1,6 @@
 import User from '../models/User'
+const db = require("./config/keys").mongoURI;
+
 
 class UserController {
   async starBoard(io, socket, data) {

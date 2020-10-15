@@ -1,15 +1,23 @@
-import User from '../models/User'
-const db = require("./config/keys").mongoURI;
-
+const User = require("../models/User");
 
 class UserController {
   async starBoard(io, socket, data) {
-    const { userId, boardId, boolean } = data;
-    const user = await User.findById(userId);
-    user.starredBoard[boardId] = boolean;
-    user.save().then(user => {
-      io.sockets.emit("UPDATE_USER_STARRED_BOARDS", user);
-    });
+    const { userId, boardId, bool } = data;
+    const query = { _id: userId };
+  
+    let sb = `starredBoards.${boardId}`;
+    
+    User.findByIdAndUpdate(query, {
+      $set: {
+        [sb]: !bool
+      }
+    }, {new: true},
+    function (err, doc) {
+      io.sockets.emit("UPDATE_USER_STARRED_BOARDS", {
+        boardId,
+        bool: !bool
+      });
+    })
   }
 }
 

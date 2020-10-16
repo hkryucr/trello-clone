@@ -1,61 +1,75 @@
 <template>
+<div>
+  <NavBar />
   <div class="home-container">
-    <NavBar />
-    <div class="home-content-container">
-      <div class="home-content-wrapper">
-        <nav class="home-left-sidebar-container">
-          <div class="nav-user-info-container">
-            <ul class="nav-user-info">
-              <li class="user-boards">
-                <a class="boards-link" href="">
-                  <span class="icon-container">
-                    <span class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
-                  </span>
-                  <span class="boards-link-text">Boards</span>
-                </a>
-              </li>
-              <div class="template-link-container">
-                <li class="templates">
-                  <a class="templates-link" href="">
-                    <span class="icon-container">
-                      <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
-                    </span>
-                    <span class="templates-link-text">Templates</span>
-                  </a>
-                </li>
-              </div>
-              <li class="to-homepage">
-                <a class="homepage-link" href="">
-                  <span class="icon-container">
-                    <span class="icon-wrapper">
-                      <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
-                    </span>
-                  </span>
-                  <span class="homepage-link-text">Home</span>
-                </a>
-              </li>
-            </ul>
+    <div class='boards-page-container'>
+      <nav class="home-left-sidebar-container">
+        <div :class="[activeTab === 'boards' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'boards')" >
+          <span class="icon-container">
+            <span style='color: #0079bf;' class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Boards</div>
+        </div>
+        <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'templates')">
+          <span class="icon-container">
+            <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Templates</div>
+        </div>
+        <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'home')">
+          <span class="icon-container">
+            <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
+          </span>
+          <div class='boards-side-menu-text'>Home</div>
+        </div>
+        <div class='boards-side-menu-teams'>Teams</div>
+      <div class='boards-side-menu-create-team'>
+        <div class='icon-wrapper'>
+          <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
+        </div>
+        <div class='boards-side-menu-create-text'>Create a team</div>
+      </div>
+      </nav>
+      <div class='boards-section-container'>
+        <div class="my-boards">
+          <div class="my-boards-section-header">
+            <div class="boards-page-icon">
+              <span class="icon-lg icon-star"></span>
+            </div>
+            <h3 class="boards-page-header-name">Starred Boards</h3>
           </div>
-          <div class="create-team-nav">
-            <div class="create-team-nav-header">
-              <div class="NC6qaILF7dGKjb">
-                <div class="_2zEdWKjwDvxZHR dG8NJxS20S4HJ2">
-                  <div class="_mtkwfAlvk6O3f">TEAMS</div>
+          <div class="boards-container">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+                <div @click.prevent="toggleStar(getUser.id, board._id)">
+                  {{getUser.starredBoards[board._id]}}
                 </div>
               </div>
             </div>
-            <div class="create-team">
-              <button class="_33CvMKqfH4Yf0j _3SBHBJq0AAxzqg" data-test-id="home-navigation-create-team-button" aria-label="Create a team">
-                <span class="_12-5x14JSgUact">
-                  <span class="_2aV_KY1gTq1qWc">
-                    <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
-                  </span>
-                </span>
-                <span class="_3qwe2tMMFonNvf">Create a team</span>
-              </button>
+          </div>
+        <div class="my-boards">
+          <div class="my-boards-section-header">
+            <div class="boards-page-icon">
+              <span class="icon-lg icon-clock"></span>
+            </div>
+            <h3 class="boards-page-header-name">Recently Viewed</h3>
+          </div>
+          <div class="boards-container">
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
+                  </div>
+                </router-link>
+              </div>
             </div>
           </div>
-        </nav>
         <div class="my-boards">
           <div class="my-boards-section-header">
             <div class="boards-page-icon">
@@ -64,46 +78,68 @@
             <h3 class="boards-page-header-name">Personal Boards</h3>
           </div>
           <div class="boards-container">
-            <div class="boards-index" v-for="(board, $boardIndex) of boards" :key="$boardIndex">
-              <router-link class="board-tile" :to="{ name: 'board', params: { id: board._id} }">
-                <div class="board-tile-details">
-                  <div class="board-tile-details-name" >
-                    {{board.name}}
+              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
+                <router-link to='board/:board.id'>
+                  <div class='board-tile-container'>
+                    <div class='board-tile-name'>{{board.name}}</div>
+                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
                   </div>
-                </div>
-              </router-link>
+                </router-link>
+              </div>
+              <div class="boards-listing-container">
+                <div class='board-create-tile-container'>
+                  <span>Create new board</span>
+                  <!-- <div class='board-tile-name'>Create New Board</div>
+                  <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
-    </div>
+      </div>
   </div>
+</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import NavBar from './NavBar'
+import NavBar from '../views/NavBar'
 
 export default {
   components: {
     NavBar
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards'])
   },
   mounted () {
-    this.$store.dispatch('fetchUser', this.getUser._id)
+    this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
-        this.boards = res.data.boards
+        // this.boards = res.data.boards
+        console.log(this.getUser)
       })
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
       })
   },
+  methods: {
+    async signout () {
+      await this.$store.commit('RESET')
+      this.$router.push({ name: 'login' })
+    },
+    changeTab ($event, target) {
+      if (this.activeTab !== target) this.activeTab = target
+    },
+    toggleStar (userId, boardId) {
+      console.log('fireing', userId, boardId)
+      this.$store.dispatch('starBoard', { userId, boardId })
+    }
+  },
   data () {
     return {
-      boards: []
+      // boards: [],
+      activeTab: 'boards'
     }
   }
 }
@@ -115,52 +151,26 @@ export default {
 }
 .home-container {
   min-height: calc(100vh - 40px);
-  background-color: #fafbfc;
-  margin: auto;
-  flex-grow: 1;
-  width: 100%;
 }
-.home-content-container {
+.boards-page-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
 }
-.home-content-wrapper {
-  position: sticky;
-  top: 0px;
+.icon-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
 }
 .home-left-sidebar-container {
   margin: 40px 0 0;
   padding: 0 16px;
-  width: 240px;
-}
-.nav-user-info-container {
-  display: block;
-}
-.nav-user-info {
-  margin-bottom: 12px;
-  list-style: none;
-  padding: 0;
-}
-.user-boards {
-  margin-bottom: 4px;
-  display: block;
-  align-items: center;
-  background-color: transparent;
-  border-radius: 4px;
-  box-shadow: none;
-  display: flex;
-  font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
+  width: 272px;
+  top: 10;
 }
 .boards-link {
   background-color: #e4f0f6;
@@ -176,57 +186,65 @@ export default {
 .icon-link::before {
   content: "\E90A";
 }
-.template-link-container {
-  display: block;
-  align-items: center;
-  background-color: transparent;
-  border-radius: 4px;
-  box-shadow: none;
-  display: flex;
+
+.boards-side-menu-text {
+  padding: 3px;
   font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-}
-.templates-link {
-  text-decoration: none;
-}
-.templates {
-  margin-bottom: 4px;
-}
-.templates-link-text {
   font-size: 14px;
-  color: #172b4d;
 }
-.to-homepage {
-  margin-bottom: 4px;
-}
-.homepage-link {
-  align-items: center;
-  background-color: transparent;
-  border-radius: 4px;
-  box-shadow: none;
+.boards-side-menu-option-selected {
   display: flex;
-  font-weight: 700;
-  margin: 0;
-  min-height: 20px;
-  overflow: hidden;
-  padding: 6px 8px 6px 0;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-  color: #172b4d;
+  padding: 6px 8px;
+  width: 100%;
+  background-color: #e4f0f6;
+  color: #0079bf;
+  border-radius: 4px;
+  margin-bottom: 5px;
 }
-.homepage-link-text {
+.boards-side-menu-option-selected:hover {
+  cursor: pointer;
+}
+.boards-side-menu-option {
+  display: flex;
+  padding: 6px 8px;
+  width: 100%;
+  color: #172b4d;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+.boards-side-menu-create-team {
+  display: flex;
+  margin: 15px;
+  width: 100%;
+  margin-left: 6px;
+  padding: 6px 8px;
+  color: #172b4d;
+  border-radius: 4px;
+}
+.boards-side-menu-create-text {
+  padding-left: 10px;
+  color: rgba(9,30,66,.66);
+  font-weight: 500;
   font-size: 14px;
-  color: #172b4d;
 }
+.boards-side-menu-option:hover, .boards-side-menu-create-team:hover {
+  background-color: #eeeded;
+  cursor: pointer;
+}
+.boards-side-menu-teams {
+  color: #5e6c84;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  line-height: 16px;
+  margin-top: 16px;
+  text-transform: uppercase;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 6px 12px;
+  text-align: left;
+}
+
 .create-team-nav {
   display: block;
 }
@@ -266,24 +284,6 @@ export default {
   font-weight: 400;
   color: rgba(9,30,66,.66);
 }
-._33CvMKqfH4Yf0j {
-  margin: 0;
-  margin-top: 6px;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  background-color: transparent;
-  border-radius: 4px;
-  display: flex;
-  overflow: hidden;
-  text-decoration: none;
-  text-decoration: none;
-  transition-property: background-color,border-color,box-shadow;
-  transition-duration: 85ms;
-  transition-timing-function: ease;
-  cursor: pointer;
-  text-align: left;
-}
 .my-boards-section-header {
   display: flex;
 }
@@ -307,7 +307,73 @@ export default {
 .boards-index {
   display: flex;
 }
-.board-title {
-  background-color: red;
+.my-boards {
+  margin: 40px 16px;
+  width: 100%;
+  max-width: 825px;
+  min-width: 288px;
+  margin-bottom: 0;
 }
+.boards-container {
+  display: flex;
+}
+.board-tile-container {
+  display: flex;
+  height: 96px;
+  width: 193.875px;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: darkgreen;
+  border-radius: 3px;
+  margin: 8px;
+}
+.board-create-tile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96px;
+  width: 193.875px;
+  position: relative;
+  background-color: rgba(9,30,66,.04);
+  border-radius: 3px;
+  margin: 8px;
+  cursor: pointer;
+}
+.board-create-tile-container:hover {
+  background-color: #afafaf48;
+}
+.boards-listing-container {
+  display: flex;
+}
+.board-tile-name {
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+a {
+  text-decoration: none;
+}
+.boards-section-container {
+  display: flex;
+  flex-direction: column;
+}
+.board-tile.mod-add{
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  color: #172b4d;
+  display: table-cell;
+  height: 80px;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  width: inherit;
+  transition-property: background-color,border-color,box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+}
+
 </style>

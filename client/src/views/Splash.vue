@@ -129,10 +129,73 @@ export default {
         </div>
       </div>
     </section>
+    <div class="bottom-gradient">
+      <section class="work-smarter">
+        <div class="work-smarter-container">
+          <div class="inner py-12 px-20 text-center text-white">
+            <h3>Work smarter with Trello</h3>
+            <p>Companies of all shapes and sizes use Trello.</p>
+            <div class="row flex justify-center mt-12">
+              <div class="mb-12 flex items-center" v-for="(num, $index) in [0, 1, 2, 3, 4, 5, 6]" :key="$index">
+                <img :src="require(`../assets/company-${num}.svg`)" alt="" style="width: 168px;max-height: 60px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="get-started" class="get-started flex items-center my-4">
+        <div class="get-started-container text-center py-6">
+          <div class="row flex">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3 px-lg-5 pt-4">
+              <h3>Start Planning Today</h3>
+              <p>Sign up and join over 1,000,000 teams worldwide who are using Trello to get more done.</p>
+              <router-link to="/signup" class="btn btn-success px-3">Get Started – It’s Free!</router-link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="splash-footer">
+        <div class="global-footer-detail">
+          <img class="atlassian-logo-small white" src="../assets/Log in to Trello-4.svg">
+          <div>&nbsp;© Copyright 2020. All rights reserved.</div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
 <style lang="css">
+.splash-footer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 4em 1em;
+}
+.splash-footer > .global-footer-detail {
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #172B4D;
+}
+.global-footer-detail > div {
+  margin-bottom: 1rem;
+}
+.global-footer-detail > img {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 17px;
+}
+#get-started {
+  background-image: url('../assets/trellians-splash-footer.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1332px 393px;
+  height: 393px;
+  margin: 2.5rem 0;
+}
 .splash-header{
   position: fixed;
   top: 0;
@@ -193,24 +256,91 @@ export default {
   margin: 0 auto;
 }
 @media (min-width: 576px){
-  .section-container {
+  .section-container, .work-smarter-container, .get-started-container{
     max-width: 540px;
+  }
+  .work-smarter-container > .inner > .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (min-width: 768px){
-  .section-container {
+  .section-container, .work-smarter-container, .get-started-container {
     max-width: 720px;
+  }
+  .get-started-container > .row > div {
+      padding-top: 1.5rem !important;
+      /* margin-left: 16.66666667%; */
+      flex: 0 0 66.66666667%;
+      max-width: 66.66666667%;
   }
 }
 @media (min-width: 992px){
-  .section-container {
+  .section-container, .work-smarter-container, .get-started-container {
     max-width: 960px;
+  }
+  .work-smarter-container > .inner > .row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .get-started-container > .row > div {
+      padding-top: 1.5rem !important;
   }
 }
 @media (min-width: 1200px){
-  .section-container {
+  .section-container, .work-smarter-container, .get-started-container {
     max-width: 1140px;
   }
+}
+.get-started-container {
+  /* width: 100%; */
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.get-started-container > .row {
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.get-started-container > .row h3 {
+  font-size: 2.1875rem;
+  margin-bottom: 1rem;
+}
+
+.get-started-container > .row p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.get-started-container > .row a {
+  color: #fff;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border-radius: 6px;
+  -webkit-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.work-smarter-container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 .section-container-row {
   display: flex;
@@ -297,9 +427,6 @@ export default {
   max-width: 50%;
   display: flex;
 }
-/* .section-container-row-right2{
-
-} */
 .start-doing-btn {
   display: inline-block;
   text-align: center;
@@ -374,6 +501,7 @@ export default {
   font-size: 1.25rem;
   line-height: 1.5;
   border-radius: 6px;
+  text-decoration: none;
   transition: color .15s ease-in-out, background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .quick-signup-email-btn{
@@ -387,5 +515,35 @@ export default {
 .btn-demo-user:hover{
   border-color: #6c9cb9;
   background-color: #3c8abb;
+}
+
+.bottom-gradient {
+  background: linear-gradient(to bottom, #fff 0%, #f7ecff 46%, #d2ecff 74%, #fff 100%);
+}
+.work-smarter-container .inner {
+  background: linear-gradient(180deg, #42548e 0%, #6b668c 100%);
+  border-radius: 12px;
+  color: #fff !important;
+}
+.work-smarter-container > .inner > h3 {
+  font-size: 2.2rem;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.work-smarter-container > .inner > p{
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.work-smarter-container > .inner > .row {
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
 }
 </style>

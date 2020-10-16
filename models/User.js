@@ -24,8 +24,12 @@ const UserSchema = new Schema({
   },
   boards: [{
     type: Schema.Types.ObjectId,
-    ref: "Board",
+    ref: "Board"
   }],
+  starredBoards: {
+    type: Map,
+    of: Boolean
+  },
   createdAt: {
     type: Date,
     default: Date.now

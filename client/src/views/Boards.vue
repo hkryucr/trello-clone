@@ -46,7 +46,7 @@
                     <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
                   </div>
                 </router-link>
-                <div @click.prevent="toggleStar(getUser.id, board._id)">
+                <div @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
                   {{getUser.starredBoards[board._id]}}
                 </div>
               </div>
@@ -131,9 +131,9 @@ export default {
     changeTab ($event, target) {
       if (this.activeTab !== target) this.activeTab = target
     },
-    toggleStar (userId, boardId) {
+    toggleStar (userId, boardId, bool) {
       console.log('fireing', userId, boardId)
-      this.$store.dispatch('starBoard', { userId, boardId })
+      this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   },
   data () {

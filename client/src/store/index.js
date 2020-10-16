@@ -107,10 +107,11 @@ export default new Vuex.Store({
         type
       })
     },
-    starBoard: ({ state, commit }, { userId, boardId }) => {
+    starBoard: ({ state, commit }, { userId, boardId, bool }) => {
       VueInstance.$socket.emit('starBoard', {
         userId,
-        boardId
+        boardId,
+        bool
       })
     }
   },
@@ -180,8 +181,9 @@ export default new Vuex.Store({
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
-    SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, boolean }) {
-      state.user.starredBoards[boardId] = boolean
+    SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, bool }) {
+      state.user.starredBoards[boardId] = bool
+      console.log(state.user.starredBoards)
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value

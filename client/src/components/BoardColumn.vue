@@ -90,21 +90,6 @@ export default {
 </script>
 
 <style lang="css">
-.column {
-  @apply bg-grey-light p-2 text-left shadow rounded;
-  width: 272px;
-  margin: 0 4px;
-}
-.column:first-child {
-  margin-left: 8px;
-}
-.column:last-child {
-  margin-right: 8px;
-}
-.column-name {
-  width: 100%;
-}
-
 .input-main-header > textarea {
   @apply rounded;
   height: 100%;

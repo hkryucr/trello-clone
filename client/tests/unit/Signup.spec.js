@@ -47,9 +47,9 @@ describe('Signup', () => {
 //     store,
 //     mocks
 //   })
-//   await flushPromises() 
+//   await flushPromises()
 //   expect(store.dispatch).toHaveBeenCalledWith('fetchListData', {
 //   type
 //   })
-  
+
 // })

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-on:click.prevent="closeModal()">
+  <div id="app" @click="closeModal">
     <router-view/>
   </div>
 </template>
@@ -7,7 +7,9 @@
 export default {
   methods: {
     closeModal () {
-      this.$store.commit('CLOSE_MODAL')
+      if (this.$store.state.ui.navModal !== 'empty') {
+        this.$store.commit('CLOSE_MODAL')
+      }
     }
   }
 }
@@ -32,7 +34,7 @@ body, html {
 * {
   box-sizing: border-box;
 }
-textarea:focus, input:focus{
+textarea:focus, input:focus, button:focus{
     outline: none;
 }
 

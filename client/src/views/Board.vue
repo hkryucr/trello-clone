@@ -15,12 +15,13 @@
             :board="board"
           />
           <div class="column mod-add is-idle" ref="listWrapper">
-            <form class="flex flex-row flex-wrap" @submit.prevent="createColumn">
+            <form class="flex flex-row flex-wrap" @submit.prevent="createColumn" @blur="removeAddList" >
               <a href="#" class="add-list" @click.prevent="openAddList">
                 <span class="icon-sm icon-add"></span>
                 Add another list
               </a>
               <input
+                ref="newColumnInput"
                 type="text"
                 v-model="newColumnName"
                 class="p-2 mr-2 flex-grow list-add-title"
@@ -88,15 +89,30 @@ export default {
         name: this.newColumnName,
         boardId: this.board._id
       }
-      this.$store.dispatch('createColumn', data)
-      this.newColumnName = ''
-      this.$refs.listWrapper.classList.add('is-idle')
+      if (this.newColumnName.length > 0) {
+        this.$store.dispatch('createColumn', data)
+        this.newColumnName = ''
+        this.$refs.listWrapper.classList.add('is-idle')
+      }
     },
     openAddList () {
       this.$refs.listWrapper.classList.remove('is-idle')
+      this.$refs.newColumnInput.focus()
+      this.$refs.newColumnInput.select()
+      document.addEventListener('click', this.outsideClickListener)
     },
     removeAddList () {
+      this.newColumnName = ''
       this.$refs.listWrapper.classList.add('is-idle')
+      this.removeClickListener()
+    },
+    outsideClickListener (event) {
+      if (event.target.closest('form') === null) {
+        this.removeAddList()
+      }
+    },
+    removeClickListener () {
+      document.removeEventListener('click', this.outsideClickListener)
     }
   }
 }

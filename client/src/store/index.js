@@ -113,6 +113,17 @@ export default new Vuex.Store({
         boardId,
         bool
       })
+    },
+    deleteTask: ({ state, commit }, { task }) => {
+      VueInstance.$socket.emit('deleteTask', {
+        task
+      })
+    },
+    deleteColumn: ({ state, commit }, { column }) => {
+      console.log(column)
+      VueInstance.$socket.emit('deleteColumn', {
+        column
+      })
     }
   },
   mutations: {
@@ -183,10 +194,18 @@ export default new Vuex.Store({
     },
     SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, bool }) {
       state.user.starredBoards[boardId] = bool
-      console.log(state.user.starredBoards)
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
+    },
+    SOCKET_DELETED_TASK (state, { columnId, taskId }) {
+      // console.log(tasks)
+      const idx = state.board.columns.indexOf(columnId)
+      state.board.columns[idx].tasks = state.board.columns[idx].tasks.filter(task => task._id !== taskId)
+    },
+    SOCKET_DELETED_COLUMN (state, { columns }) {
+      console.log(columns)
+      // state.board.columns = columns
     },
     OPEN_MODAL (state, modal) {
       state.ui.navModal = modal

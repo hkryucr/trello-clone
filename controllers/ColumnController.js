@@ -1,5 +1,6 @@
 const Column = require("../models/Column");
 const Board = require("../models/Board");
+const Task = require("../models/Task")
 
 class ColumnController {
   async createColumn(io, socket, data) {
@@ -41,6 +42,22 @@ class ColumnController {
     columnObj.save().then((column) => {
       io.sockets.emit("UPDATE_COLUMN", columnObj);
     })
+  }
+
+  async deleteColumn (io, socket, { column }) {
+    Column.remove({_id: column._id})
+    Task.deleteMany({column: column._id})
+    Board.findOneAndUpdate(
+      { _id: column.board },
+      { $pull: { columns: column._id } },
+      { new: true },
+      function (err, columns) {
+        if (err) {
+          res.send(err);
+        }
+        io.sockets.emit("DELETED_COLUMN", columns);
+      }
+    );
   }
   // async createTask(io, socket, data) {
   //   const { name, columnId } = data;

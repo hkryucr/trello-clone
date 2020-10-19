@@ -7,6 +7,7 @@
     draggable
   >
     <div class="flex items-center mb-2 font-bold">
+        <button @click.prevent="deleteColumn">Delete</button>
         <div class="input-main-header">
           <h3 class="input-name  column-name" @click.prevent="clickColumnName($event)" v-show="!nameInputClicked">{{column.name}}</h3>
           <textarea
@@ -84,6 +85,12 @@ export default {
         this.$refs.columnName.classList.remove('input-show')
         this.$store.dispatch('updateColumn', { name: e.target.value, columnId: this.column._id })
       }
+    },
+    deleteColumn () {
+      console.log(this.column)
+      this.$store.dispatch('deleteColumn', {
+        column: this.column
+      })
     }
   }
 }

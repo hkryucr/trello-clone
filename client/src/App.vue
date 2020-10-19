@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-on:click.prevent="closeModal()">
+  <div id="app" v-on:click="closeModal()">
     <router-view/>
   </div>
 </template>

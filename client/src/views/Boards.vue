@@ -3,98 +3,79 @@
   <NavBar />
   <div class="home-container">
     <div class='boards-page-container'>
-      <nav class="home-left-sidebar-container">
-        <div :class="[activeTab === 'boards' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'boards')" >
-          <span class="icon-container">
-            <span style='color: #0079bf;' class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
-          </span>
-          <div class='boards-side-menu-text'>Boards</div>
+      <div class="home-left-sidebar">
+        <nav class="home-left-sidebar-container">
+          <div :class="[activeTab === 'boards' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'boards')" >
+            <span class="icon-container">
+              <span style='color: #0079bf;' class="icon-board icon-sm _2aV_KY1gTq1qWc"></span>
+            </span>
+            <div class='boards-side-menu-text'>Boards</div>
+          </div>
+          <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'templates')">
+            <span class="icon-container">
+              <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
+            </span>
+            <div class='boards-side-menu-text'>Templates</div>
+          </div>
+          <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'home')">
+            <span class="icon-container">
+              <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
+            </span>
+            <div class='boards-side-menu-text'>Home</div>
+          </div>
+          <div class='boards-side-menu-teams'>Teams</div>
+        <div class='boards-side-menu-create-team'>
+          <div class='icon-wrapper'>
+            <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
+          </div>
+          <div class='boards-side-menu-create-text'>Create a team</div>
         </div>
-        <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'templates')">
-          <span class="icon-container">
-            <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
-          </span>
-          <div class='boards-side-menu-text'>Templates</div>
-        </div>
-        <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'home')">
-          <span class="icon-container">
-            <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
-          </span>
-          <div class='boards-side-menu-text'>Home</div>
-        </div>
-        <div class='boards-side-menu-teams'>Teams</div>
-      <div class='boards-side-menu-create-team'>
-        <div class='icon-wrapper'>
-          <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
-        </div>
-        <div class='boards-side-menu-create-text'>Create a team</div>
+        </nav>
       </div>
-      </nav>
       <div class='boards-section-container'>
-        <div class="my-boards">
-          <div class="my-boards-section-header">
-            <div class="boards-page-icon">
-              <span class="icon-lg icon-star"></span>
-            </div>
-            <h3 class="boards-page-header-name">Starred Boards</h3>
-          </div>
-          <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
-                <router-link to='board/:board.id'>
-                  <div class='board-tile-container'>
-                    <div class='board-tile-name'>{{board.name}}</div>
-                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
-                  </div>
-                </router-link>
-                <div @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
-                  {{getUser.starredBoards[board._id]}}
+        <div style="position: sticky; top: 0px;">
+          <div class="content-all-boards">
+            <div class="my-boards" v-if="getStarredBoards && getStarredBoards.length">
+              <div class="my-boards-section-header">
+                <div class="boards-page-icon">
+                  <span class="icon-lg icon-star"></span>
                 </div>
+                <h3 class="boards-page-header-name">Starred Boards</h3>
+              </div>
+              <div class="boards-container">
+                <ul class="board-tile-list">
+                  <BoardTile v-for="(board, $boardIndex) of getStarredBoards" :key="$boardIndex" :board=board />
+                </ul>
+              </div>
+            </div>
+            <div class="my-boards" v-if="getBoards && getBoards.length">
+              <div class="my-boards-section-header">
+                <div class="boards-page-icon">
+                  <span class="icon-lg icon-clock"></span>
+                </div>
+                <h3 class="boards-page-header-name">Recently Viewed</h3>
+              </div>
+              <div class="boards-container">
+                <ul class="board-tile-list">
+                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
+                </ul>
+              </div>
+            </div>
+            <div class="my-boards">
+              <div class="my-boards-section-header">
+                <div class="boards-page-icon">
+                  <span class="icon-lg icon-member"></span>
+                </div>
+                <h3 class="boards-page-header-name">Personal Boards</h3>
+              </div>
+              <div class="boards-container">
+                <ul class="board-tile-list">
+                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
+                </ul>
               </div>
             </div>
           </div>
-        <div class="my-boards">
-          <div class="my-boards-section-header">
-            <div class="boards-page-icon">
-              <span class="icon-lg icon-clock"></span>
-            </div>
-            <h3 class="boards-page-header-name">Recently Viewed</h3>
-          </div>
-          <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
-                <router-link to='board/:board.id'>
-                  <div class='board-tile-container'>
-                    <div class='board-tile-name'>{{board.name}}</div>
-                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
-                  </div>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        <div class="my-boards">
-          <div class="my-boards-section-header">
-            <div class="boards-page-icon">
-              <span class="icon-lg icon-member"></span>
-            </div>
-            <h3 class="boards-page-header-name">Personal Boards</h3>
-          </div>
-          <div class="boards-container">
-              <div class="boards-listing-container" v-for="(board, $boardIndex) of getBoards" :key="$boardIndex">
-                <router-link to='board/:board.id'>
-                  <div class='board-tile-container'>
-                    <div class='board-tile-name'>{{board.name}}</div>
-                    <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span>
-                  </div>
-                </router-link>
-              </div>
-              <div class="boards-listing-container">
-                <div class='board-create-tile-container'>
-                  <span>Create new board</span>
-                  <!-- <div class='board-tile-name'>Create New Board</div>
-                  <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
-                  </div>
-              </div>
-            </div>
-          </div>
+        </div>
       </div>
       </div>
   </div>
@@ -104,20 +85,20 @@
 <script>
 import { mapGetters } from 'vuex'
 import NavBar from '../views/NavBar'
+import BoardTile from '../components/boards/BoardTile'
 
 export default {
   components: {
-    NavBar
+    NavBar,
+    BoardTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards'])
   },
   mounted () {
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
-        // this.boards = res.data.boards
-        console.log(this.getUser)
       })
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
@@ -132,7 +113,6 @@ export default {
       if (this.activeTab !== target) this.activeTab = target
     },
     toggleStar (userId, boardId, bool) {
-      console.log('fireing', userId, boardId)
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   },
@@ -150,7 +130,8 @@ export default {
   padding: 3px;
 }
 .home-container {
-  min-height: calc(100vh - 40px);
+  height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 .boards-page-container {
   display: flex;
@@ -165,6 +146,10 @@ export default {
   width: 24px;
   height: 24px;
   padding: 4px;
+}
+.home-left-sidebar {
+  position: sticky;
+  top: 0px;
 }
 .home-left-sidebar-container {
   margin: 40px 0 0;
@@ -186,10 +171,9 @@ export default {
 .icon-link::before {
   content: "\E90A";
 }
-
 .boards-side-menu-text {
   padding: 3px;
-  font-weight: 700;
+  font-weight: 700 !important;
   font-size: 14px;
 }
 .boards-side-menu-option-selected {
@@ -244,7 +228,6 @@ export default {
   padding: 6px 12px;
   text-align: left;
 }
-
 .create-team-nav {
   display: block;
 }
@@ -296,7 +279,7 @@ export default {
 .boards-page-header-name {
   display: inline-block;
   line-height: 24px;
-  margin: 4px 0 0;
+  margin: 4px 0 11px 8px;
   font-size: 16px;
   font-weight: 700;
   flex: 1;
@@ -308,25 +291,20 @@ export default {
   display: flex;
 }
 .my-boards {
-  margin: 40px 16px;
+  display: flex;
+  flex-direction: column;
+  /* margin: 40px 16px;
   width: 100%;
   max-width: 825px;
   min-width: 288px;
-  margin-bottom: 0;
+  margin-bottom: 0; */
 }
 .boards-container {
-  display: flex;
+  /* display: flex; */
 }
-.board-tile-container {
+.board-tile-list {
   display: flex;
-  height: 96px;
-  width: 193.875px;
-  position: relative;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: darkgreen;
-  border-radius: 3px;
-  margin: 8px;
+  flex-wrap: wrap;
 }
 .board-create-tile-container {
   display: flex;
@@ -343,7 +321,7 @@ export default {
 .board-create-tile-container:hover {
   background-color: #afafaf48;
 }
-.boards-listing-container {
+.board-tile {
   display: flex;
 }
 .board-tile-name {
@@ -359,7 +337,14 @@ a {
 .boards-section-container {
   display: flex;
   flex-direction: column;
+  margin: 40px 16px 0;
+  width: 100%;
+  max-width: 825px;
+  min-width: 288px;
 }
+/* .content-all-boards{
+
+} */
 .board-tile.mod-add{
   background-color: rgba(9,30,66,.04);
   box-shadow: none;
@@ -375,5 +360,4 @@ a {
   transition-duration: 85ms;
   transition-timing-function: ease;
 }
-
 </style>

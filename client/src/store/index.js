@@ -28,6 +28,12 @@ export default new Vuex.Store({
     getBoards: state => {
       return state.user && state.user.boards
     },
+    getStarredBoards: state => {
+      if (!state.user || !state.user.boards || !state.user.starredBoards) return
+      return state.user.boards.filter(board => {
+        return state.user.starredBoards[board._id]
+      })
+    },
     getNavModal: state => {
       return state.ui && state.ui.navModal
     },
@@ -183,7 +189,6 @@ export default new Vuex.Store({
     },
     SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, bool }) {
       state.user.starredBoards[boardId] = bool
-      console.log(state.user.starredBoards)
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value

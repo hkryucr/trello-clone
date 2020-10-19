@@ -20,7 +20,7 @@ export default {
         <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
         <div class="board-tile-details is-badged">
           <div title="Trello" dir="auto" class="board-tile-details-name">
-            <div style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2; font-weight: 900;">
+            <div style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2; font-weight: 800;">
               {{board.name}}
             </div>
           </div>

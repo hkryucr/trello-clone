@@ -2,7 +2,7 @@
   <div class='modal-menu'>
     <div class='modal-menu-header-container'>
         <div class='modal-menu-header'>More from Atlassian</div>
-        <div class='modal-menu-close'>X</div>
+        <div class='modal-menu-close' v-on:click.prevent="closeModal">X</div>
     </div>
     <div class='modal-menu-body'>
       <section class='modal-switch-container'>
@@ -62,7 +62,15 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  props: {
+    closeModal: {
+      type: Function
+    }
+  }
+}
+</script>
 <style lang="css">
 .modal-menu {
   display: flex;
@@ -93,6 +101,7 @@
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
 }
 .modal-menu-body {
   display: flex;

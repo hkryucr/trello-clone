@@ -2,7 +2,7 @@
   <div class='modal-create'>
     <div class='modal-create-header-container'>
         <div class='modal-create-header'>Create</div>
-        <div class='modal-create-close'>X</div>
+        <div class='modal-create-close' v-on:click.prevent="closeModal">X</div>
     </div>
     <section class='create-body-container'>
       <div class='create-body-link-container'>
@@ -45,13 +45,20 @@
     </section>
   </div>
 </template>
-
+<script>
+export default {
+  props: {
+    closeModal: {
+      type: Function
+    }
+  }
+}
+</script>
 <style lang="css">
 .modal-create {
   display: flex;
   flex-direction: column;
   width: 304px;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   font-size: 14px;
   font-weight: 400;
 }
@@ -77,6 +84,7 @@
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   font-size: 14px;
   font-weight: 400;
+  cursor: pointer;
 }
 .create-link-header-container {
   width: 100%;

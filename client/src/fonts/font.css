@@ -477,9 +477,6 @@
   border-radius: 3px;
   text-decoration: none;
 }
-.icon-private {
-  color: #eb5a46;
-}
 .dark-hover:hover .icon-private,
 .icon-private.dark-hover:hover {
   color: #cf513d;

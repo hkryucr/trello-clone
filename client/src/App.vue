@@ -15,19 +15,24 @@ export default {
 }
 </script>
 <style>
-@import 'assets/styles/tailwind.postcss';
 @import 'fonts/font.css';
+@import 'assets/styles/tailwind.postcss';
 
 body, html {
   height: 100%;
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   height: 100%;
+  font-size: 16px;
+  font-weight: 400;
+}
+* {
+  box-sizing: border-box;
 }
 
 ul {
@@ -45,7 +50,6 @@ ol {
 ul ul, ol ul {
    list-style-type: circle;
    list-style-position: inside;
-   /* margin-left: 15px; */
 }
 
 ol ol, ul ol {

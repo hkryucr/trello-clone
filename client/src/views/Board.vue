@@ -15,19 +15,19 @@
             :board="board"
           />
           <div class="column mod-add is-idle" ref="listWrapper">
-            <form class="flex flex-row flex-wrap" @submit.prevent="createColumn" @blur="removeAddList" >
-              <a href="#" class="add-list" @click.prevent="openAddList">
+            <form class="flex flex-row flex-wrap add-list-form" @submit.prevent="createColumn" @blur="removeAddList" >
+              <a href="#" class="add-list-button" @click.prevent="openAddList">
                 <span class="icon-sm icon-add"></span>
-                Add another list
+                Add a list
               </a>
               <input
                 ref="newColumnInput"
                 type="text"
                 v-model="newColumnName"
-                class="p-2 mr-2 flex-grow list-add-title"
+                class="p-2 mr-2 flex-grow add-list-title"
                 placeholder="Enter list title..."
               />
-              <div class="list-add-controls">
+              <div class="add-list-controls">
                 <input type="submit" class="primary" value="Add List" />
                 <button @click="removeAddList" class="icon-lg icon-close dark-hover"></button>
               </div>
@@ -107,7 +107,7 @@ export default {
       this.removeClickListener()
     },
     outsideClickListener (event) {
-      if (event.target.closest('form') === null) {
+      if (event.target.closest('form.add-list-form') === null) {
         this.removeAddList()
       }
     },
@@ -119,9 +119,6 @@ export default {
 </script>
 
 <style lang="css">
-.task {
-  @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
-}
 .board {
   @apply bg-teal-dark h-full overflow-auto;
   background-color: #40d9ac;
@@ -130,10 +127,7 @@ export default {
   padding-bottom: 20px;
   height: calc(100vh - 80px);
 }
-.task-bg {
-  @apply pin absolute;
-  background: rgba(0, 0, 0, 0.5);
-}
+
 .column {
   @apply bg-grey-light p-2 text-left shadow rounded;
   width: 272px;
@@ -162,11 +156,15 @@ export default {
   background-color: hsla(0, 0%, 100%, 0.24);
   cursor: pointer;
 }
-.column.mod-add .add-list {
+.column.mod-add .add-list-button {
   color: #fff;
   display: none;
   padding: 6px 8px;
   transition: color 85ms ease-in;
+}
+
+.column.mod-add.is-idle .add-list-button {
+  display: block;
 }
 
 .column.mod-add.is-idle .icon-add {
@@ -174,37 +172,37 @@ export default {
     margin-right: 2px;
 }
 
-.column.mod-add.is-idle .add-list {
-  display: block;
-}
-
-.column.mod-add.is-idle .list-add-controls {
+.column.mod-add .add-list-controls {
   overflow: hidden;
   margin: 4px 0 0;
   transition: margin 85ms ease-in, height 85ms ease-in;
-  height: 32px;
 }
 
-.column.mod-add.is-idle .list-add-controls {
+.column.mod-add.is-idle .add-list-controls {
   height: 0;
   margin: 0;
 }
 
-.column.mod-add .list-add-title {
-  background: #fff;
+.column.mod-add .add-list-title {
+  background-color: #fff;
   border: none;
   box-shadow: inset 0 0 0 2px #0079bf;
   display: block;
   margin: 0;
-  transition: margin 85ms ease-in, background 85ms ease-in;
+  transition: margin 85ms ease-in, background-color 85ms ease-in;
   width: 100%;
 }
-.column.mod-add.is-idle .list-add-title {
-  background: none;
+.column.mod-add.is-idle .add-list-title {
+  background-color: none;
   border-color: transparent;
   box-shadow: none;
   cursor: pointer;
   display: none;
   margin: 0;
 }
-</style>
+.task-bg {
+  
+  @apply pin absolute;
+  background: rgba(0, 0, 0, 0.5);
+}
+</style s>

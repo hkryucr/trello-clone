@@ -39,33 +39,28 @@
         :columnIndex="columnIndex"
       />
     </div>
-    <div class="task-composer">
-      <textarea
-          ref="newTaskInput"
-          class="block p-2 w-full bg-transparent task"
-          placeholder="Add a task"
-          v-model="newTaskName"
-      />
+    <div class="task-composer task-hide" ref="taskWrapper">
+      <div class="task">
+        <textarea
+            ref="newTaskInput"
+            class="block p-2 w-full bg-transparent task-composer-textarea"
+            placeholder="Enter a title for this card…"
+            v-model="newTaskName"
+            @input="updateHeight"
+            @keyup.enter="createTask"
+            @keyup.esc="createTask"
+        />
+      </div>
+      <div class="task-controls">
+        <input type="submit" class="primary" value="Add Card" @click.prevent="createTask">
+        <a href="#" class="icon-lg icon-close dark-hover js-cancel" @click.prevent="closeAddCard"></a>
+      </div>
     </div>
-    <div class="task mod-add is-idle" ref="taskWrapper">
-      <form
-        class="flex flex-row flex-wrap add-task-form"
-        @submit.prevent="createTask"
-        @blur="removeAddList"
-      >
-        <a href="#" class="add-task-button" @click.prevent="openAddList">
-          <span class="icon-sm icon-add"></span>
-          Add a list
-        </a>
-
-        <div class="add-task-controls">
-          <input type="submit" class="primary" value="Add Card" />
-          <button
-            @click="removeAddList"
-            class="icon-lg icon-close dark-hover"
-          ></button>
-        </div>
-      </form>
+    <div class="task-composer-container" ref="addTaskContainer">
+      <a href="#" class="open-task-composer" @click.prevent="openAddCard">
+        <span class="icon-sm icon-add"></span>
+        <span>Add a card</span>
+      </a>
     </div>
 
   </div>
@@ -81,10 +76,22 @@ export default {
   data () {
     return {
       newTaskName: '',
-      nameInputClicked: false
+      nameInputClicked: false,
+      throttling: false
     }
   },
   methods: {
+    updateHeight () {
+      if (!this.throttling) {
+        console.log('updating')
+        this.throttling = true
+        this.$refs.newTaskInput.style.height = 'auto'
+        this.$refs.newTaskInput.style.height = this.$refs.newTaskInput.scrollHeight + 5 + 'px'
+        window.setTimeout(() => {
+          this.throttling = false
+        }, 100)
+      }
+    },
     clickColumnName () {
       this.nameInputClicked = true
       this.$refs.columnName.classList.add('input-show')
@@ -121,19 +128,21 @@ export default {
       }
     },
     openAddCard () {
-      this.$refs.taskWrapper.classList.remove('is-idle')
-      this.$refs.newColumnInput.focus()
-      this.$refs.newColumnInput.select()
+      this.$refs.taskWrapper.classList.remove('task-hide')
+      this.$refs.newTaskInput.focus()
+      this.$refs.newTaskInput.select()
+      this.$refs.addTaskContainer.classList.add('task-hide')
       document.addEventListener('click', this.outsideClickListener)
     },
-    removeAddCard () {
-      this.newColumnName = ''
-      this.$refs.taskWrapper.classList.add('is-idle')
+    closeAddCard () {
+      this.newTaskName = ''
+      this.$refs.taskWrapper.classList.add('task-hide')
+      this.$refs.addTaskContainer.classList.remove('task-hide')
       this.removeClickListener()
     },
     outsideClickListener (event) {
-      if (event.target.closest('form.add-task-form') === null) {
-        this.removeAddList()
+      if (event.target.closest('div.task-composer') === null && event.target.closest('div.task-composer-container') === null) {
+        this.closeAddCard()
       }
     },
     removeClickListener () {
@@ -157,4 +166,48 @@ export default {
   white-space: wrap;
   resize: none;
 }
+
+textarea.task-composer-textarea {
+  background: none;
+  border: none;
+  box-shadow: none;
+  height: auto;
+  resize: none;
+  margin-bottom: 4px;
+  max-height: 162px;
+  min-height: 54px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  padding: 0;
+}
+
+.task-composer-container {
+  min-height: 38px;
+  max-height: 38px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.open-task-composer {
+  border-radius: 3px;
+  color: #5e6c84;
+  display: block;
+  flex: 1 0 auto;
+  margin: 2px 0 8px 8px;
+  padding: 4px 8px;
+  position: relative;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.open-task-composer span {
+  color: #5e6c84;
+  margin-right: 2px;
+}
+
+.task-hide {
+  display: none;
+}
+
 </style>

@@ -200,7 +200,7 @@ export default {
   display: none;
   margin: 0;
 }
-.task-bg 
+.task-bg {
   @apply pin absolute;
   background: rgba(0, 0, 0, 0.5);
 }

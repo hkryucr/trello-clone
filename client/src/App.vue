@@ -7,7 +7,7 @@
 export default {
   methods: {
     closeModal () {
-      if (this.$store.state.ui.navModal !== 'empty') {
+      if (this.$store.state.ui.modal !== 'empty') {
         this.$store.commit('CLOSE_MODAL')
       }
     }
@@ -34,6 +34,30 @@ body, html {
 * {
   box-sizing: border-box;
 }
+
+ul {
+   list-style-type: disc;
+   list-style-position: inside;
+   padding: 0;
+   margin: 0;
+}
+
+ol {
+   list-style-type: decimal;
+   list-style-position: inside;
+}
+
+ul ul, ol ul {
+   list-style-type: circle;
+   list-style-position: inside;
+}
+
+ol ol, ul ol {
+   list-style-type: lower-latin;
+   list-style-position: inside;
+   /* margin-left: 15px; */
+}
+
 textarea:focus, input:focus, button:focus{
     outline: none;
 }

@@ -4,7 +4,7 @@
       <img alt="Trello" class="trello-main-logo" src="../assets/trello-logo-blue.svg">
     </router-link>
     <div class="form-container">
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="handleLogin($event)">
         <div :class="[errors.length ? 'quick-switch' : '', 'errors']">
           <div class="error-message" v-for="(error, $index) in errors" :key="$index">{{error}}</div>
         </div>
@@ -77,7 +77,7 @@ export default {
         this.password = e.target.value
       }
     },
-    async handleLogin () {
+    async handleLogin (e) {
       if (this.email.length === 0) {
         this.errors.push('Missing email')
         return

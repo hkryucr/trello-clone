@@ -2,7 +2,7 @@
   <div class='modal-account'>
     <div class='modal-account-header-container'>
         <div class='modal-account-header'>Account</div>
-        <div class='modal-account-close'>X</div>
+        <div class='modal-account-close' v-on:click.prevent="closeModal">X</div>
     </div>
     <div class='modal-account-1'>
         <div class="modal-account-user-container">
@@ -40,6 +40,11 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    closeModal: {
+      type: Function
+    }
+  },
   data () {
     return {
       initials: this.$store.getters.getUser.initials,
@@ -86,6 +91,7 @@ export default {
   grid-row: 1;
 }
 .modal-account-close {
+  cursor: pointer;
   grid-column: 3;
   grid-row: 1;
   line-height: 40px;

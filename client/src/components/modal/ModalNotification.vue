@@ -2,7 +2,7 @@
   <div class='modal-notification'>
     <div class='modal-notification-header-container'>
         <div class='modal-notification-header'>Notifications</div>
-        <div class='modal-notification-close'>X</div>
+        <div class='modal-notification-close' v-on:click.prevent="closeModal">X</div>
     </div>
     <div class='modal-notification-view-all-container'>
         <a class='modal-notification-view-all'>View All</a>
@@ -22,7 +22,15 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  props: {
+    closeModal: {
+      type: Function
+    }
+  }
+}
+</script>
 <style lang="css">
 .modal-notification {
   display: flex;
@@ -56,6 +64,7 @@
   line-height: 40px;
   font-size: 14px;
   font-weight: 400;
+  cursor: pointer;
 }
 .modal-notification-view-all-container {
   width: 100%;
@@ -77,17 +86,20 @@
 .modal-notification-image-container {
   width: 100%;
   padding: 32px;
+  text-align: center;
 }
 .modal-notification-message {
   font-size: 20px;
   font-weight: 600;
   padding: 24px;
   color: black;
+  text-align: center;
 }
 .modal-notfication-link {
   font-size: 16px;
   font-weight: 400;
   padding-bottom: 95px;
+  text-align: center;
 }
 .modal-notification-bottom-container {
   display: flex;

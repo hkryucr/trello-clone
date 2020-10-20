@@ -268,10 +268,9 @@ export default {
     max-width: 720px;
   }
   .get-started-container > .row > div {
-      padding-top: 1.5rem !important;
-      /* margin-left: 16.66666667%; */
-      flex: 0 0 66.66666667%;
-      max-width: 66.66666667%;
+    padding-top: 1.5rem !important;
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
   }
 }
 @media (min-width: 992px){

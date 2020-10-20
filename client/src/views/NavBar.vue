@@ -28,12 +28,12 @@
           <span v-on:click.stop.prevent="openmodal('modalaccount')" class='navbar-user'>{{ this.initials }}</span>
       </div>
       <div v-bind:class=[getNavModal] @click.stop.prevent="stopTheEvent">
-        <ModalMenu v-if="getNavModal === 'modalmenu'"/>
-        <ModalBoard v-if="getNavModal === 'modalboard'"/>
-        <ModalCreate v-if="getNavModal === 'modalcreate'"/>
-        <ModalInformation v-if="getNavModal === 'modalinformation'"/>
-        <ModalNotification v-if="getNavModal === 'modalnotification'"/>
-        <ModalAccount v-if="getNavModal === 'modalaccount'"/>
+        <ModalMenu class="modal-border" v-if="getNavModal === 'modalmenu'" :closeModal="closeModal"/>
+        <ModalBoard class="modal-border" v-if="getNavModal === 'modalboard'" :closeModal="closeModal"/>
+        <ModalCreate class="modal-border" v-if="getNavModal === 'modalcreate'" :closeModal="closeModal"/>
+        <ModalInformation class="modal-border" v-if="getNavModal === 'modalinformation'" :closeModal="closeModal"/>
+        <ModalNotification class="modal-border" v-if="getNavModal === 'modalnotification'" :closeModal="closeModal"/>
+        <ModalAccount class="modal-border" v-if="getNavModal === 'modalaccount'" :closeModal="closeModal"/>
       </div>
     </div>
    </div>
@@ -81,6 +81,9 @@ export default {
     },
     homepage: function () {
       this.$router.push('/')
+    },
+    closeModal () {
+      this.$store.commit('CLOSE_MODAL')
     }
   },
   computed: {
@@ -91,7 +94,7 @@ export default {
 
 <style lang="css">
 .navbar-outer-container {
-  background-color: #20504f;
+  background-color: #026aa7;
   padding: 2px;
   height: 2.5rem;
   /* display: flex; */
@@ -100,26 +103,30 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  /* justify-content: space-between; */
   height: 100%;
 }
 .navbar-left{
   display: flex;
   flex-direction: row;
-  width: 33%;
+  flex-grow: 1;
+  flex-basis: 100%;
 }
-.navbar-left >input {
+.navbar-left > input {
   border-radius: 3px;
+  margin: 0 2px;
 }
 .navbar-right{
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  width: 33%
+  flex-grow: 1;
+  flex-basis: 100%;
 }
 .navbar-header {
   position: relative;
   text-align: center;
-  width: 33%;
+  flex-shrink: 0;
 }
 .navbar-icon{
   display: flex;
@@ -129,7 +136,7 @@ export default {
   height: 90%;
   width: 32px;
   height: 32px;
-  margin: 0 5px;
+  margin: 0 2px;
   padding: 5px;
   border-radius: 3px;
 }
@@ -149,6 +156,7 @@ export default {
   vertical-align: middle;
   color: #fff;
   font-weight: 700;
+  margin: 0 2px;
 }
 .empty{
   display: none;
@@ -175,10 +183,14 @@ export default {
   font-weight: 400;
   background-color: #fff;
   border-radius: 3px;
-  box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
   box-sizing: border-box;
   outline: 0;
   overflow: hidden;
+}
+.modal-border {
+  box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08) !important;
+  -webkit-box-shadow: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08) !important;
+  border: 1px solid rgba(9,30,66,.25)
 }
 .navbar-board-link {
   display: flex;
@@ -188,7 +200,7 @@ export default {
   width: 110px;
   min-width: 110px;
   height: 32px;
-  margin: 0 5px;
+  margin: 0 2px;
   padding: 5px;
   border-radius: 2px;
 }

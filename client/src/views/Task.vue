@@ -144,7 +144,8 @@ export default {
     },
     deleteTask () {
       this.$store.dispatch('deleteTask', {
-        task: this.task
+        task: this.task,
+        idx: this.task.idx
       })
     }
   }

@@ -28,14 +28,24 @@ export default new Vuex.Store({
     getBoards: state => {
       return state.user && state.user.boards
     },
+    getStarredBoards: state => {
+      if (!state.user || !state.user.boards || !state.user.starredBoards) return
+      return state.user.boards.filter(board => {
+        return state.user.starredBoards[board._id]
+      })
+    },
     getNavModal: state => {
       return state.ui && state.ui.navModal
     },
     getTask (state) {
       return id => {
         for (const column of state.board.columns) {
-          for (const task of column.tasks) {
-            if (task._id === id) return task
+          for (let i = 0; i < column.tasks.length; i++) {
+            if (column.tasks[i]._id === id) {
+              const task = column.tasks[i]
+              task.idx = i
+              return task
+            }
           }
         }
       }
@@ -114,15 +124,16 @@ export default new Vuex.Store({
         bool
       })
     },
-    deleteTask: ({ state, commit }, { task }) => {
+    deleteTask: ({ state, commit }, { task, idx }) => {
       VueInstance.$socket.emit('deleteTask', {
-        task
+        task,
+        idx
       })
     },
-    deleteColumn: ({ state, commit }, { column }) => {
-      console.log(column)
+    deleteColumn: ({ state, commit }, { column, idx }) => {
       VueInstance.$socket.emit('deleteColumn', {
-        column
+        column,
+        idx
       })
     }
   },
@@ -198,14 +209,17 @@ export default new Vuex.Store({
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
     },
-    SOCKET_DELETED_TASK (state, { columnId, taskId }) {
-      // console.log(tasks)
-      const idx = state.board.columns.indexOf(columnId)
-      state.board.columns[idx].tasks = state.board.columns[idx].tasks.filter(task => task._id !== taskId)
+    SOCKET_DELETED_TASK (state, { columnId, taskId, taskIdx }) {
+      console.log(state.board)
+      for (let i = 0; i < state.board.columns.length; i++) {
+        if (state.board.columns[i]._id === columnId) {
+          state.board.columns[i].tasks.splice(taskIdx, 1)
+          return
+        }
+      }
     },
-    SOCKET_DELETED_COLUMN (state, { columns }) {
-      console.log(columns)
-      // state.board.columns = columns
+    SOCKET_DELETED_COLUMN (state, { columns, idx }) {
+      state.board.columns.splice(idx, 1)
     },
     OPEN_MODAL (state, modal) {
       state.ui.navModal = modal

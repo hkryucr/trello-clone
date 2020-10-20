@@ -2,7 +2,7 @@
   <div class='modal-information'>
     <div class='modal-information-header-container'>
         <div class='modal-information-header'>Information</div>
-        <div class='modal-information-close'>X</div>
+        <div class='modal-information-close' v-on:click.prevent="closeModal">X</div>
     </div>
     <a href="https://trello.com/guide?utm_source=trello&utm_medium=inapp&utm_content=header-tips&utm_campaign=guide" class='modal-information-photo-container'>
       <img class='modal-information-photo' src="../../assets/information.png" alt="information">
@@ -24,7 +24,15 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  props: {
+    closeModal: {
+      type: Function
+    }
+  }
+}
+</script>
 <style lang="css">
 .modal-information {
   display: flex;
@@ -56,6 +64,7 @@
   line-height: 40px;
   font-size: 14px;
   font-weight: 400;
+  cursor: pointer;
 }
 .modal-information-bottom-container {
   display: flex;

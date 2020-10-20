@@ -87,9 +87,9 @@ export default {
       }
     },
     deleteColumn () {
-      console.log(this.column)
       this.$store.dispatch('deleteColumn', {
-        column: this.column
+        column: this.column,
+        idx: this.columnIndex
       })
     }
   }

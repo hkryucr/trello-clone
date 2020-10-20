@@ -2,7 +2,7 @@
   <div class='modal-board'>
     <form class='modal-board-input-container'>
         <input class='modal-board-input' type="text" placeholder="Find boards by name…">
-        <div class='modal-board-close'>X</div>
+        <div class='modal-board-close' v-on:click.prevent="closeModal">X</div>
     </form>
     <div class='modal-boards-star-container'>
       <div class='modal-boards-star-header'>
@@ -58,6 +58,11 @@ export default {
     return {
       star: true
     }
+  },
+  props: {
+    closeModal: {
+      type: Function
+    }
   }
 }
 </script>
@@ -86,6 +91,7 @@ export default {
 }
 .modal-board-close {
   padding: 8px;
+  cursor: pointer;
 }
 .modal-boards-star-container, .modal-boards-recent-container, .modal-boards-personal-container {
   display: flex;

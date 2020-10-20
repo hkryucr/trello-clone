@@ -89,16 +89,15 @@ class TaskController {
     });
   }
 
-  async deleteTask(io, socket, { task }) {
+  async deleteTask(io, socket, { task, idx }) {
     Task.remove({_id: task._id})
     Column.findOneAndUpdate({_id: task.column}, {$pull: {tasks: task._id }}, {new: true}, function(err, col) {
         if (err) {
             res.send(err);
         }
-        console.log(col)
         io.sockets.emit("DELETED_TASK", {
           columnId: col._id,
-          taskId: task._id
+          taskIdx: idx
         })
     });
   }

@@ -44,7 +44,7 @@ class ColumnController {
     })
   }
 
-  async deleteColumn (io, socket, { column }) {
+  async deleteColumn (io, socket, { column, idx }) {
     Column.remove({_id: column._id})
     Task.deleteMany({column: column._id})
     Board.findOneAndUpdate(
@@ -55,7 +55,10 @@ class ColumnController {
         if (err) {
           res.send(err);
         }
-        io.sockets.emit("DELETED_COLUMN", columns);
+        io.sockets.emit("DELETED_COLUMN", {
+          columns,
+          idx
+        });
       }
     );
   }

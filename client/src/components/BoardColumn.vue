@@ -77,7 +77,6 @@ export default {
   methods: {
     updateHeight () {
       if (!this.throttling) {
-        console.log('updating')
         this.throttling = true
         this.$refs.newTaskInput.style.height = 'auto'
         this.$refs.newTaskInput.style.height = this.$refs.newTaskInput.scrollHeight + 5 + 'px'
@@ -130,8 +129,8 @@ export default {
     },
     closeAddCard () {
       this.newTaskName = ''
-      this.$refs.taskWrapper.classList.add('task-hide')
-      this.$refs.addTaskContainer.classList.remove('task-hide')
+      if (this.$refs.taskWrapper) this.$refs.taskWrapper.classList.add('task-hide')
+      if (this.$refs.addTaskContainer) this.$refs.addTaskContainer.classList.remove('task-hide')
       this.removeClickListener()
     },
     outsideClickListener (event) {

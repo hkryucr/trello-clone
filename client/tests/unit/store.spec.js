@@ -9,7 +9,7 @@ describe('mutations', () => {
         name: ''
       }
     }
-    
+
     store.mutations.UPDATE_BOARD_NAME(state, board)
     expect(state.board.name).toBe(board.name)
   })

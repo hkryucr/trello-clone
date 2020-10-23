@@ -21,8 +21,13 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// mongoose.set("useFindAndModify", false);
 mongoose
-  .connect(db, { useUnifiedTopology: true })
+  .connect(db, {
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useNewUrlParser: true,
+  })
   .then(() => {
     console.log("Connected to mongoDB");
   })

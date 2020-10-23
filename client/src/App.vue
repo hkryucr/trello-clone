@@ -58,7 +58,7 @@ ol ol, ul ol {
    /* margin-left: 15px; */
 }
 
-textarea:focus, input:focus{
+textarea:focus, input:focus, button:focus{
     outline: none;
 }
 

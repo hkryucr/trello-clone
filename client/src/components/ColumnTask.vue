@@ -43,6 +43,9 @@ export default {
       e.dataTransfer.setData('from-task-index', taskIndex)
       e.dataTransfer.setData('from-column-index', fromColumnIndex)
       e.dataTransfer.setData('type', 'task')
+    },
+    deleteTask (task) {
+      this.$store.dispatch('deleteTask', task)
     }
   }
 }

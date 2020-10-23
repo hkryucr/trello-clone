@@ -86,17 +86,20 @@ export default {
 .modal-notification-image-container {
   width: 100%;
   padding: 32px;
+  text-align: center;
 }
 .modal-notification-message {
   font-size: 20px;
   font-weight: 600;
   padding: 24px;
   color: black;
+  text-align: center;
 }
 .modal-notfication-link {
   font-size: 16px;
   font-weight: 400;
   padding-bottom: 95px;
+  text-align: center;
 }
 .modal-notification-bottom-container {
   display: flex;

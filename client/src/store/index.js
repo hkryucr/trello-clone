@@ -40,8 +40,12 @@ export default new Vuex.Store({
     getTask (state) {
       return id => {
         for (const column of state.board.columns) {
-          for (const task of column.tasks) {
-            if (task._id === id) return task
+          for (let i = 0; i < column.tasks.length; i++) {
+            if (column.tasks[i]._id === id) {
+              const task = column.tasks[i]
+              task.idx = i
+              return task
+            }
           }
         }
       }
@@ -119,6 +123,18 @@ export default new Vuex.Store({
         boardId,
         bool
       })
+    },
+    deleteTask: ({ state, commit }, { task, idx }) => {
+      VueInstance.$socket.emit('deleteTask', {
+        task,
+        idx
+      })
+    },
+    deleteColumn: ({ state, commit }, { column, idx }) => {
+      VueInstance.$socket.emit('deleteColumn', {
+        column,
+        idx
+      })
     }
   },
   mutations: {
@@ -192,6 +208,18 @@ export default new Vuex.Store({
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
+    },
+    SOCKET_DELETED_TASK (state, { columnId, taskId, taskIdx }) {
+      console.log(state.board)
+      for (let i = 0; i < state.board.columns.length; i++) {
+        if (state.board.columns[i]._id === columnId) {
+          state.board.columns[i].tasks.splice(taskIdx, 1)
+          return
+        }
+      }
+    },
+    SOCKET_DELETED_COLUMN (state, { columns, idx }) {
+      state.board.columns.splice(idx, 1)
     },
     OPEN_MODAL (state, modal) {
       state.ui.navModal = modal

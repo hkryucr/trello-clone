@@ -8,25 +8,20 @@
     draggable
   >
     <div class="flex items-center mb-2 font-bold">
-      <div class="input-main-header">
-        <h3
-          class="input-name column-name"
-          @click.prevent="clickColumnName($event)"
-          v-show="!nameInputClicked"
-        >
-          {{ column.name }}
-        </h3>
-        <textarea
-          ref="columnName"
-          class="text-lg input-hide"
-          v-bind:class="{ 'input-show': nameInputClicked }"
-          type="text"
-          @blur="updateColumn($event)"
-          @keyup.enter="updateColumn($event)"
-          @keyup.esc="updateColumn($event)"
-          v-bind:value="column.name"
-        />
-      </div>
+        <button @click.prevent="deleteColumn">Delete</button>
+        <div class="input-main-header">
+          <h3 class="input-name  column-name" @click.prevent="clickColumnName($event)" v-show="!nameInputClicked">{{column.name}}</h3>
+          <textarea
+            ref="columnName"
+            class="text-lg input-hide"
+            v-bind:class="{'input-show': nameInputClicked}"
+            type="text"
+            @blur="updateColumn($event)"
+            @keyup.enter="updateColumn($event)"
+            @keyup.esc="updateColumn($event)"
+            v-bind:value="column.name"
+          />
+        </div>
     </div>
     <div class="list-reset overflow-y-auto">
       <ColumnTask
@@ -62,7 +57,6 @@
         <span>Add a card</span>
       </a>
     </div>
-
   </div>
 </template>
 
@@ -147,6 +141,12 @@ export default {
     },
     removeClickListener () {
       document.removeEventListener('click', this.outsideClickListener)
+    },
+    deleteColumn () {
+      this.$store.dispatch('deleteColumn', {
+        column: this.column,
+        idx: this.columnIndex
+      })
     }
   }
 }

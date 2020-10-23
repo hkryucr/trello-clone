@@ -6,8 +6,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
 const Board = require("../../models/Board");
+const Background = require("../../models/Background");
 const Column = require("../../models/Column");
 const Task = require("../../models/Task");
+const { populate } = require("../../models/Background");
 
 router.get("/", async (req, res) => {
   console.log("the board route is running")
@@ -16,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  Board.findById(req.params.id)
+  await Board.findById(req.params.id)
     .populate([
       { 
         path: "columns", 
@@ -27,6 +29,7 @@ router.get("/:id", async (req, res) => {
         }
       }
     ])
+    .populate("background")
     .exec(function (err, board) {
       if (err) return res.status(404).json({
         noboardfound: "No board found with that id"

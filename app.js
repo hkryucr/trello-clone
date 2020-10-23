@@ -90,6 +90,10 @@ io.on("connection", (socket) => {
     new ColumnController().deleteColumn(io, socket, data)
   });
   
+  socket.on("deleteBoard", async (data) => {
+    new BoardController().deleteBoard(io, socket, data)
+  });
+  
   socket.on("disconnect", () => {
     console.log("disconnected");
   });

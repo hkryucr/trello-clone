@@ -14,6 +14,10 @@ const BoardSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
+  background: {
+    type: Schema.Types.ObjectId,
+    ref: "Background"
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -78,7 +78,7 @@
               </button>
             </li>
             <li class="flex flex-row">
-              <button class="button-link">
+              <button class="button-link" @click.prevent="deleteTask">
                 <span class="icon-sm icon-archive"></span>Delete
               </button>
             </li>
@@ -140,6 +140,12 @@ export default {
         body: this.$refs.taskDescription.value,
         taskId: this.task._id,
         type: 'description'
+      })
+    },
+    deleteTask () {
+      this.$store.dispatch('deleteTask', {
+        task: this.task,
+        idx: this.task.idx
       })
     }
   }

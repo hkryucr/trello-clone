@@ -41,27 +41,50 @@
         class="task-main flex flex-row flex-grow items-start justify-between w-full"
       >
         <div class="w-4/5">
-          <div class="task-description relative">
+          <div class="description-header">
             <span
               class="task-description-icon icon-description icon-lg window-module-title-icon absolute"
             ></span>
-            <h3 class="pt-1">description</h3>
-            <textarea
-              ref="taskDescription"
-              class="task-description-input relative overflow-hidden bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal resize-none"
-              :value="task.description"
-              @change="updateTaskProperty($event, 'description')"
-            />
-            <input
-              class="primary"
-              type="submit"
-              value="Save"
-              @click.prevent="updateTaskDescription($event)"
-            />
-            <router-link
-              class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
-              :to="{ name: 'board', params: { id: this.$route.params.id } }"
-            ></router-link>
+            <h3>Description</h3>
+            <div class="editable">
+              <div class="description-edit-controls">
+                <a href="#" class="description-edit-button" @click.prevent="openEditing">Edit</a>
+              </div>
+            </div>
+          </div>
+          <div class="editable" ref="descriptionWrapper">
+            <div class="description-edit-controls">
+              <p @click.prevent="openEditing">
+                {{
+                  task.description
+                    ? task.description
+                    : "Add a more detailed description…"
+                }}
+              </p>
+            </div>
+            <div class="description-input">
+              <textarea
+                ref="taskDescription"
+                class="task-description-input relative overflow-hidden bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal resize-none"
+                placeholder="Add a more detailed description…"
+                :value="task.description"
+                @change="updateTaskProperty($event, 'description')"
+              />
+              <input
+                class="primary"
+                type="submit"
+                value="Save"
+                @click.prevent="updateTaskDescription($event)"
+              />
+              <button
+                class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
+                @click.prevent="closeEditing"
+              ></button>
+              <!-- <router-link
+                  class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
+                  :to="{ name: 'board', params: { id: this.$route.params.id } }"
+                ></router-link> -->
+            </div>
           </div>
         </div>
         <div class="task-view-right w-1/5">
@@ -141,12 +164,21 @@ export default {
         taskId: this.task._id,
         type: 'description'
       })
+      this.closeEditing()
     },
     deleteTask () {
       this.$store.dispatch('deleteTask', {
         task: this.task,
         idx: this.task.idx
       })
+    },
+    openEditing () {
+      this.$refs.descriptionWrapper.classList.add('editing')
+      this.$refs.taskDescription.focus()
+      this.$refs.taskDescription.select()
+    },
+    closeEditing () {
+      this.$refs.descriptionWrapper.classList.remove('editing')
     }
   }
 }
@@ -192,8 +224,13 @@ export default {
 .task-main {
   padding: 0 8px 8px 16px;
 }
-.task-description {
-  margin: 0 0 4px 40px;
+.description-header {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 8px 0;
+  position: relative;
+  margin: 0 0 4px 40px
 }
 .task-description-input {
   min-height: 108px;
@@ -208,6 +245,39 @@ export default {
 }
 .button-list {
   list-style-type: none;
+}
+.editable {
+  margin-left: 40px;
+}
+
+.editable .description-edit-controls {
+  cursor: pointer;
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.description-edit-controls p {
+  margin: 0 0 8px;
+}
+.editable .description-edit-button {
+  margin: 0 0 0 8px;
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+}
+.editable .description-input {
+  display: none;
+}
+.editing .description-edit-controls {
+  display: none;
+}
+
+.editing .description-input {
+  display: block;
+  float: left;
+  padding-bottom: 9px;
+  z-index: 50;
+  width: 100%;
 }
 input[type="submit"].primary {
   background-color: #5aac44;

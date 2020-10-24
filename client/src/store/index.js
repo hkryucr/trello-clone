@@ -4,6 +4,7 @@ import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
 import { initialState } from '../utils/InitialState'
@@ -58,6 +59,9 @@ export default new Vuex.Store({
           }
         }
       }
+    },
+    getBackgrounds (state) {
+      return state.backgrounds
     }
   },
   actions: {
@@ -140,7 +144,8 @@ export default new Vuex.Store({
       VueInstance.$socket.emit('deleteBoard', {
         boardId
       })
-    }
+    },
+    fetchBackgrounds: () => fetchBackgrounds()
   },
   mutations: {
     UPDATE_BOARD_NAME: (state, { name }) => {
@@ -167,6 +172,9 @@ export default new Vuex.Store({
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
+    },
+    SET_BACKGROUNDS: (state, backgrounds) => {
+      state.backgrounds = backgrounds
     },
     SOCKET_UPDATE_BOARD (state, { name }) {
       this.state.board.name = name
@@ -215,7 +223,6 @@ export default new Vuex.Store({
       task[key] = value
     },
     SOCKET_DELETED_TASK (state, { columnId, taskId, taskIdx }) {
-      console.log(state.board)
       for (let i = 0; i < state.board.columns.length; i++) {
         if (state.board.columns[i]._id === columnId) {
           state.board.columns[i].tasks.splice(taskIdx, 1)

@@ -72,7 +72,7 @@
                 <ul class="board-tile-list">
                   <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
                   <li class="boards-page-board-section-list-item">
-                    <div class="board-tile mod-add">
+                    <div @click.prevent='openModal' class="board-tile mod-add">
                       <p><span>Create new board</span></p>
                     </div>
                   </li>
@@ -82,6 +82,22 @@
           </div>
         </div>
       </div>
+      </div>
+      <div v-if='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
+        <div class='create-board-modal'>
+          <div class='create-board-modal-top' @click.stop>
+            <div class='create-board-modal-info'>
+              <button style="text-align: end" class='create-board-modal-close'>X</button>
+              <input class='create-board-modal-input' placeholder="Add board title" type="text">
+              <div>No Team</div>
+              <div>Private</div>
+            </div>
+            <ul class='create-board-modal-bkgrd-opt-container'>
+              <li class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex">{{bkgrd.template}}</li>
+            </ul>
+          </div>
+          <div class='create-board-modal-bottom'></div>
+        </div>
       </div>
   </div>
 </div>
@@ -98,7 +114,7 @@ export default {
     BoardTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds'])
   },
   mounted () {
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
@@ -108,6 +124,12 @@ export default {
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
       })
+    this.$store.dispatch('fetchBackgrounds')
+      .then(async res => {
+        await this.$store.commit('SET_BACKGROUNDS', res.data)
+        console.log(this.$store.state)
+      })
+      .catch(err => console.log(err))
   },
   methods: {
     async signout () {
@@ -119,12 +141,19 @@ export default {
     },
     toggleStar (userId, boardId, bool) {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
+    },
+    openModal () {
+      this.createBoard = true
+    },
+    closeModal () {
+      this.createBoard = false
     }
   },
   data () {
     return {
       // boards: [],
-      activeTab: 'boards'
+      activeTab: 'boards',
+      createBoard: false
     }
   }
 }
@@ -370,4 +399,69 @@ a {
 .board-tile.mod-add:hover {
   background-color: rgba(9, 30, 66, 0.08);
 }
+.create-board-modal-bkgrd{
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0,0,0,.75);
+  z-index: 100;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+}
+.create-board-modal{
+  background: none;
+  position: relative;
+  top: 44px;
+  justify-content: center;
+}
+.create-board-modal-info{
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  height: 96px;
+  padding: 10px 10px 10px 16px;
+  position: relative;
+  width: 296px;
+  display: flex;
+  flex-direction: column;
+  background-color: #5e6c84;
+}
+.create-board-modal-input{
+  border: none!important;
+  background: transparent!important;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  left: -8px;
+  line-height: 24px;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  position: relative;
+  width: calc(100% - 18px - 16px);
+}
+.create-board-modal-top {
+  display: flex;
+}
+.create-board-modal-bkgrd-opt-container{
+  width: 100px;
+  height: 96px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0 0 0 8px;
+}
+.create-board-modal-bkgrd-opt{
+  width: 28px;
+  height: 28px;
+  margin-bottom: 6px
+}
+.closed{
+  display: none;
+}
+
 </style>

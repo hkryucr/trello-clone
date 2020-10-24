@@ -71,6 +71,11 @@
               <div class="boards-container">
                 <ul class="board-tile-list">
                   <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
+                  <li class="boards-page-board-section-list-item">
+                    <div class="board-tile mod-add">
+                      <p><span>Create new board</span></p>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -351,7 +356,7 @@ a {
   border: none;
   color: #172b4d;
   display: table-cell;
-  height: 80px;
+  height: 96px;
   font-weight: 400;
   text-align: center;
   vertical-align: middle;
@@ -359,5 +364,10 @@ a {
   transition-property: background-color,border-color,box-shadow;
   transition-duration: 85ms;
   transition-timing-function: ease;
+  font-size: 14px;
+  cursor: pointer;
+}
+.board-tile.mod-add:hover {
+  background-color: rgba(9, 30, 66, 0.08);
 }
 </style>

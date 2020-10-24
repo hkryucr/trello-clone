@@ -135,6 +135,11 @@ export default new Vuex.Store({
         column,
         idx
       })
+    },
+    deleteBoard: ({ state, commit }, { boardId }) => {
+      VueInstance.$socket.emit('deleteBoard', {
+        boardId
+      })
     }
   },
   mutations: {

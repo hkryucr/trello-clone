@@ -134,6 +134,16 @@ router.get("/:id", (req, res) => {
   User
     .findById(req.params.id)
     .populate("boards")
+    .populate([
+      { 
+        path: "boards", 
+        model: "Board", 
+        populate: {
+          path: "background",
+          model: "Background"
+        }
+      }
+    ])
     .exec(function (err, user) {
       if (err) return res.status(404).json({
         nouserfound: "No user found with that id"
@@ -143,6 +153,7 @@ router.get("/:id", (req, res) => {
         bio: user.bio,
         boards: user.boards,
         email: user.email,
+        initials: user.initials,
         fullName: user.fullName,
         starredBoards: user.starredBoards
       }

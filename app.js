@@ -6,6 +6,7 @@ const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
 const columns = require("./routes/api/columns");
 const tasks = require("./routes/api/tasks");
+const backgrounds = require("./routes/api/backgrounds");
 
 const BoardController = require("./controllers/BoardController");
 const ColumnController = require("./controllers/ColumnController");
@@ -49,6 +50,7 @@ app.use("/api/users", users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);
 app.use("/api/tasks", tasks);
+app.use("/api/backgrounds", backgrounds);
 
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);
@@ -93,6 +95,10 @@ io.on("connection", (socket) => {
 
   socket.on("deleteColumn", async (data) => {
     new ColumnController().deleteColumn(io, socket, data)
+  });
+  
+  socket.on("deleteBoard", async (data) => {
+    new BoardController().deleteBoard(io, socket, data)
   });
   
   socket.on("disconnect", () => {

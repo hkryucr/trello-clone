@@ -14,7 +14,9 @@ export default {
 </script>
 <template>
   <li class="boards-page-board-section-list-item" >
-    <router-link :to="`board/${board._id}`" class="board-tile mod-light-background">
+    <router-link :to="`board/${board._id}`" class="board-tile mod-light-background"
+    :style="`${(board.background.backgroundType === 'color') ? ('background-color:' + board.background.template): ('background-image: url(' + board.background.template + ');')}`"
+    >
       <div class="board-tile-container board-tile-details">
         <!-- <div class='board-tile-name'>{{board.name}}</div>
         <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
@@ -66,7 +68,7 @@ export default {
   }
 }
 .board-tile {
-  background-color: rgb(0, 121, 191);
+  /* background-color: rgb(0, 121, 191); */
   background-size: cover;
   background-position: 50%;
   color: #fff;

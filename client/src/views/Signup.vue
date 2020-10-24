@@ -24,17 +24,9 @@
       <div class="signup-or">OR</div>
       <div class="signup-link-container">
         <div class="signup-link">
-          <span id="google-icon"></span>
-          <span class="signup-link-text">Continue with Google</span>
+          <!-- <span id="google-icon"></span> -->
+          <span class="login-method-text" @click.prevent="login">Log in with Demo account</span>
         </div>
-        <!-- <div class="signup-link">
-          <span id="microsoft-icon"></span>
-          <span class="signup-link-text">Continue with Microsoft</span>
-        </div>
-        <div class="signup-link">
-          <span id="apple-icon"></span>
-          <span class="signup-link-text">Continue with Apple</span>
-        </div> -->
       </div>
       <router-link class="login-link" to="/login">Already have an account? Log In</router-link>
     </div> ㅇㄴ
@@ -117,6 +109,17 @@ export default {
       if (!this.password) {
         this.errors.push('Password field is required')
       }
+    },
+    login () {
+      const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
+      this.$store.dispatch('login', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          await this.$store.commit('SET_USER', res.data.user)
+        })
+        .catch(err => {
+          console.log(err.response, 'login error')
+        })
     }
   }
 }

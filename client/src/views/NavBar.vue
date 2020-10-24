@@ -8,7 +8,21 @@
             <img class='trello-icon'  src ='../assets/trello-brands.svg' >
             <div class='navbar-boards-text'>Boards</div>
           </div>
-          <input type="text" placeholder="                              🔍">
+          <div class="_3Z6i0FBUukKNYK">
+            <span class="H-W6qp3xgoZvbe" id="search-input-label-text">Search Trello</span>
+            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="search" aria-labelledby="search-input-label-text" value="">
+            <span class="_2baX9YmlCebcUG">
+              <label for="bOzGXajER38WrMCJUQtLelwWmN5nnRZA">
+                <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _35K2W68MBDEnev">
+                  <span class="sc-bdVaJa kBFJig" role="img" aria-label="SearchIcon">
+                    <svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 18a7.5 7.5 0 115.936-2.915l3.94 4.01a1 1 0 01-1.425 1.402l-3.938-4.006A7.467 7.467 0 0110.5 18zm5.5-7.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" fill="currentColor"></path>
+                    </svg>
+                  </span>
+                </span>
+              </label>
+            </span>
+          </div>
       </div>
       <div class="navbar-header">
         <router-link to="/">
@@ -67,7 +81,6 @@ export default {
   },
   data () {
     return {
-      initials: this.$store.getters.getUser.initials
     }
   },
   methods: {
@@ -87,7 +100,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getNavModal'])
+    ...mapGetters(['getNavModal']),
+    initials () {
+      return this.$store.getters.getUser.initials
+    }
   }
 }
 </script>
@@ -97,13 +113,11 @@ export default {
   background-color: #026aa7;
   padding: 2px;
   height: 2.5rem;
-  /* display: flex; */
 }
 .navbar-container{
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* justify-content: space-between; */
   height: 100%;
 }
 .navbar-left{
@@ -157,6 +171,7 @@ export default {
   color: #fff;
   font-weight: 700;
   margin: 0 2px;
+  font-size: 14px;
 }
 .empty{
   display: none;
@@ -221,5 +236,73 @@ export default {
   cursor: pointer;
   fill: #fff;
 }
-
+._3Z6i0FBUukKNYK {
+  position: relative;
+  margin: 0 2px;
+}
+._3Z6i0FBUukKNYK .H-W6qp3xgoZvbe {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+._3Z6i0FBUukKNYK ._1CyMivLdH2a8dA {
+    background-color: hsla(0,0%,100%,.3);
+    border-radius: 3px;
+    border: none;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: hsla(0,0%,100%,.5);
+    float: left;
+    font-size: 13px;
+    height: 32px;
+    line-height: 19px;
+    margin: 0;
+    outline: none;
+    padding-left: 8px;
+    padding-right: 30px;
+    transition: width .15s;
+    width: 180px;
+}
+._2baX9YmlCebcUG {
+    color: #fff;
+    position: absolute;
+    right: 2px;
+}
+._3Z6i0FBUukKNYK label {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+._35K2W68MBDEnev {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+}
+.kBFJig {
+    color: rgb(255, 255, 255);
+    display: inline-block;
+    fill: inherit;
+    flex-shrink: 0;
+    line-height: 1;
+}
+._3Dk1GPoKnJxuep svg {
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+}
+.kBFJig > svg {
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    vertical-align: bottom;
+}
 </style>

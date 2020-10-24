@@ -9,9 +9,6 @@ export default {
     toggleStar (userId, boardId, bool) {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
-  },
-  mounted: {
-
   }
 }
 </script>

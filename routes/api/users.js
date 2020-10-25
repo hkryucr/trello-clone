@@ -153,6 +153,7 @@ router.get("/:id", (req, res) => {
         bio: user.bio,
         boards: user.boards,
         email: user.email,
+        initials: user.initials,
         fullName: user.fullName,
         starredBoards: user.starredBoards
       }

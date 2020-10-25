@@ -83,23 +83,23 @@
         </div>
       </div>
       </div>
-      <div v-if='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
+      <div v-show='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
         <div class='create-board-modal'>
           <div class='create-board-modal-top' @click.stop>
-            <div class='create-board-modal-info'>
-              <button style="text-align: end" class='create-board-modal-close'>X</button>
+            <div class='create-board-modal-info' ref="createBackground">
+              <button @click.prevent.stop='closeModal' style="text-align: end" class='create-board-modal-close'>X</button>
               <input class='create-board-modal-input' placeholder="Add board title" type="text">
               <div>No Team</div>
               <div>Private</div>
             </div>
             <ul class='create-board-modal-bkgrd-opt-container'>
-              <li class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex">{{bkgrd.template}}</li>
+              <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
             </ul>
           </div>
           <div class='create-board-modal-bottom'></div>
         </div>
       </div>
-  </div>
+</div>
 </div>
 </template>
 
@@ -107,11 +107,13 @@
 import { mapGetters } from 'vuex'
 import NavBar from '../views/NavBar'
 import BoardTile from '../components/boards/BoardTile'
+import BackgroundTile from '../components/boards/BackgroundTile'
 
 export default {
   components: {
     NavBar,
-    BoardTile
+    BoardTile,
+    BackgroundTile
   },
   computed: {
     ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds'])
@@ -127,7 +129,6 @@ export default {
     this.$store.dispatch('fetchBackgrounds')
       .then(async res => {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
-        console.log(this.$store.state)
       })
       .catch(err => console.log(err))
   },
@@ -144,16 +145,33 @@ export default {
     },
     openModal () {
       this.createBoard = true
+      this.setBackground()
     },
     closeModal () {
       this.createBoard = false
+    },
+    setBackground () {
+      const selectedBackground = this.$store.state.backgrounds[this.idx]
+      if (selectedBackground.backgroundType === 'image') {
+        this.$refs.createBackground.style.backgroundColor = ''
+        this.$refs.createBackground.style.backgroundImage = `url(${selectedBackground.template})`
+      } else if (selectedBackground.backgroundType === 'color') {
+        this.$refs.createBackground.style.backgroundImage = ''
+        this.$refs.createBackground.style.backgroundColor = selectedBackground.template
+      }
+    },
+    setBackgroundIdx (idx) {
+      this.idx = idx
+      this.setBackground()
     }
   },
   data () {
     return {
       // boards: [],
       activeTab: 'boards',
-      createBoard: false
+      createBoard: false,
+      boardName: '',
+      idx: 0
     }
   }
 }
@@ -426,7 +444,9 @@ a {
   width: 296px;
   display: flex;
   flex-direction: column;
-  background-color: #5e6c84;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .create-board-modal-input{
   border: none!important;
@@ -454,11 +474,7 @@ a {
   justify-content: space-between;
   list-style: none;
   margin: 0 0 0 8px;
-}
-.create-board-modal-bkgrd-opt{
-  width: 28px;
-  height: 28px;
-  margin-bottom: 6px
+  overflow: auto;
 }
 .closed{
   display: none;

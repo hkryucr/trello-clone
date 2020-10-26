@@ -45,18 +45,18 @@ class ColumnController {
   }
 
   async deleteColumn (io, socket, { column, idx }) {
-    Column.remove({_id: column._id})
-    Task.deleteMany({column: column._id})
-    Board.findOneAndUpdate(
+    await Column.remove({_id: column._id})
+    await Task.deleteMany({column: column._id})
+    await Board.findOneAndUpdate(
       { _id: column.board },
       { $pull: { columns: column._id } },
       { new: true },
-      function (err, columns) {
+      function (err, boards) {
         if (err) {
           res.send(err);
         }
         io.sockets.emit("DELETED_COLUMN", {
-          columns,
+          boards,
           idx
         });
       }

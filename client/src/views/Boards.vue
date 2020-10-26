@@ -86,17 +86,19 @@
       <div v-show='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
         <div class='create-board-modal'>
           <div class='create-board-modal-top' @click.stop>
-            <div class='create-board-modal-info' ref="createBackground">
-              <button @click.prevent.stop='closeModal' style="text-align: end" class='create-board-modal-close'>X</button>
-              <input class='create-board-modal-input' placeholder="Add board title" type="text">
+            <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
+              <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
+              <input v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
               <div>No Team</div>
               <div>Private</div>
-            </div>
+            </form>
             <ul class='create-board-modal-bkgrd-opt-container'>
               <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
             </ul>
           </div>
-          <div class='create-board-modal-bottom'></div>
+          <div class='create-board-modal-bottom'>
+            <div @click.prevent='submitBoard' v-bind:class="{'create-board-modal-submit-button-disabled': this.boardName.length === 0, 'create-board-modal-submit-button-active': this.boardName.length > 0 }">Create Board</div>
+          </div>
         </div>
       </div>
 </div>
@@ -131,6 +133,7 @@ export default {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
       .catch(err => console.log(err))
+    console.log(this.$store.state)
   },
   methods: {
     async signout () {
@@ -149,6 +152,8 @@ export default {
     },
     closeModal () {
       this.createBoard = false
+      this.boardName = ''
+      this.idx = 0
     },
     setBackground () {
       const selectedBackground = this.$store.state.backgrounds[this.idx]
@@ -163,6 +168,18 @@ export default {
     setBackgroundIdx (idx) {
       this.idx = idx
       this.setBackground()
+    },
+    async submitBoard () {
+      const boardObj = {
+        name: this.boardName,
+        columns: [],
+        user: this.$store.state.user.id,
+        background: this.$store.state.backgrounds[this.idx]._id
+      }
+      this.createBoard = false
+      this.boardName = ''
+      this.idx = 0
+      this.$store.dispatch('createBoard', boardObj)
     }
   },
   data () {
@@ -449,8 +466,9 @@ a {
   background-repeat: no-repeat;
 }
 .create-board-modal-input{
-  border: none!important;
-  background: transparent!important;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
   box-shadow: none;
   box-sizing: border-box;
   color: #fff;
@@ -462,6 +480,13 @@ a {
   padding: 2px 8px;
   position: relative;
   width: calc(100% - 18px - 16px);
+  top: -20px;
+}
+.create-board-modal-input:hover {
+  background: rgba(0,0,0,.25)
+}
+.create-board-modal-input:focus {
+  background: rgba(0,0,0,.15)
 }
 .create-board-modal-top {
   display: flex;
@@ -479,5 +504,28 @@ a {
 .closed{
   display: none;
 }
+.create-board-modal-bottom{
+  padding: 10px 0;
+  width: 109px;
 
+}
+.create-board-modal-submit-button-disabled{
+  border: none;
+  color: #a5adba;
+  cursor: not-allowed;
+  padding: 8px 5px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+}
+.create-board-modal-submit-button-active{
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 5px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #5aac44;
+}
 </style>

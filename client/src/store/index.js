@@ -77,6 +77,9 @@ export default new Vuex.Store({
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
     },
+    createBoard: ({ state, commit }, board) => {
+      VueInstance.$socket.emit('createBoard', board)
+    },
     moveTask: (
       { state, commit },
       { fromColumn, fromTask, toColumn, toTask }
@@ -140,7 +143,7 @@ export default new Vuex.Store({
         idx
       })
     },
-    deleteBoard: ({ state, commit }, { boardId }) => {
+    deleteBoard: ({ state, commit }, boardId) => {
       VueInstance.$socket.emit('deleteBoard', {
         boardId
       })
@@ -205,6 +208,11 @@ export default new Vuex.Store({
     SOCKET_CREATE_COLUMN (state, newColumn) {
       state.board.columns.push(newColumn)
     },
+    SOCKET_CREATED_BOARD (state, newBoard) {
+      state.board = newBoard
+      state.user.boards.push(newBoard)
+      router.push({ name: 'board', params: { id: newBoard._id } })
+    },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
       const fromTasks = state.board.columns[fromColumn].tasks
       const toTasks = state.board.columns[toColumn].tasks
@@ -232,6 +240,10 @@ export default new Vuex.Store({
     },
     SOCKET_DELETED_COLUMN (state, { columns, idx }) {
       state.board.columns.splice(idx, 1)
+    },
+    SOCKET_DELETED_BOARD (state, boardId) {
+      state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
+      router.push({ name: 'boards' })
     },
     OPEN_MODAL (state, modal) {
       state.ui.navModal = modal

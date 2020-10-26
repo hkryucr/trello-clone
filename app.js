@@ -69,6 +69,10 @@ io.on("connection", (socket) => {
     new ColumnController().createColumn(io, socket, data);
   });
 
+  socket.on("createBoard", async (data) => {
+    new BoardController().createBoard(io, socket, data)
+  })
+
   socket.on("moveColumn", async (data) => {
     new ColumnController().moveColumn(io, socket, data);
   });

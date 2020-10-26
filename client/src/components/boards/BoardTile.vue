@@ -10,6 +10,8 @@ export default {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }
+  // mounted: {
+  // }
 }
 </script>
 <template>

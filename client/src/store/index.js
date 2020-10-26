@@ -4,6 +4,7 @@ import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
 import { initialState } from '../utils/InitialState'
@@ -58,6 +59,9 @@ export default new Vuex.Store({
           }
         }
       }
+    },
+    getBackgrounds (state) {
+      return state.backgrounds
     }
   },
   actions: {
@@ -72,6 +76,9 @@ export default new Vuex.Store({
     },
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
+    },
+    createBoard: ({ state, commit }, board) => {
+      VueInstance.$socket.emit('createBoard', board)
     },
     moveTask: (
       { state, commit },
@@ -136,11 +143,12 @@ export default new Vuex.Store({
         idx
       })
     },
-    deleteBoard: ({ state, commit }, { boardId }) => {
+    deleteBoard: ({ state, commit }, boardId) => {
       VueInstance.$socket.emit('deleteBoard', {
         boardId
       })
-    }
+    },
+    fetchBackgrounds: () => fetchBackgrounds()
   },
   mutations: {
     UPDATE_BOARD_NAME: (state, { name }) => {
@@ -167,6 +175,9 @@ export default new Vuex.Store({
     },
     UPDATE_BOARD_STATE (state, { board }) {
       this.state.board = board
+    },
+    SET_BACKGROUNDS: (state, backgrounds) => {
+      state.backgrounds = backgrounds
     },
     SOCKET_UPDATE_BOARD (state, { name }) {
       this.state.board.name = name
@@ -197,6 +208,11 @@ export default new Vuex.Store({
     SOCKET_CREATE_COLUMN (state, newColumn) {
       state.board.columns.push(newColumn)
     },
+    SOCKET_CREATED_BOARD (state, newBoard) {
+      state.board = newBoard
+      state.user.boards.push(newBoard)
+      router.push({ name: 'board', params: { id: newBoard._id } })
+    },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
       const fromTasks = state.board.columns[fromColumn].tasks
       const toTasks = state.board.columns[toColumn].tasks
@@ -215,7 +231,6 @@ export default new Vuex.Store({
       task[key] = value
     },
     SOCKET_DELETED_TASK (state, { columnId, taskId, taskIdx }) {
-      console.log(state.board)
       for (let i = 0; i < state.board.columns.length; i++) {
         if (state.board.columns[i]._id === columnId) {
           state.board.columns[i].tasks.splice(taskIdx, 1)
@@ -225,6 +240,10 @@ export default new Vuex.Store({
     },
     SOCKET_DELETED_COLUMN (state, { columns, idx }) {
       state.board.columns.splice(idx, 1)
+    },
+    SOCKET_DELETED_BOARD (state, boardId) {
+      state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
+      router.push({ name: 'boards' })
     },
     OPEN_MODAL (state, modal) {
       state.ui.navModal = modal

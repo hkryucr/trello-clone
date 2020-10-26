@@ -16,20 +16,12 @@
       <div class="login-or">OR</div>
       <div class="login-link-container">
         <div class="login-method">
-          <span id="google-icon"></span>
-          <span class="login-method-text">Continue with Google</span>
+          <!-- <span id="google-icon"></span> -->
+          <span class="login-method-text" @click.prevent="login">Log in with Demo account</span>
         </div>
-        <!-- <div class="login-method">
-          <span id="microsoft-icon"></span>
-          <span class="login-method-text">Continue with Microsoft</span>
-        </div>
-        <div class="login-method">
-          <span id="apple-icon"></span>
-          <span class="login-method-text">Continue with Apple</span>
-        </div> -->
-        <p class="sso-link-container">
+        <!-- <p class="sso-link-container">
           <a class="sso-login">Log in with SSO</a>
-        </p>
+        </p> -->
       </div>
       <div class="bottom-form-links">
         <div class="forgot-password">
@@ -40,14 +32,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="bottom-form-smaller-links">
-      <div>
-        <a class="privacy-policy" href="">Privacy Policy</a>
-      </div>
-      <div>
-        <a class="terms-of-service" href="">Terms of Service</a>
-      </div>
-    </div> -->
     <div class="space-holder"></div>
     <splashBottom></splashBottom>
     <background></background>
@@ -93,6 +77,17 @@ export default {
           for (let key in err.response.data) {
             this.errors.push(err.response.data[key])
           }
+        })
+    },
+    login () {
+      const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
+      this.$store.dispatch('login', credentials)
+        .then(async (res) => {
+          await this.$store.commit('SET_TOKEN', res.data.token)
+          await this.$store.commit('SET_USER', res.data.user)
+        })
+        .catch(err => {
+          console.log(err.response, 'login error')
         })
     }
   }

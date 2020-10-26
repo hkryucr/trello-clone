@@ -1,43 +1,56 @@
 <template>
   <div class="board flex flex-col">
     <NavBar />
-    <BoardHeader :board="board" />
-    <div class="relative">
-      <div
-        class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden"
-      >
-        <div class="flex flex-row items-start h-full">
-          <BoardColumn
-            v-for="(column, $columnIndex) of board.columns"
-            :key="$columnIndex"
-            :column="column"
-            :columnIndex="$columnIndex"
-            :board="board"
-          />
-          <div class="column mod-add is-idle" ref="listWrapper">
-            <form class="flex flex-row flex-wrap add-list-form" @submit.prevent="createColumn" @blur="removeAddList" >
-              <a href="#" class="add-list-button" @click.prevent="openAddList">
-                <span class="icon-sm icon-add"></span>
-                Add a list
-              </a>
-              <input
-                ref="newColumnInput"
-                type="text"
-                v-model="newColumnName"
-                class="p-2 mr-2 flex-grow add-list-title"
-                placeholder="Enter list title..."
-              />
-              <div class="add-list-controls">
-                <input type="submit" class="primary" value="Add List" />
-                <button @click="removeAddList" class="icon-lg icon-close dark-hover"></button>
-              </div>
-            </form>
+    <div class="">
+      <BoardHeader :board="board" />
+      <div class="relative">
+        <div
+          class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden"
+        >
+          <div class="flex flex-row items-start h-full">
+            <BoardColumn
+              v-for="(column, $columnIndex) of board.columns"
+              :key="$columnIndex"
+              :column="column"
+              :columnIndex="$columnIndex"
+              :board="board"
+            />
+            <div class="column mod-add is-idle" ref="listWrapper">
+              <form
+                class="flex flex-row flex-wrap add-list-form"
+                @submit.prevent="createColumn"
+                @blur="removeAddList"
+              >
+                <a
+                  href="#"
+                  class="add-list-button"
+                  @click.prevent="openAddList"
+                >
+                  <span class="icon-sm icon-add"></span>
+                  Add a list
+                </a>
+                <input
+                  ref="newColumnInput"
+                  type="text"
+                  v-model="newColumnName"
+                  class="p-2 mr-2 flex-grow add-list-title"
+                  placeholder="Enter list title..."
+                />
+                <div class="add-list-controls">
+                  <input type="submit" class="primary" value="Add List" />
+                  <button
+                    @click="removeAddList"
+                    class="icon-lg icon-close dark-hover"
+                  ></button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-        <div class="task-bg" v-if="isTaskOpen" @click.self="close">
-          <router-view></router-view>
-        </div>
       </div>
+    </div>
+    <div class="task-bg" v-if="isTaskOpen" @click.self="close">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -165,8 +178,8 @@ export default {
 }
 
 .column.mod-add.is-idle .icon-add {
-    color: #fff;
-    margin-right: 2px;
+  color: #fff;
+  margin-right: 2px;
 }
 
 .column.mod-add .add-list-controls {

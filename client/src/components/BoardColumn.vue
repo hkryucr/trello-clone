@@ -34,7 +34,7 @@
         :columnIndex="columnIndex"
       />
     </div>
-    <div class="task-composer task-hide" ref="taskWrapper">
+    <div class="task-composer task-hide" ref="taskWrapper" :id="'task-' + columnIndex">
       <div class="task">
         <textarea
             ref="newTaskInput"
@@ -51,7 +51,7 @@
         <a href="#" class="icon-lg icon-close dark-hover js-cancel" @click.prevent="closeAddCard"></a>
       </div>
     </div>
-    <div class="task-composer-container" ref="addTaskContainer">
+    <div class="task-composer-container" ref="addTaskContainer" :id="'composer-' + columnIndex">
       <a href="#" class="open-task-composer" @click.prevent="openAddCard">
         <span class="icon-sm icon-add"></span>
         <span>Add a card</span>
@@ -134,7 +134,8 @@ export default {
       this.removeClickListener()
     },
     outsideClickListener (event) {
-      if (event.target.closest('div.task-composer') === null && event.target.closest('div.task-composer-container') === null) {
+      if (event.target.closest(`#task-${this.columnIndex}`) === null && event.target.closest(`#composer-${this.columnIndex}`) === null) {
+        console.log('closing')
         this.closeAddCard()
       }
     },
@@ -192,8 +193,8 @@ textarea.task-composer-textarea {
   color: #5e6c84;
   display: block;
   flex: 1 0 auto;
-  margin: 2px 0 8px 8px;
-  padding: 4px 8px;
+  /* margin: 2px 0 8px 8px; */
+  padding: 6px 8px 12px 16px;
   position: relative;
   text-decoration: none;
   -webkit-user-select: none;

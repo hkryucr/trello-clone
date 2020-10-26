@@ -94,9 +94,11 @@ export default {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
-  font-size: 14px;
   font-weight: 600;
   vertical-align: center;
+}
+.board-main-header .input-name {
+  font-size: 14px;
 }
 .board-name {
   font-size: 18px;

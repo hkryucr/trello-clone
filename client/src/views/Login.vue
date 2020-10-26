@@ -14,10 +14,10 @@
         <input type="submit" class="login-submit-button" value="Log in">
       </form>
       <div class="login-or">OR</div>
-      <div class="login-link-container">
+      <div class="login-link-container" @click.prevent="login">
         <div class="login-method">
           <!-- <span id="google-icon"></span> -->
-          <span class="login-method-text" @click.prevent="login">Log in with Demo account</span>
+          <span class="login-method-text">Log in with Demo account</span>
         </div>
         <!-- <p class="sso-link-container">
           <a class="sso-login">Log in with SSO</a>

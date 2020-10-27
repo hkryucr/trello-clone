@@ -2,7 +2,7 @@
   <div class='modal-menu'>
     <div class='modal-menu-header-container'>
         <div class='modal-menu-header'>More from Atlassian</div>
-        <div class='modal-menu-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-menu-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <div class='modal-menu-body'>
       <section class='modal-switch-container'>
@@ -92,7 +92,8 @@ export default {
   line-height: 40px;
   margin: 0;
   grid-column: 1/span 3;
-  grid-row: 1
+  grid-row: 1;
+  text-align: center;
 }
 .modal-menu-close {
   grid-column: 3;
@@ -102,6 +103,8 @@ export default {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  width: 10px;
+  height: auto;
 }
 .modal-menu-body {
   display: flex;

@@ -2,7 +2,7 @@
   <div class='modal-information'>
     <div class='modal-information-header-container'>
         <div class='modal-information-header'>Information</div>
-        <div class='modal-information-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-information-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <a href="https://trello.com/guide?utm_source=trello&utm_medium=inapp&utm_content=header-tips&utm_campaign=guide" class='modal-information-photo-container'>
       <img class='modal-information-photo' src="../../assets/information.png" alt="information">
@@ -62,9 +62,9 @@ export default {
   grid-column: 3;
   grid-row: 1;
   line-height: 40px;
-  font-size: 14px;
-  font-weight: 400;
   cursor: pointer;
+  width: 10px;
+  height: auto;
 }
 .modal-information-bottom-container {
   display: flex;
@@ -104,6 +104,7 @@ export default {
   padding: 10px 0;
   color: #7a869a;
   text-decoration: underline;
+  text-align: center;
 }
 .modal-information-new-tip:hover {
   color: black;

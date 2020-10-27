@@ -89,15 +89,15 @@
             <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
               <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
               <input v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
-              <div>No Team</div>
-              <div>Private</div>
+              <div class='create-board-modal-no-team'>No Team</div>
+              <div class='create-board-modal-private'>Private</div>
             </form>
             <ul class='create-board-modal-bkgrd-opt-container'>
               <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
             </ul>
           </div>
-          <div class='create-board-modal-bottom'>
-            <div @click.prevent='submitBoard' v-bind:class="{'create-board-modal-submit-button-disabled': this.boardName.length === 0, 'create-board-modal-submit-button-active': this.boardName.length > 0 }">Create Board</div>
+          <div class='create-board-modal-bottom' @click.stop>
+            <div @click.prevent.stop='submitBoard' v-bind:class="{'create-board-modal-submit-button-disabled': this.boardName.length === 0, 'create-board-modal-submit-button-active': this.boardName.length > 0 }">Create Board</div>
           </div>
         </div>
       </div>
@@ -133,7 +133,6 @@ export default {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
       .catch(err => console.log(err))
-    console.log(this.$store.state)
   },
   methods: {
     async signout () {
@@ -170,6 +169,9 @@ export default {
       this.setBackground()
     },
     async submitBoard () {
+      if (this.boardName.length === 0) {
+        return
+      }
       const boardObj = {
         name: this.boardName,
         columns: [],
@@ -474,7 +476,7 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 700;
-  left: -8px;
+  left: -3px;
   line-height: 24px;
   margin-bottom: 4px;
   padding: 2px 8px;
@@ -486,7 +488,7 @@ a {
   background: rgba(0,0,0,.25)
 }
 .create-board-modal-input:focus {
-  background: rgba(0,0,0,.15)
+  background: hsla(0,0%,100%,.3)
 }
 .create-board-modal-top {
   display: flex;
@@ -527,5 +529,20 @@ a {
   font-size: 14px;
   text-align: center;
   background-color: #5aac44;
+}
+.create-board-modal-no-team, .create-board-modal-private{
+  margin-top: -25px;
+  width: fit-content;
+  padding: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 3px;
+}
+.create-board-modal-private{
+  margin-top: 0;
+}
+.create-board-modal-no-team:hover, .create-board-modal-private:hover {
+  background-color: hsla(0,0%,100%,.3);
+  cursor: pointer;
 }
 </style>

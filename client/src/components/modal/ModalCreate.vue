@@ -2,7 +2,7 @@
   <div class='modal-create'>
     <div class='modal-create-header-container'>
         <div class='modal-create-header'>Create</div>
-        <div class='modal-create-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-create-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <section class='create-body-container'>
       <div class='create-body-link-container'>
@@ -85,6 +85,9 @@ export default {
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
+  width: 10px;
+  height: auto;
+  margin-left: 30px;
 }
 .create-link-header-container {
   width: 100%;

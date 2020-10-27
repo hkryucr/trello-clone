@@ -2,7 +2,7 @@
   <div class='modal-board'>
     <form class='modal-board-input-container'>
         <input class='modal-board-input' type="text" placeholder="Find boards by name…">
-        <div class='modal-board-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-board-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </form>
     <div class='modal-boards-star-container'>
       <div class='modal-boards-star-header'>
@@ -82,16 +82,18 @@ export default {
 .modal-board-input {
   border: 1px solid lightgray;
   padding: 8px 12px;
-  width: 98%;
+  width: 90%;
 }
 .modal-board-input-container {
   display: flex;
   align-items: center;
   font-weight: 500;
+  justify-content: space-evenly;
 }
 .modal-board-close {
-  padding: 8px;
   cursor: pointer;
+  width: 10px;
+  height: auto;
 }
 .modal-boards-star-container, .modal-boards-recent-container, .modal-boards-personal-container {
   display: flex;

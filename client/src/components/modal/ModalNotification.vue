@@ -2,7 +2,7 @@
   <div class='modal-notification'>
     <div class='modal-notification-header-container'>
         <div class='modal-notification-header'>Notifications</div>
-        <div class='modal-notification-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-notification-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <div class='modal-notification-view-all-container'>
         <a class='modal-notification-view-all'>View All</a>
@@ -62,8 +62,8 @@ export default {
   grid-column: 3;
   grid-row: 1;
   line-height: 40px;
-  font-size: 14px;
-  font-weight: 400;
+  width: 10px;
+  height: auto;
   cursor: pointer;
 }
 .modal-notification-view-all-container {

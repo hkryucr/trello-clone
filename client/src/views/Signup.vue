@@ -22,10 +22,10 @@
         <input :class="(this.checkForm) ? 'hello':''" type="submit" class="signup-submit-button" value="Sign Up"/>
       </form>
       <div class="signup-or">OR</div>
-      <div class="signup-link-container" @click.prevent="login">
-        <div class="signup-link">
+      <div class="signup-link-container">
+        <div class="">
           <!-- <span id="google-icon"></span> -->
-          <span class="login-method-text">Log in with Demo account</span>
+          <span class="signup-submit-button demo-login-button" @click.prevent="login">Log in with Demo account</span>
         </div>
       </div>
       <router-link class="login-link" to="/login">Already have an account? Log In</router-link>

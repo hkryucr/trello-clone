@@ -1,10 +1,11 @@
 <template>
-  <div class="board flex flex-col">
+  <div class="board flex flex-col" ref="board" :style="insertBackground">
     <NavBar />
     <div class="">
       <BoardHeader :board="board" />
       <div class="relative">
         <div
+          :class="[board && board.background && board.background.backgroundType === 'image' ? 'board-gradient' : '']"
           class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden"
         >
           <div class="flex flex-row items-start h-full">
@@ -78,7 +79,14 @@ export default {
     isTaskOpen () {
       return this.$route.name === 'task'
     },
-    ...mapState(['board'])
+    ...mapState(['board']),
+    insertBackground () {
+      if (this.board && this.board.background) {
+        return `${(this.board.background.backgroundType === 'color') ? ('background-color:' + this.board.background.template) : ('background-image: url(' + this.board.background.template + ');')}`
+      } else {
+        return ''
+      }
+    }
   },
   mounted () {
     // Original Fetch from the Backend
@@ -130,14 +138,24 @@ export default {
 
 <style lang="css">
 .board {
-  @apply bg-teal-dark h-full overflow-auto;
-  background-color: #40d9ac;
+  @apply h-full overflow-auto;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .board-main {
   padding-bottom: 20px;
   height: calc(100vh - 80px);
 }
-
+.board-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.24) 0,
+    rgba(0, 0, 0, 0.24) 48px,
+    transparent 80px,
+    transparent
+  );
+}
 .column {
   @apply bg-grey-light p-2 text-left shadow rounded;
   width: 272px;

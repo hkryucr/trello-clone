@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-row board-header-container justify-between">
+  <div :class="[(board.background && board.background.backgroundType === 'image') ? 'board-header-gradient' : '']"
+    class="flex flex-row board-header-container justify-between"
+  >
     <div class="board-header-left flex flex-row">
       <div class="input-main-header board-main-header">
         <h3
@@ -89,6 +91,9 @@ export default {
 <style lang="css">
 .board-header-container {
   padding: 8px 4px 4px 8px;
+}
+.board-header-gradient {
+  background: rgba(0,0,0,.24);
 }
 .input-name {
   cursor: pointer;

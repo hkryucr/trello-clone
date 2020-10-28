@@ -23,9 +23,9 @@
       </form>
       <div class="signup-or">OR</div>
       <div class="signup-link-container">
-        <div class="signup-link">
+        <div class="">
           <!-- <span id="google-icon"></span> -->
-          <span class="login-method-text" @click.prevent="login">Log in with Demo account</span>
+          <span class="signup-submit-button demo-login-button" @click.prevent="login">Log in with Demo account</span>
         </div>
       </div>
       <router-link class="login-link" to="/login">Already have an account? Log In</router-link>

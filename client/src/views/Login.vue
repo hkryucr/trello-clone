@@ -15,13 +15,10 @@
       </form>
       <div class="login-or">OR</div>
       <div class="login-link-container">
-        <div class="login-method">
+        <div class="">
           <!-- <span id="google-icon"></span> -->
-          <span class="login-method-text" @click.prevent="login">Log in with Demo account</span>
+          <span class="login-submit-button demo-login-button" @click.prevent="login">Log in with Demo account</span>
         </div>
-        <!-- <p class="sso-link-container">
-          <a class="sso-login">Log in with SSO</a>
-        </p> -->
       </div>
       <div class="bottom-form-links">
         <div class="forgot-password">
@@ -221,6 +218,13 @@ export default {
 }
 .login-submit-button:hover {
   background-color: #61BD4F;
+}
+.demo-login-button {
+  color: #fff;
+  background-color: #0081cb;
+}
+.demo-login-button:hover {
+  background-color: rgba(0, 129, 203, .8);
 }
 .login-or {
   text-align: center;

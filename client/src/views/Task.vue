@@ -1,24 +1,17 @@
 <template>
   <div class="task-view">
-    <div class="flex flex-col flex-grow items-start justify-between">
-      <div class="w-full">
-        <div class="task-header flex flex-row relative flex-wrap">
-          <span
-            class="window-header-icon task-header-icon left-20 icon-lg js-card-header-icon icon-card absolute"
-          ></span>
-          <div class="w-full h-auto m-0 p-0">
+    <div class="w-full">
+      <router-link class="icon-md icon-close dialog-close-button" :to="{ name: 'board', params: { id: this.$route.params.id } }"></router-link>
+      <div class="flex flex-col flex-grow items-start justify-between">
+        <div class="w-full">
+          <div class="task-header relative">
+            <span
+              class="window-header-icon task-header-icon icon-lg js-card-header-icon icon-card absolute"
+            ></span>
             <div class="task-main-header">
-              <h2
-                class="input-name task-name m-0 p-0"
-                @click.prevent="clickTaskName($event)"
-                v-show="!nameInputClicked"
-              >
-                {{ task.name }}
-              </h2>
               <input
                 ref="taskName"
-                class="text-lg input-hide m-0 p-0"
-                v-bind:class="{ 'input-show': nameInputClicked }"
+                class="text-xl m-0 p-0"
                 type="text"
                 @blur="updateTaskName($event)"
                 @keyup.enter="updateTaskName($event)"
@@ -26,7 +19,7 @@
                 v-bind:value="task.name"
               />
             </div>
-            <div>
+            <div class="text-sm">
               in the list
               <router-link
                 class="text-gray-link"
@@ -36,76 +29,78 @@
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="task-main flex flex-row flex-grow items-start justify-between w-full"
-      >
-        <div class="w-4/5">
-          <div class="description-header">
-            <span
-              class="task-description-icon icon-description icon-lg window-module-title-icon absolute"
-            ></span>
-            <h3>Description</h3>
-            <div class="editable">
-              <div class="description-edit-controls">
-                <a href="#" class="description-edit-button" @click.prevent="openEditing">Edit</a>
+        <div
+          class="task-main flex flex-row flex-grow items-start justify-between w-full"
+        >
+          <div class="w-4/5">
+            <div class="description-header">
+              <span
+                class="task-description-icon icon-description icon-lg window-module-title-icon absolute"
+              ></span>
+              <h3>Description</h3>
+              <div class="editable" ref="descriptionButton">
+                <div  v-if="task.description" class="description-edit-controls">
+                  <a href="#" class="description-edit-button" @click.prevent="openEditing">Edit</a>
+                </div>
+              </div>
+            </div>
+            <div class="margin-left-40">
+              <div class="editable" ref="descriptionWrapper">
+                <div class="description-edit-controls">
+                  <p @click.prevent="openEditing">
+                    {{
+                      task.description
+                        ? task.description
+                        : "Add a more detailed description…"
+                    }}
+                  </p>
+                </div>
+                <div class="description-input">
+                  <textarea
+                    ref="taskDescription"
+                    class="task-description-input relative overflow-hidden bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal resize-none"
+                    placeholder="Add a more detailed description…"
+                    :value="task.description"
+                    @change="updateTaskProperty($event, 'description')"
+                  />
+                  <input
+                    class="primary"
+                    type="submit"
+                    value="Save"
+                    @click.prevent="updateTaskDescription($event)"
+                  />
+                  <button
+                    class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
+                    @click.prevent="closeEditing"
+                  ></button>
+                  <!-- <router-link
+                      class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
+                      :to="{ name: 'board', params: { id: this.$route.params.id } }"
+                    ></router-link> -->
+                </div>
               </div>
             </div>
           </div>
-          <div class="editable" ref="descriptionWrapper">
-            <div class="description-edit-controls">
-              <p @click.prevent="openEditing">
-                {{
-                  task.description
-                    ? task.description
-                    : "Add a more detailed description…"
-                }}
-              </p>
-            </div>
-            <div class="description-input">
-              <textarea
-                ref="taskDescription"
-                class="task-description-input relative overflow-hidden bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal resize-none"
-                placeholder="Add a more detailed description…"
-                :value="task.description"
-                @change="updateTaskProperty($event, 'description')"
-              />
-              <input
-                class="primary"
-                type="submit"
-                value="Save"
-                @click.prevent="updateTaskDescription($event)"
-              />
-              <button
-                class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
-                @click.prevent="closeEditing"
-              ></button>
-              <!-- <router-link
-                  class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
-                  :to="{ name: 'board', params: { id: this.$route.params.id } }"
-                ></router-link> -->
-            </div>
+          <div class="task-view-right w-1/5">
+            <h3>Actions</h3>
+            <ul class="button-list p-1">
+              <li class="flex flex-row">
+                <button class="button-link">
+                  <span class="icon-sm icon-move"></span>Move
+                </button>
+              </li>
+              <li class="flex flex-row">
+                <button class="button-link">
+                  <span class="icon-sm icon-copy"></span>Copy
+                </button>
+              </li>
+              <li class="flex flex-row">
+                <button class="button-link" @click.prevent="deleteTask">
+                  <span class="icon-sm icon-archive"></span>Delete
+                </button>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div class="task-view-right w-1/5">
-          <h3>Actions</h3>
-          <ul class="button-list p-1">
-            <li class="flex flex-row">
-              <button class="button-link">
-                <span class="icon-sm icon-move"></span>Move
-              </button>
-            </li>
-            <li class="flex flex-row">
-              <button class="button-link">
-                <span class="icon-sm icon-copy"></span>Copy
-              </button>
-            </li>
-            <li class="flex flex-row">
-              <button class="button-link" @click.prevent="deleteTask">
-                <span class="icon-sm icon-archive"></span>Delete
-              </button>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -114,11 +109,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      nameInputClicked: false
-    }
-  },
   computed: {
     task () {
       return this.$store.getters.getTask(this.$route.params.taskId)
@@ -135,27 +125,14 @@ export default {
         value: e.target.value
       })
     },
-    clickTaskName () {
-      this.nameInputClicked = true
-      // this.updateWidth()
-      this.$refs.taskName.classList.add('input-show')
-      this.$refs.taskName.focus()
-      this.$refs.taskName.select()
-    },
     updateTaskName (e) {
-      if (
-        !this.nameInputClicked ||
-        e.target.value.replace(/ /g, '').length === 0
-      ) {
-        this.nameInputClicked = false
-      } else {
-        this.nameInputClicked = false
-        this.$refs.taskName.classList.remove('input-show')
+      if (e.target.value.replace(/ /g, '').length !== 0 && e.target.value !== this.task.name) {
         this.$store.dispatch('updateTask', {
           body: e.target.value,
           taskId: this.task._id,
           type: 'name'
         })
+        // this.$refs.taskName.blur()
       }
     },
     updateTaskDescription (e) {
@@ -171,14 +148,17 @@ export default {
         task: this.task,
         idx: this.task.idx
       })
+      this.$router.push({ name: 'board', params: { id: this.$route.params.id } })
     },
     openEditing () {
       this.$refs.descriptionWrapper.classList.add('editing')
+      this.$refs.descriptionButton.classList.add('editing')
       this.$refs.taskDescription.focus()
       this.$refs.taskDescription.select()
     },
     closeEditing () {
       this.$refs.descriptionWrapper.classList.remove('editing')
+      this.$refs.descriptionButton.classList.remove('editing')
     }
   }
 }
@@ -186,7 +166,7 @@ export default {
 
 <style>
 .task-view {
-  @apply relative flex flex-col pin mx-4 m-32 mx-auto py-4 text-left rounded shadow;
+  @apply relative flex flex-col pin mx-4 m-32 mx-auto pb-4 text-left rounded shadow;
   width: 768px;
   background: #f4f5f7;
 }
@@ -197,28 +177,44 @@ export default {
 .task-main-header {
   padding: 3px 0;
   white-space: nowrap;
-  display: inline-block;
+  display: block;
+}
+.dialog-close-button {
+  color: #42526e;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 32px;
+  overflow: hidden;
+  padding: 4px;
+  margin: 4px;
+  width: 32px;
+  z-index: 2;
+  transition: background-color 85ms,color 85ms;
 }
 .task-main-header > input {
-  @apply rounded;
-  height: 100%;
-  width: fit-content;
   max-width: 100%;
   box-sizing: border-box;
   outline: transparent;
-  font-weight: bolder;
   white-space: nowrap;
+  background: transparent;
+  border-radius: 3px;
+  box-shadow: none;
+  font-size: 20px;
+  font-weight: 600;
+  height: 32px;
+  line-height: 24px;
+  margin: -4px -8px;
+  min-height: 24px;
+  padding: 4px 8px;
+  width: 100%;
 }
-.task-name {
-  padding: 0;
+.task-main-header > input:focus {
+  box-shadow: inset 0 0 0 2px #0079bf;
+  background: #fff;
 }
-.task-name:hover {
-  padding: 0;
-}
-.task-header-icon {
-  left: -40px;
-}
-.task-description-icon {
+.task-header-icon, .task-description-icon {
   left: -40px;
 }
 .task-main {
@@ -227,10 +223,13 @@ export default {
 .description-header {
   display: flex;
   align-items: center;
-  min-height: 32px;
+  min-height: 48px;
   padding: 8px 0;
   position: relative;
   margin: 0 0 4px 40px
+}
+.description-header  h3 {
+  font-size: 16px;
 }
 .task-description-input {
   min-height: 108px;
@@ -246,10 +245,9 @@ export default {
 .button-list {
   list-style-type: none;
 }
-.editable {
+.margin-left-40 {
   margin-left: 40px;
 }
-
 .editable .description-edit-controls {
   cursor: pointer;
   word-break: break-word;
@@ -258,12 +256,23 @@ export default {
 }
 .description-edit-controls p {
   margin: 0 0 8px;
+  font-size: 14px;
 }
 .editable .description-edit-button {
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  border-radius: 3px;
+  display: inline-block;
+  line-height: 20px;
+  padding: 6px 12px;
   margin: 0 0 0 8px;
   background-color: rgba(9,30,66,.04);
   box-shadow: none;
   border: none;
+  font-weight: 400;
+  text-align: center;
+  color: #172b4d;
+  font-size: 14px;
 }
 .editable .description-input {
   display: none;

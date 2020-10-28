@@ -36,7 +36,7 @@
       <span class="board-header-btn-divider"></span>
       <span class="board-header-user-icon"></span>
     </div>
-    <div class="board-header-right">
+    <div @click.prevent="deleteBoard" class="board-header-right">
       <div class="flex my-auto header-board-link justify-self-end">
         <span class="icon-sm icon-overflow-menu-horizontal board-header-btn-icon text-white"></span>
         <span>Show Menu</span>
@@ -83,6 +83,9 @@ export default {
         this.$refs.boardName.classList.remove('input-show')
         this.$store.dispatch('updateBoard', { name: e.target.value })
       }
+    },
+    deleteBoard () {
+      this.$store.dispatch('deleteBoard', this.board._id)
     }
   }
 }

@@ -8,9 +8,9 @@
             <img class='trello-icon'  src ='../assets/trello-brands.svg' >
             <div class='navbar-boards-text'>Boards</div>
           </div>
-          <div class="_3Z6i0FBUukKNYK">
+          <div :class="[{ 'search-input-clicked': isSearchInputClicked }, '_3Z6i0FBUukKNYK']">
             <span class="H-W6qp3xgoZvbe" id="search-input-label-text">Search Trello</span>
-            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="search" aria-labelledby="search-input-label-text" value="">
+            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="text" aria-labelledby="search-input-label-text" value=""  @focus="onFocusSearch" @blur="onBlurSearch">
             <span class="_2baX9YmlCebcUG">
               <label for="bOzGXajER38WrMCJUQtLelwWmN5nnRZA">
                 <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _35K2W68MBDEnev">
@@ -21,6 +21,22 @@
                   </span>
                 </span>
               </label>
+              <a href="/search?q=" aria-label="Jump to search page" v-if="isSearchInputClicked">
+                <!-- <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _1aTEN2k6mbGXDt"> -->
+                  <!-- <span class="sc-bdVaJa jKipYA" role="img" aria-label="ExternalLinkIcon">
+                    <svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.745 8.608a1.03 1.03 0 011.031-1.036h.004l4.161.02a1.053 1.053 0 011.045 1.044l.019 4.161a1.03 1.03 0 01-1.036 1.035 1.05 1.05 0 01-1.045-1.044l-.008-1.712-6.723 6.723c-.391.39-1.025.39-1.415 0a1.002 1.002 0 010-1.415l6.723-6.723-1.712-.008a1.05 1.05 0 01-1.044-1.045z" fill="currentColor"></path>
+                    </svg>
+                  </span> -->
+                <!-- </span> -->
+              </a>
+              <span v-if="isSearchInputClicked" class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _1rJlkXCMSTe5X7">
+                <span class="sc-bdVaJa jKipYA" data-testid="header-search-close" role="img" aria-label="CloseIcon">
+                  <svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.586 12L5.293 6.707a1 1 0 011.414-1.414L12 10.586l5.293-5.293a1 1 0 111.414 1.414L13.414 12l5.293 5.293a1 1 0 01-1.414 1.414L12 13.414l-5.293 5.293a1 1 0 01-1.414-1.414L10.586 12z" fill="currentColor"></path>
+                  </svg>
+                </span>
+              </span>
             </span>
           </div>
       </div>
@@ -81,9 +97,20 @@ export default {
   },
   data () {
     return {
+      isSearchInputClicked: false
     }
   },
   methods: {
+    onFocusSearch: function () {
+      if (this.isSearchInputClicked === false) {
+        this.isSearchInputClicked = true
+      }
+    },
+    onBlurSearch () {
+      if (this.isSearchInputClicked === true) {
+        this.isSearchInputClicked = false
+      }
+    },
     stopTheEvent: (event) => event.stopPropagation(),
     openmodal (modal) {
       if (this.getNavModal === modal) {
@@ -312,5 +339,125 @@ export default {
     overflow: hidden;
     pointer-events: none;
     vertical-align: bottom;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._2baX9YmlCebcUG {
+    color: rgba(0,0,0,.4);
+    display: flex;
+}
+._2baX9YmlCebcUG {
+    color: #fff;
+    position: absolute;
+    right: 2px;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._2baX9YmlCebcUG {
+    color: rgba(0,0,0,.4);
+    display: flex;
+}
+._2baX9YmlCebcUG {
+    color: #fff;
+    position: absolute;
+    right: 2px;
+}
+._2baX9YmlCebcUG a {
+  color: #172b4d;
+  background-color: transparent;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._1aTEN2k6mbGXDt, ._3Z6i0FBUukKNYK.search-input-clicked ._1rJlkXCMSTe5X7 {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._1aTEN2k6mbGXDt {
+    max-width: 20px;
+}
+._2_Q6rrYCFblD3M {
+    display: flex;
+    line-height: 1;
+}
+.jKipYA {
+    color: rgb(66, 82, 110);
+    display: inline-block;
+    fill: inherit;
+    flex-shrink: 0;
+    line-height: 1;
+}
+._3Dk1GPoKnJxuep svg {
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+}
+.jKipYA > svg {
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    vertical-align: bottom;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._1aTEN2k6mbGXDt, ._3Z6i0FBUukKNYK.search-input-clicked ._1rJlkXCMSTe5X7 {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._2baX9YmlCebcUG {
+    color: rgba(0,0,0,.4);
+    display: flex;
+}
+._2baX9YmlCebcUG {
+    color: #fff;
+    position: absolute;
+    right: 2px;
+}
+.jKipYA {
+    color: rgb(66, 82, 110);
+    display: inline-block;
+    fill: inherit;
+    flex-shrink: 0;
+    line-height: 1;
+}
+._2baX9YmlCebcUG {
+    color: #fff;
+    position: absolute;
+    right: 2px;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._2baX9YmlCebcUG {
+    color: rgba(0,0,0,.4);
+    display: flex;
+}
+._3Dk1GPoKnJxuep svg {
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+}
+.jKipYA > svg {
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    vertical-align: bottom;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._1CyMivLdH2a8dA:hover {
+    background-color: #fff;
+}
+._3Z6i0FBUukKNYK.search-input-clicked ._1CyMivLdH2a8dA {
+    background-color: #fff;
+    color: #172b4d;
+    border: none;
+    box-shadow: none;
+    padding-right: 54px;
+    width: 180px;
+}
+@media only screen and (max-width: 1280px) and (min-width: 901px){
+  ._3Z6i0FBUukKNYK.search-input-clicked ._1CyMivLdH2a8dA {
+      width: 280px;
+  }
+}
+@media only screen and (min-width: 1281px){
+  ._3Z6i0FBUukKNYK.search-input-clicked ._1CyMivLdH2a8dA {
+      width: 380px;
+  }
 }
 </style>

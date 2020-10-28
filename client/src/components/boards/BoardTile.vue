@@ -3,20 +3,24 @@ import { mapGetters } from 'vuex'
 export default {
   props: ['board'],
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards']),
+    insertBackground () {
+      return `${(this.board.background.backgroundType === 'color') ? ('background-color:' + this.board.background.template) : ('background-image: url(' + this.board.background.template + ');')}`
+    }
   },
   methods: {
     toggleStar (userId, boardId, bool) {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }
+  // mounted: {
+  // }
 }
 </script>
 <template>
   <li class="boards-page-board-section-list-item" >
-    <router-link :to="`board/${board._id}`" class="board-tile mod-light-background"
-    :style="`${(board.background.backgroundType === 'color') ? ('background-color:' + board.background.template): ('background-image: url(' + board.background.template + ');')}`"
-    >
+    <router-link :to="`board/${board._id}`" class="board-tile mod-light-background" :style="insertBackground">
+      <div class="board-tile-hover"></div>
       <div class="board-tile-container board-tile-details">
         <!-- <div class='board-tile-name'>{{board.name}}</div>
         <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
@@ -68,7 +72,6 @@ export default {
   }
 }
 .board-tile {
-  /* background-color: rgb(0, 121, 191); */
   background-size: cover;
   background-position: 50%;
   color: #fff;
@@ -78,6 +81,23 @@ export default {
   text-decoration: none;
   border-radius: 3px;
   display: block;
+}
+.board-tile-hover {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+.board-tile-hover:hover {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.25) !important;
+  z-index: 3;
 }
 .board-tile-details {
   display: flex;

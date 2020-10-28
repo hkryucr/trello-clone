@@ -7,5 +7,6 @@ export const initialState = () => ({
   ui: {
     navModal: 'empty'
   },
-  user: {}
+  user: {},
+  backgrounds: {}
 })

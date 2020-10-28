@@ -72,7 +72,7 @@
                 <ul class="board-tile-list">
                   <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
                   <li class="boards-page-board-section-list-item">
-                    <div class="board-tile mod-add">
+                    <div @click.prevent='openModal' class="board-tile mod-add">
                       <p><span>Create new board</span></p>
                     </div>
                   </li>
@@ -83,7 +83,26 @@
         </div>
       </div>
       </div>
-  </div>
+      <div v-show='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
+        <div class='create-board-modal'>
+          <div class='create-board-modal-top' @click.stop>
+            <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
+              <div style="position: absolute; background-color: rgba(0, 0, 0, .2); left: 0; top: 0; right: 0; bottom: 0;"></div>
+              <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
+              <input v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
+              <!-- <div class='create-board-modal-no-team'>No Team</div>
+              <div class='create-board-modal-private'>Private</div> -->
+            </form>
+            <ul class='create-board-modal-bkgrd-opt-container'>
+              <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
+            </ul>
+          </div>
+          <div class='create-board-modal-bottom' @click.stop>
+            <div @click.prevent.stop='submitBoard' v-bind:class="{'create-board-modal-submit-button-disabled': this.boardName.length === 0, 'create-board-modal-submit-button-active': this.boardName.length > 0 }">Create Board</div>
+          </div>
+        </div>
+      </div>
+</div>
 </div>
 </template>
 
@@ -91,14 +110,16 @@
 import { mapGetters } from 'vuex'
 import NavBar from '../views/NavBar'
 import BoardTile from '../components/boards/BoardTile'
+import BackgroundTile from '../components/boards/BackgroundTile'
 
 export default {
   components: {
     NavBar,
-    BoardTile
+    BoardTile,
+    BackgroundTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds'])
   },
   mounted () {
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
@@ -108,6 +129,11 @@ export default {
       .catch(err => {
         console.log(err.response, 'err from boards mounted')
       })
+    this.$store.dispatch('fetchBackgrounds')
+      .then(async res => {
+        await this.$store.commit('SET_BACKGROUNDS', res.data)
+      })
+      .catch(err => console.log(err))
   },
   methods: {
     async signout () {
@@ -119,12 +145,53 @@ export default {
     },
     toggleStar (userId, boardId, bool) {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
+    },
+    openModal () {
+      this.createBoard = true
+      this.setBackground()
+    },
+    closeModal () {
+      this.createBoard = false
+      this.boardName = ''
+      this.idx = 0
+    },
+    setBackground () {
+      const selectedBackground = this.$store.state.backgrounds[this.idx]
+      if (selectedBackground.backgroundType === 'image') {
+        this.$refs.createBackground.style.backgroundColor = ''
+        this.$refs.createBackground.style.backgroundImage = `url(${selectedBackground.template})`
+      } else if (selectedBackground.backgroundType === 'color') {
+        this.$refs.createBackground.style.backgroundImage = ''
+        this.$refs.createBackground.style.backgroundColor = selectedBackground.template
+      }
+    },
+    setBackgroundIdx (idx) {
+      this.idx = idx
+      this.setBackground()
+    },
+    async submitBoard () {
+      if (this.boardName.length === 0) {
+        return
+      }
+      const boardObj = {
+        name: this.boardName,
+        columns: [],
+        user: this.$store.state.user.id,
+        background: this.$store.state.backgrounds[this.idx]._id
+      }
+      this.createBoard = false
+      this.boardName = ''
+      this.idx = 0
+      this.$store.dispatch('createBoard', boardObj)
     }
   },
   data () {
     return {
       // boards: [],
-      activeTab: 'boards'
+      activeTab: 'boards',
+      createBoard: false,
+      boardName: '',
+      idx: 0
     }
   }
 }
@@ -369,5 +436,114 @@ a {
 }
 .board-tile.mod-add:hover {
   background-color: rgba(9, 30, 66, 0.08);
+}
+.create-board-modal-bkgrd{
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0,0,0,.75);
+  z-index: 100;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+}
+.create-board-modal{
+  background: none;
+  position: relative;
+  top: 44px;
+  justify-content: center;
+}
+.create-board-modal-info{
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  height: 96px;
+  padding: 10px 10px 10px 16px;
+  position: relative;
+  width: 296px;
+  display: flex;
+  flex-direction: column;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.create-board-modal-input{
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  left: -3px;
+  line-height: 24px;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  position: relative;
+  width: calc(100% - 18px - 16px);
+  top: -20px;
+}
+.create-board-modal-input:hover {
+  background: rgba(0,0,0,.25)
+}
+.create-board-modal-input:focus {
+  background: hsla(0,0%,100%,.3)
+}
+.create-board-modal-top {
+  display: flex;
+}
+.create-board-modal-bkgrd-opt-container{
+  width: 100px;
+  height: 96px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0 0 0 8px;
+  overflow: auto;
+}
+.closed{
+  display: none;
+}
+.create-board-modal-bottom{
+  padding: 10px 0;
+  width: 109px;
+
+}
+.create-board-modal-submit-button-disabled{
+  border: none;
+  color: #a5adba;
+  cursor: not-allowed;
+  padding: 8px 5px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+}
+.create-board-modal-submit-button-active{
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 5px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #5aac44;
+}
+.create-board-modal-no-team, .create-board-modal-private{
+  margin-top: -25px;
+  width: fit-content;
+  padding: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 3px;
+}
+.create-board-modal-private{
+  margin-top: 0;
+}
+.create-board-modal-no-team:hover, .create-board-modal-private:hover {
+  background-color: hsla(0,0%,100%,.3);
+  cursor: pointer;
 }
 </style>

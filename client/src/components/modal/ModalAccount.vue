@@ -2,7 +2,7 @@
   <div class='modal-account'>
     <div class='modal-account-header-container'>
         <div class='modal-account-header'>Account</div>
-        <div class='modal-account-close' v-on:click.prevent="closeModal">X</div>
+        <div class='modal-account-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <div class='modal-account-1'>
         <div class="modal-account-user-container">
@@ -95,8 +95,8 @@ export default {
   grid-column: 3;
   grid-row: 1;
   line-height: 40px;
-  font-size: 14px;
-  font-weight: 400;
+  width: 10px;
+  height: auto;
 }
 .modal-account-initials {
   border-radius: 50%;

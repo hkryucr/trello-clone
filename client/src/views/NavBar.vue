@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar-outer-container">
+  <div :class="[pathName == 'boards' ? 'navbar-boards' : 'navbar-board', 'navbar-outer-container']">
     <div class="navbar-container">
       <div class='navbar-left'>
           <div @click.stop.prevent="openModal('modalMenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
@@ -140,6 +140,9 @@ export default {
     ...mapGetters(['getNavModal']),
     initials () {
       return this.$store.getters.getUser.initials
+    },
+    pathName () {
+      return this.$router.currentRoute.name
     }
   }
 }
@@ -147,9 +150,14 @@ export default {
 
 <style lang="css">
 .navbar-outer-container {
-  background-color: #026aa7;
   padding: 2px;
   height: 2.5rem;
+}
+.navbar-boards {
+  background-color: #026aa7;
+}
+.navbar-board {
+  background-color: rgba(0,0,0,.32);
 }
 .navbar-container{
   display: flex;

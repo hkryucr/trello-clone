@@ -450,7 +450,7 @@ a {
 }
 .create-board-modal{
   background: none;
-  position: relative;
+  position: absolute;
   top: 44px;
   justify-content: center;
 }

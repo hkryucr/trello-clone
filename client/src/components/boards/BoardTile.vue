@@ -31,8 +31,8 @@ export default {
             </div>
           </div>
           <div class="board-tile-details-sub-container">
-            <span class="board-tile-options">
-              <span @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+            <span class="board-tile-options" @click.prevent.stop="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
+              <span title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
             </span>
           </div>
         </div>

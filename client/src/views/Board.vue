@@ -89,8 +89,6 @@ export default {
     }
   },
   mounted () {
-    // Original Fetch from the Backend
-    // boardId should react based on state that is made by a user
     let boardId = this.$route.params.id
     fetchBoard(boardId).then((res) => {
       this.$store.commit('UPDATE_BOARD_STATE', {

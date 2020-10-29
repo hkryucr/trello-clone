@@ -2,15 +2,15 @@
   <div :class="[pathName == 'boards' ? 'navbar-boards' : 'navbar-board', 'navbar-outer-container']">
     <div class="navbar-container">
       <div class='navbar-left'>
-          <div @click.stop.prevent="openmodal('modalmenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
+          <div @click.stop.prevent="openModal('modalMenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
           <div class='navbar-icon'><font-awesome-icon icon="home" :style="{ color: '#fff' }" /></div>
-          <div class='navbar-board-link' v-on:click.stop="openmodal('modalboard')">
+          <div class='navbar-board-link' v-on:click.stop="openModal('modalBoard')">
             <img class='trello-icon'  src ='../assets/trello-brands.svg' >
             <div class='navbar-boards-text'>Boards</div>
           </div>
-          <div :class="[{ 'search-input-clicked': isSearchInputClicked }, '_3Z6i0FBUukKNYK']">
+          <div :class="[{ 'search-input-clicked': isSearchInputClicked }, '_3Z6i0FBUukKNYK']" @click.stop.prevent="openSearchModal('modalSearch')">
             <span class="H-W6qp3xgoZvbe" id="search-input-label-text">Search Trello</span>
-            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="text" aria-labelledby="search-input-label-text" value=""  @focus="onFocusSearch" @blur="onBlurSearch">
+            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="text" aria-labelledby="search-input-label-text" v-model="searchInput" ref="searchInputDOM">
             <span class="_2baX9YmlCebcUG">
               <label for="bOzGXajER38WrMCJUQtLelwWmN5nnRZA">
                 <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _35K2W68MBDEnev">
@@ -21,7 +21,7 @@
                   </span>
                 </span>
               </label>
-              <a href="/search?q=" aria-label="Jump to search page" v-if="isSearchInputClicked">
+              <!-- <a href="/search?q=" aria-label="Jump to search page" v-if="isSearchInputClicked"> -->
                 <!-- <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _1aTEN2k6mbGXDt"> -->
                   <!-- <span class="sc-bdVaJa jKipYA" role="img" aria-label="ExternalLinkIcon">
                     <svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24">
@@ -29,9 +29,9 @@
                     </svg>
                   </span> -->
                 <!-- </span> -->
-              </a>
+              <!-- </a> -->
               <span v-if="isSearchInputClicked" class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _1rJlkXCMSTe5X7">
-                <span class="sc-bdVaJa jKipYA" data-testid="header-search-close" role="img" aria-label="CloseIcon">
+                <span class="sc-bdVaJa jKipYA" @click.stop.prevent="closeSearchModal" role="img" aria-label="CloseIcon">
                   <svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M10.586 12L5.293 6.707a1 1 0 011.414-1.414L12 10.586l5.293-5.293a1 1 0 111.414 1.414L13.414 12l5.293 5.293a1 1 0 01-1.414 1.414L12 13.414l-5.293 5.293a1 1 0 01-1.414-1.414L10.586 12z" fill="currentColor"></path>
                   </svg>
@@ -52,18 +52,19 @@
         </router-link>
       </div>
       <div class="navbar-right">
-          <div v-on:click.stop.prevent="openmodal('modalcreate')" class='navbar-icon'><font-awesome-icon icon="plus" class="icon" :style="{ color: '#fff' }"/></div>
-          <div v-on:click.stop.prevent="openmodal('modalinformation')" class='navbar-icon'><font-awesome-icon icon="info-circle" class="icon" :style="{ color: '#fff' }"/></div>
-          <div v-on:click.stop.prevent="openmodal('modalnotification')" class='navbar-icon'><font-awesome-icon icon="bell" class="icon" :style="{ color: '#fff' }"/></div>
-          <span v-on:click.stop.prevent="openmodal('modalaccount')" class='navbar-user'>{{ this.initials }}</span>
+          <div v-on:click.stop.prevent="openModal('modalCreate')" class='navbar-icon'><font-awesome-icon icon="plus" class="icon" :style="{ color: '#fff' }"/></div>
+          <div v-on:click.stop.prevent="openModal('modalInformation')" class='navbar-icon'><font-awesome-icon icon="info-circle" class="icon" :style="{ color: '#fff' }"/></div>
+          <div v-on:click.stop.prevent="openModal('modalNotification')" class='navbar-icon'><font-awesome-icon icon="bell" class="icon" :style="{ color: '#fff' }"/></div>
+          <span v-on:click.stop.prevent="openModal('modalAccount')" class='navbar-user'>{{ this.initials }}</span>
       </div>
       <div v-bind:class=[getNavModal] @click.stop.prevent="stopTheEvent">
-        <ModalMenu class="modal-border" v-if="getNavModal === 'modalmenu'" :closeModal="closeModal"/>
-        <ModalBoard class="modal-border" v-if="getNavModal === 'modalboard'" :closeModal="closeModal"/>
-        <ModalCreate class="modal-border" v-if="getNavModal === 'modalcreate'" :closeModal="closeModal"/>
-        <ModalInformation class="modal-border" v-if="getNavModal === 'modalinformation'" :closeModal="closeModal"/>
-        <ModalNotification class="modal-border" v-if="getNavModal === 'modalnotification'" :closeModal="closeModal"/>
-        <ModalAccount class="modal-border" v-if="getNavModal === 'modalaccount'" :closeModal="closeModal"/>
+        <ModalMenu class="modal-border" v-if="getNavModal === 'modalMenu'" :closeModal="closeModal"/>
+        <ModalBoard class="modal-border" v-if="getNavModal === 'modalBoard'" :closeModal="closeModal"/>
+        <ModalCreate class="modal-border" v-if="getNavModal === 'modalCreate'" :closeModal="closeModal"/>
+        <ModalInformation class="modal-border" v-if="getNavModal === 'modalInformation'" :closeModal="closeModal"/>
+        <ModalNotification class="modal-border" v-if="getNavModal === 'modalNotification'" :closeModal="closeModal"/>
+        <ModalAccount class="modal-border" v-if="getNavModal === 'modalAccount'" :closeModal="closeModal"/>
+        <ModalSearch class="modal-border" v-if="isSearchInputClicked"/>
       </div>
     </div>
    </div>
@@ -71,6 +72,7 @@
 
 <script>
 import ModalMenu from '../components/modal/ModalMenu'
+import ModalSearch from '../components/modal/ModalSearch'
 import ModalBoard from '../components/modal/ModalBoard'
 import ModalCreate from '../components/modal/ModalCreate'
 import ModalInformation from '../components/modal/ModalInformation'
@@ -79,6 +81,7 @@ import ModalAccount from '../components/modal/ModalAccount'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import EventBus from '../utils/eventBus'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 
@@ -93,26 +96,24 @@ export default {
     ModalCreate,
     ModalInformation,
     ModalNotification,
-    ModalAccount
+    ModalAccount,
+    ModalSearch
   },
   data () {
     return {
-      isSearchInputClicked: false
+      isSearchInputClicked: false,
+      searchInput: ''
     }
   },
+  mounted () {
+    const vm = this
+    EventBus.$on('closeSearchModal', function (payLoad) {
+      vm.closeSearchModal()
+    })
+  },
   methods: {
-    onFocusSearch: function () {
-      if (this.isSearchInputClicked === false) {
-        this.isSearchInputClicked = true
-      }
-    },
-    onBlurSearch () {
-      if (this.isSearchInputClicked === true) {
-        this.isSearchInputClicked = false
-      }
-    },
     stopTheEvent: (event) => event.stopPropagation(),
-    openmodal (modal) {
+    openModal (modal) {
       if (this.getNavModal === modal) {
         this.$store.commit('CLOSE_MODAL')
       } else {
@@ -124,6 +125,15 @@ export default {
     },
     closeModal () {
       this.$store.commit('CLOSE_MODAL')
+    },
+    openSearchModal (modal) {
+      this.isSearchInputClicked = true
+      this.$refs.searchInputDOM.focus()
+    },
+    closeSearchModal () {
+      // this.$refs.searchInputDOM.blur()
+      this.isSearchInputClicked = false
+      this.searchInput = ''
     }
   },
   computed: {
@@ -209,9 +219,10 @@ export default {
   font-size: 14px;
 }
 .empty{
-  display: none;
+  /* display: none; */
+  width: 0
 }
-.modalmenu, .modalboard {
+.modalMenu, .modalBoard {
   position: fixed;
   top: 44px;
   left: 4px;
@@ -219,7 +230,7 @@ export default {
   background-color: #fff;
   z-index: 10;
 }
-.modalcreate, .modalinformation, .modalnotification, .modalaccount {
+.modalCreate, .modalInformation, .modalNotification, .modalAccount {
   position: fixed;
   right: 4px;
   top: 44px;
@@ -227,7 +238,7 @@ export default {
   background-color: #fff;
   z-index: 10;
 }
-.modalcreate {
+.modalCreate {
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;

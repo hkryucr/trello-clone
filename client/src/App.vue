@@ -60,6 +60,9 @@ ol ol, ul ol {
    list-style-position: inside;
    /* margin-left: 15px; */
 }
+li {
+  list-style: none;
+}
 
 textarea:focus, input:focus, button:focus{
     outline: none;

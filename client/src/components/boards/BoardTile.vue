@@ -19,7 +19,7 @@ export default {
 </script>
 <template>
   <li class="boards-page-board-section-list-item" >
-    <router-link :to="`board/${board._id}`" class="board-tile mod-light-background" :style="insertBackground">
+    <router-link :to="`board/${board._id}`" :class="[ board.background.backgroundType === 'image' ? 'bg-image' : 'bg-color','board-tile', 'mod-light-background']" :style="insertBackground">
       <div class="board-tile-hover"></div>
       <div class="board-tile-container board-tile-details">
         <!-- <div class='board-tile-name'>{{board.name}}</div>
@@ -82,21 +82,31 @@ export default {
   border-radius: 3px;
   display: block;
 }
-.board-tile-hover {
+.bg-image .board-tile-hover {
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 3;
+  background-color: rgba(0,0,0,.3) !important;
 }
-.board-tile-hover:hover {
+.bg-color .board-tile-hover {
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(0,0,0,.25) !important;
+  z-index: 3;
+  background-color: rgba(0,0,0,.15) !important;
+}
+.board-tile:hover > .board-tile-hover{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.4) !important;
   z-index: 3;
 }
 .board-tile-details {
@@ -115,12 +125,14 @@ export default {
   max-height: 40px;
   width: 100%;
   word-wrap: break-word;
+  z-index: 4;
 }
 .board-tile-details-sub-container {
   flex: 0 0 auto;
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
+  z-index: 4;
 }
 .board-tile-container {
   width: 100%;

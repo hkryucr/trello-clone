@@ -93,6 +93,7 @@ export default {
 
 <style lang="css">
 .board-header-container {
+  height: 48px;
   padding: 8px 4px 4px 8px;
 }
 .board-header-gradient {

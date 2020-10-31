@@ -438,7 +438,7 @@ a {
   background-color: rgba(9, 30, 66, 0.08);
 }
 .create-board-modal-bkgrd{
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   background-color: rgba(0,0,0,.75);
@@ -495,11 +495,11 @@ a {
   display: flex;
 }
 .create-board-modal-bkgrd-opt-container{
-  width: 100px;
+  width: 110px;
   height: 96px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   list-style: none;
   margin: 0 0 0 8px;
   overflow: auto;

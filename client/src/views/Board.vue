@@ -1,12 +1,12 @@
 <template>
   <div class="board flex flex-col" ref="board" :style="insertBackground">
     <NavBar />
-    <div class="">
+    <div class="flex flex-col">
       <BoardHeader :board="board" />
       <div class="relative">
         <div
           :class="[board && board.background && board.background.backgroundType === 'image' ? 'board-gradient' : '']"
-          class="board-main flex flex-col items-start absolute w-screen overflow-x-auto overflow-y-hidden"
+          class="board-main flex flex-col items-start w-full overflow-x-auto overflow-y-hidden"
         >
           <div class="flex flex-row items-start h-full">
             <BoardColumn
@@ -88,8 +88,6 @@ export default {
     }
   },
   mounted () {
-    // Original Fetch from the Backend
-    // boardId should react based on state that is made by a user
     let boardId = this.$route.params.id
     fetchBoard(boardId).then((res) => {
       this.$store.commit('UPDATE_BOARD_STATE', {
@@ -143,8 +141,8 @@ export default {
   background-repeat: no-repeat;
 }
 .board-main {
-  padding-bottom: 20px;
-  height: calc(100vh - 80px);
+  /* padding-bottom: 20px; */
+  height: calc(100vh - 88px);
 }
 .board-gradient {
   background: linear-gradient(

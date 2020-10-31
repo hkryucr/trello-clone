@@ -4,12 +4,15 @@
   </div>
 </template>
 <script>
+import EventBus from './utils/eventBus'
+
 export default {
   methods: {
     closeModal () {
       if (this.$store.state.ui.modal !== 'empty') {
         this.$store.commit('CLOSE_MODAL')
       }
+      EventBus.$emit('closeSearchModal', 'close')
     }
   }
 }
@@ -27,7 +30,7 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  height: 100%;
+  height: 100vh;
   font-size: 16px;
   font-weight: 400;
 }

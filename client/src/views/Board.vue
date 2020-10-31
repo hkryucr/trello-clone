@@ -179,7 +179,7 @@ export default {
   min-height: 32px;
   padding: 4px;
   transition: background 85ms ease-in, opacity 40ms ease-in,
-    border-color 85ms ease-in;
+  border-color 85ms ease-in;
 }
 
 .column.mod-add.is-idle {

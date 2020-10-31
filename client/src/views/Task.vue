@@ -288,7 +288,7 @@ export default {
   z-index: 50;
   width: 100%;
 }
-input[type="submit"].primary {
+input[type="submit"].primary, button.primary {
   background-color: #5aac44;
   box-shadow: none;
   border: none;
@@ -302,7 +302,7 @@ input[type="submit"].primary {
   text-align: center;
   border-radius: 3px;
 }
-input[type="submit"].primary:hover {
+input[type="submit"].primary:hover, button.primary:hover {
   background-color: #61bd4f;
   box-shadow: none;
   border: none;

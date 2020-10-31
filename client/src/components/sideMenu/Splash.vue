@@ -72,7 +72,6 @@ export default {
 .side-menu-splash-options-container{
   padding: 12px;
   border-radius: 3px;
-  margin: 5px;
   display: flex;
   flex-direction: column;
 }
@@ -81,7 +80,7 @@ export default {
 }
 .side-menu-splash-option {
   display: flex;
-  padding: 6px 15px;
+  padding: 6px 12px;
   border-radius: 3px;
 
 }

@@ -54,7 +54,11 @@
       <div class="task-bg" v-if="isTaskOpen" @click.self="close">
         <router-view></router-view>
       </div>
-    <div class='side-menu'></div>
+    <div @click.stop v-bind:class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
+      <div v-if='this.sideMenu' class='side-menu-container'>
+        <Splash />
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -65,12 +69,15 @@ import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
 import BoardHeader from '@/components/BoardHeader'
+import Splash from '../components/sideMenu/Splash'
+import EventBus from '../utils/eventBus'
 
 export default {
   components: {
     BoardColumn,
     NavBar,
-    BoardHeader
+    BoardHeader,
+    Splash
   },
   data () {
     return {
@@ -98,6 +105,13 @@ export default {
       this.$store.commit('UPDATE_BOARD_STATE', {
         board: res.data
       })
+    })
+    const vm = this
+    EventBus.$on('toggleSideMenu', function () {
+      vm.sideMenu = !vm.sideMenu
+    })
+    EventBus.$on('closeSideMenu', function () {
+      vm.sideMenu = false
     })
   },
   methods: {
@@ -237,4 +251,16 @@ export default {
 .sideMenuOpen {
   margin-right: 339px;
 }
+.side-menu-container {
+  width: 339px;
+  height: 100vh;
+  background: #fff;
+  top: 40px;
+  right: 0;
+  position: absolute;
+}
+.side-menu-inactive {
+  transform: translateX(339px)
+}
+
 </style>

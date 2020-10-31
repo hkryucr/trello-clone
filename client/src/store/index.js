@@ -211,6 +211,12 @@ export default new Vuex.Store({
     SOCKET_CREATED_BOARD (state, newBoard) {
       state.board = newBoard
       state.user.boards.push(newBoard)
+      // const starObj = {
+      //   userId: newBoard.user,
+      //   boardId: newBoard._id,
+      //   bool: false
+      // }
+      // this.starBoard(starObj)
       router.push({ name: 'board', params: { id: newBoard._id } })
     },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {

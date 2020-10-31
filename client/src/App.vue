@@ -13,6 +13,7 @@ export default {
         this.$store.commit('CLOSE_MODAL')
       }
       EventBus.$emit('closeSearchModal', 'close')
+      EventBus.$emit('closeSideMenu')
     }
   }
 }

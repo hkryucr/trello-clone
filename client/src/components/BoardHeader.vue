@@ -36,7 +36,7 @@
       <span class="board-header-btn-divider"></span>
       <span class="board-header-user-icon"></span>
     </div>
-    <div @click.prevent="deleteBoard" class="board-header-right">
+    <div @click.stop.prevent='toggleSideMenu' class="board-header-right">
       <div class="flex my-auto header-board-link justify-self-end">
         <span class="icon-sm icon-overflow-menu-horizontal board-header-btn-icon text-white"></span>
         <span>Show Menu</span>
@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import EventBus from '../utils/eventBus'
+
 export default {
   props: ['board'],
   data () {
@@ -86,6 +88,9 @@ export default {
     },
     deleteBoard () {
       this.$store.dispatch('deleteBoard', this.board._id)
+    },
+    toggleSideMenu () {
+      EventBus.$emit('toggleSideMenu')
     }
   }
 }

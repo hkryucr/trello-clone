@@ -89,7 +89,7 @@
             <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
               <div style="position: absolute; background-color: rgba(0, 0, 0, .2); left: 0; top: 0; right: 0; bottom: 0;"></div>
               <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
-              <input v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
+              <input @keydown.enter="submitBoard" v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
               <!-- <div class='create-board-modal-no-team'>No Team</div>
               <div class='create-board-modal-private'>Private</div> -->
             </form>
@@ -182,7 +182,7 @@ export default {
       this.createBoard = false
       this.boardName = ''
       this.idx = 0
-      this.$store.dispatch('createBoard', boardObj)
+      this.$store.dispatch('createBoard', boardObj).then(board => console.log(board))
     }
   },
   data () {

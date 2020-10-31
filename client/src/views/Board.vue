@@ -2,56 +2,63 @@
   <div class="board flex flex-col" ref="board" :style="insertBackground">
     <NavBar />
     <div class="flex flex-col">
-      <BoardHeader :board="board" />
-      <div class="relative">
-        <div
-          :class="[board && board.background && board.background.backgroundType === 'image' ? 'board-gradient' : '']"
-          class="board-main flex flex-col items-start w-full overflow-x-auto overflow-y-hidden"
-        >
-          <div class="flex flex-row items-start h-full">
-            <BoardColumn
-              v-for="(column, $columnIndex) of board.columns"
-              :key="$columnIndex"
-              :column="column"
-              :columnIndex="$columnIndex"
-              :board="board"
-            />
-            <div class="column mod-add is-idle" ref="listWrapper">
-              <form
-                class="flex flex-row flex-wrap add-list-form"
-                @submit.prevent="createColumn"
-                @blur="removeAddList"
-              >
-                <a
-                  href="#"
-                  class="add-list-button"
-                  @click.prevent="openAddList"
+      <div v-bind:class="{'sideMenuOpen': this.sideMenu}">
+        <BoardHeader :board="board" />
+        <div class="relative">
+          <div
+            :class="[board && board.background && board.background.backgroundType === 'image' ? 'board-gradient' : '']"
+            class="board-main flex flex-col items-start w-full overflow-x-auto overflow-y-hidden"
+          >
+            <div class="flex flex-row items-start h-full">
+              <BoardColumn
+                v-for="(column, $columnIndex) of board.columns"
+                :key="$columnIndex"
+                :column="column"
+                :columnIndex="$columnIndex"
+                :board="board"
+              />
+              <div class="column mod-add is-idle" ref="listWrapper">
+                <form
+                  class="flex flex-row flex-wrap add-list-form"
+                  @submit.prevent="createColumn"
+                  @blur="removeAddList"
                 >
-                  <span class="icon-sm icon-add"></span>
-                  Add a list
-                </a>
-                <input
-                  ref="newColumnInput"
-                  type="text"
-                  v-model="newColumnName"
-                  class="p-2 mr-2 flex-grow add-list-title"
-                  placeholder="Enter list title..."
-                />
-                <div class="add-list-controls">
-                  <input type="submit" class="primary" value="Add List" />
-                  <button
-                    @click="removeAddList"
-                    class="icon-lg icon-close dark-hover"
-                  ></button>
-                </div>
-              </form>
+                  <a
+                    href="#"
+                    class="add-list-button"
+                    @click.prevent="openAddList"
+                  >
+                    <span class="icon-sm icon-add"></span>
+                    Add a list
+                  </a>
+                  <input
+                    ref="newColumnInput"
+                    type="text"
+                    v-model="newColumnName"
+                    class="p-2 mr-2 flex-grow add-list-title"
+                    placeholder="Enter list title..."
+                  />
+                  <div class="add-list-controls">
+                    <input type="submit" class="primary" value="Add List" />
+                    <button
+                      @click="removeAddList"
+                      class="icon-lg icon-close dark-hover"
+                    ></button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="task-bg" v-if="isTaskOpen" @click.self="close">
+        <router-view></router-view>
+      </div>
+    <div @click.stop v-bind:class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
+      <div v-if='this.sideMenu' class='side-menu-container'>
+        <Splash />
+      </div>
     </div>
-    <div class="task-bg" v-if="isTaskOpen" @click.self="close">
-      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -62,17 +69,21 @@ import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
 import BoardHeader from '@/components/BoardHeader'
+import Splash from '../components/sideMenu/Splash'
+import EventBus from '../utils/eventBus'
 
 export default {
   components: {
     BoardColumn,
     NavBar,
-    BoardHeader
+    BoardHeader,
+    Splash
   },
   data () {
     return {
       newColumnName: '',
-      boardName: ''
+      boardName: '',
+      sideMenu: false
     }
   },
   computed: {
@@ -94,6 +105,13 @@ export default {
       this.$store.commit('UPDATE_BOARD_STATE', {
         board: res.data
       })
+    })
+    const vm = this
+    EventBus.$on('toggleSideMenu', function () {
+      vm.sideMenu = !vm.sideMenu
+    })
+    EventBus.$on('closeSideMenu', function () {
+      vm.sideMenu = false
     })
   },
   methods: {
@@ -175,7 +193,7 @@ export default {
   min-height: 32px;
   padding: 4px;
   transition: background 85ms ease-in, opacity 40ms ease-in,
-    border-color 85ms ease-in;
+  border-color 85ms ease-in;
 }
 
 .column.mod-add.is-idle {
@@ -230,4 +248,19 @@ export default {
   @apply pin absolute;
   background: rgba(0, 0, 0, 0.5);
 }
+.sideMenuOpen {
+  margin-right: 339px;
+}
+.side-menu-container {
+  width: 339px;
+  height: 100vh;
+  background: #fff;
+  top: 40px;
+  right: 0;
+  position: absolute;
+}
+.side-menu-inactive {
+  transform: translateX(339px)
+}
+
 </style>

@@ -53,23 +53,4 @@ router.post("/", async (req, res) => {
   return res.status(200).json(board);
 })
 
-// create a board the belongs to users 
-router.post("/", async (req, res) => {
-
-  const user = await User.findById(req.body.user); 
-
-  if (!user) {
-    return res.status(422).json("User not found!");
-  }
-  
-  const board = new Board({name: req.body.name, user: user});
-
-  board.save().then((board) => {
-    return res.status(200).json(board);
-  }).catch((err) => {
-    console.log(err);
-  }); 
-  return res.status(200).json(board);
-})
-
 module.exports = router;

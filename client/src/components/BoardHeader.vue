@@ -107,10 +107,10 @@ export default {
   vertical-align: center;
 }
 .board-main-header .input-name {
-  font-size: 14px;
+  font-size: 1.125rem;
 }
 .board-name {
-  font-size: 18px;
+  /* font-size: 18px; */
   padding: 5px 12px;
 }
 .input-name:hover {
@@ -125,6 +125,8 @@ export default {
 }
 .board-main-header {
   font-size: 18px;
+  display: flex;
+  align-items: center;
 }
 .input-main-header > input {
   height: 100%;

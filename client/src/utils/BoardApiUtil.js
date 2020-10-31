@@ -7,3 +7,11 @@ export const fetchBoards = () => {
 export const fetchBoard = (boardId) => {
   return axios.get(`/api/boards/${boardId}`)
 }
+
+export const searchBoard = (searchObj) => {
+  return axios.get(`/api/boards/search`, {
+    params: {
+      searchObj
+    }
+  })
+}

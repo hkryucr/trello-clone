@@ -17,6 +17,30 @@ router.get("/", async (req, res) => {
   res.json(boards)
 });
 
+router.get("/search", async (req, res) => {
+  const searchObj = JSON.parse(req.query.searchObj)
+  Board
+    .find({ name: { $regex: `^${searchObj.text}`, $options: "i" }, user: searchObj.userId })
+    .populate('background')
+    .then(data => {
+      const formated = data.map(datum => ({
+        background: datum.background,
+        name: datum.name,
+        boardId: datum._id
+      }))
+      res.json(formated)
+    })
+    .catch(e => res.status(404).json({
+      noboardfound: "No board can be searched with that input"
+    }))
+  // ({
+  //   $text: 'asd'
+  // }).then(products => res.json(products)).catch(e => res.status(404).json({
+  //     noboardfound: "No board can be searched with that input"
+  //   }));
+  // }).exec(function(err, docs) { res.json(docs) });
+})
+
 router.get("/:id", async (req, res) => {
   await Board.findById(req.params.id)
     .populate([
@@ -38,38 +62,5 @@ router.get("/:id", async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
-  const user = await User.findById(req.body.user);
-  const board = new Board({
-    name: req.body.name,
-    user: user, 
-  });
-
-  board.save().then((board) => {
-    return res.status(200).json(board);
-  }).catch((err) => {
-    console.log(err);
-  });
-  return res.status(200).json(board);
-})
-
-// create a board the belongs to users 
-router.post("/", async (req, res) => {
-
-  const user = await User.findById(req.body.user); 
-
-  if (!user) {
-    return res.status(422).json("User not found!");
-  }
-  
-  const board = new Board({name: req.body.name, user: user});
-
-  board.save().then((board) => {
-    return res.status(200).json(board);
-  }).catch((err) => {
-    console.log(err);
-  }); 
-  return res.status(200).json(board);
-})
 
 module.exports = router;

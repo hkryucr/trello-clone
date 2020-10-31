@@ -4,6 +4,7 @@ import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import { searchBoard } from '../utils/BoardApiUtil.js'
 import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
@@ -17,6 +18,9 @@ export default new Vuex.Store({
   plugins: [createPersistedState(), saveStatePlugin],
   state: initialState(),
   getters: {
+    getSearchResult: state => {
+      return state.searchResult
+    },
     isCurrentUser: state => {
       return state.session.isLoggedIn
     },
@@ -67,6 +71,7 @@ export default new Vuex.Store({
   actions: {
     login: ({ commit }, credentials) => AuthUtil.login(credentials),
     signup: ({ commit }, credentials) => AuthUtil.signup(credentials),
+    searchBoard: ({ commit }, searchObj) => searchBoard(searchObj),
     logout: ({ commit }) => {
       commit('RESET', '')
     },
@@ -151,6 +156,9 @@ export default new Vuex.Store({
     fetchBackgrounds: () => fetchBackgrounds()
   },
   mutations: {
+    UPDATE_SEARCH_RESULT: (state, data) => {
+      state.searchResult = data
+    },
     UPDATE_BOARD_NAME: (state, { name }) => {
       state.board.name = name
     },

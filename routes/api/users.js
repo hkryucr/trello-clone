@@ -101,7 +101,6 @@ router.post("/login", (req, res) => {
         jwt.sign(payload, keys.secretOrKey, {
           expiresIn: 3600
         }, (err, token) => {
-          console.log("Login success");
           return res.json({
             success: true,
             token: "Bearer " + token,
@@ -149,6 +148,7 @@ router.get("/:id", (req, res) => {
       });
 
       const userObj = selectFields(user);
+      delete userObj['starredBoards']
       res.json(userObj);
     });
 });

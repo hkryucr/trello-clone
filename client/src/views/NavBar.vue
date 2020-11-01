@@ -165,7 +165,7 @@ export default {
   computed: {
     ...mapGetters(['getNavModal', 'getUser']),
     initials () {
-      return this.$store.getters.getUser.initials
+      return this.getUser.initials
     },
     pathName () {
       return this.$router.currentRoute.name

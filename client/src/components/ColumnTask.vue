@@ -1,5 +1,5 @@
 <template>
-  <div class="task"
+  <div class="task task-in-columnTask"
     @click="goToTask(task)"
     draggable
     @dragstart="pickupTask($event, taskIndex, columnIndex)"
@@ -7,7 +7,7 @@
     @dragenter.prevent
     @drop.stop="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
   >
-    <span class="w-full flex-no-shrink font-bold">
+    <span class="w-full flex-no-shrink" style="font-size: 14px; font-weight: 500">
       {{task.name}}
     </span>
     <p
@@ -66,5 +66,8 @@ export default {
     text-decoration: none;
     z-index: 0;
 }
-
+.task-in-columnTask:hover {
+  background-color: #f4f5f7;
+  border-bottom-color: rgba(9, 30, 66, .25);
+}
 </style>

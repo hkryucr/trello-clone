@@ -34,7 +34,7 @@
         <span>Private</span>
       </div>
       <span class="board-header-btn-divider"></span>
-      <span class="board-header-user-icon"></span>
+      <span class="board-header-user-icon">{{this.initials}}</span>
     </div>
     <div @click.stop.prevent='toggleSideMenu' class="board-header-right">
       <div class="flex my-auto header-board-link justify-self-end">
@@ -54,6 +54,11 @@ export default {
     return {
       boardName: '',
       nameInputClicked: false
+    }
+  },
+  computed: {
+    initials () {
+      return this.$store.getters.getUser.initials
     }
   },
   methods: {

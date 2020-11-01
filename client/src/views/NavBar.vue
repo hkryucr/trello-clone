@@ -111,6 +111,7 @@ export default {
     EventBus.$on('closeSearchModal', function (payLoad) {
       vm.closeSearchModal()
     })
+    console.log(this.getUser)
   },
   methods: {
     stopTheEvent: (event) => event.stopPropagation(),

@@ -1,17 +1,20 @@
 <template>
-  <div v-if="background.backgroundType === type " :style="`${(background.backgroundType === 'color') ? ('background-color:' + background.template) : ('background-image: url(' + background.template + ');')}`" class='side-menu-tile'>
+  <div @click.stop.prevent="updateBackground(background, board._id)" v-if="background.backgroundType === type " :style="`${(background.backgroundType === 'color') ? ('background-color:' + background.template) : ('background-image: url(' + background.template + ');')}`" class='side-menu-tile'>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['background', 'type']
-  // computed: {
-  //   insertBackground () {
-  //     return `${(background.backgroundType === 'color') ? ('background-color:' + background.template) : ('background-image: url(' + background.template + ');')}`
-  //   }
-  // }
-
+  props: ['background', 'type', 'board'],
+  methods: {
+    updateBackground (background, boardId) {
+      const data = {
+        background,
+        boardId
+      }
+      this.$store.dispatch('updateBackground', data)
+    }
+  }
 }
 </script>
 

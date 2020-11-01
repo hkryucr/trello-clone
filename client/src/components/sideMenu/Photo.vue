@@ -6,7 +6,7 @@
       <div class='side-menu-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
    </div>
    <ul class="side-menu-tial-container">
-     <Tile v-for="(background, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :background=background :type="type"/>
+     <Tile v-for="(background, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :background=background :type="type" :board="board"/>
    </ul>
   </div>
 </template>
@@ -17,6 +17,7 @@ import EventBus from '../../utils/eventBus'
 import Tile from '../sideMenu/Tile'
 
 export default {
+  props: ['board'],
   components: {
     Tile
   },

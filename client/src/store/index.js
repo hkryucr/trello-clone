@@ -121,6 +121,9 @@ export default new Vuex.Store({
         boardId
       })
     },
+    updateBackground: ({ state, commit }, data) => {
+      VueInstance.$socket.emit('updateBackground', data)
+    },
     updateBoard: ({ state, commit }, { name }) => {
       const boardId = state.board._id
       commit('UPDATE_BOARD_NAME', name)
@@ -217,6 +220,9 @@ export default new Vuex.Store({
     SOCKET_UPDATE_BOARD (state, { name, viewedAt }) {
       this.state.board.name = name
       this.state.board.viewedAt = viewedAt
+    },
+    SOCKET_UPDATE_BACKGROUND (state, background) {
+      this.state.board.background = background
     },
     SOCKET_UPDATE_COLUMN (state, newColumn) {
       const targetColumn = state.board.columns.find(

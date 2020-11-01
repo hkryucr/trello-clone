@@ -75,6 +75,13 @@ class BoardController {
         io.sockets.emit("DELETED_BOARD", boardId)
       })
   }
+  async updateBackground(io, socket, data) {
+    const board = await Board.findById(data.boardId)
+    board.background = data.background._id
+    board.save().then(board => {
+      io.sockets.emit("UPDATE_BACKGROUND", data.background)
+    })
+  }
 }
 
 module.exports = BoardController;

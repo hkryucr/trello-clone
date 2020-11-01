@@ -105,7 +105,7 @@ export default {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
-  font-weight: 600;
+  font-weight: 700;
   vertical-align: center;
 }
 .board-main-header .input-name {
@@ -118,7 +118,7 @@ export default {
 .input-name:hover {
   background: rgba(255, 255, 255, 0.171);
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 /* consider renaming the class */
 .input-main-header {
@@ -180,9 +180,10 @@ export default {
   width: auto;
   height: 32px;
   margin: 0 5px;
-  padding: 5px;
+  padding: 5px 8px;
   color: #fff;
-  border-radius: 2px;
+  border-radius: 3px;
+  font-size: 14px;
 }
 .header-board-link:hover {
   background-color: rgba(255, 255, 255, 0.15);

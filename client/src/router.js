@@ -75,7 +75,14 @@ const routes = [
         name: 'task',
         component: Task
       }
-    ]
+    ],
+    beforeEnter: (to, from, next) => {
+      if (!store.state.session.isLoggedIn) {
+        next({ name: 'login' })
+      } else {
+        next()
+      }
+    }
   }
 ]
 

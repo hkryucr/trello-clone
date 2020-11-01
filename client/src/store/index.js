@@ -39,7 +39,7 @@ export default new Vuex.Store({
       return state.ui && state.ui.navModal
     },
     getTask (state) {
-      return id => {
+      return (id) => {
         for (const column of state.board.columns) {
           for (let i = 0; i < column.tasks.length; i++) {
             if (column.tasks[i]._id === id) {

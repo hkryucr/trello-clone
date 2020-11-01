@@ -108,13 +108,44 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { fetchBoard } from '../utils/BoardApiUtil'
 export default {
+  data () {
+    return {
+      loaded: false
+    }
+  },
   computed: {
     task () {
+      if (!this.loaded) {
+        return {
+          name: '',
+          description: ''
+        }
+      }
       return this.$store.getters.getTask(this.$route.params.taskId)
     },
     column () {
+      if (!this.loaded) {
+        return {
+          name: ''
+        }
+      }
       return this.$store.getters.getColumn(this.$route.params.taskId)
+    }
+  },
+  mounted () {
+    const state = this.$store.state
+    if (_.isEmpty(state.board) || state.board._id !== this.$route.params.id) {
+      fetchBoard(this.$route.params.id).then(res => {
+        this.$store.commit('UPDATE_BOARD_STATE', {
+          board: res.data
+        })
+        this.loaded = true
+      })
+    } else {
+      this.loaded = true
     }
   },
   methods: {

@@ -186,14 +186,22 @@ export default {
   right: 0;
   color: #fff;
   font-size: 14px;
-  width: 0;
+  /* width: 0; */
   height: 18px;
   opacity: 0;
   transition-duration: .15s;
-  transition-property: color,background,opacity,transform,width,margin;
+  transition-property: color, background, opacity, transform, width,margin;
   -webkit-transform: translateZ(0);
 }
+.board-tile:hover .board-tile-options-2 .board-tile-options-star-icon {
+  opacity: 100;
+  width: 24px;
+  -webkit-transform: translateZ(10);
+}
 .board-tile-options-2 .board-tile-options-star-icon:hover {
-  transform: scale(1.2);
+  transform: scale(1.2) !important;
+  opacity: 100;
+  width: 24px;
+  -webkit-transform: translateZ(10);
 }
 </style>

@@ -57,7 +57,7 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getRecentlyViewed" :key="$boardIndex" :board="board" :isStarred="getUser.starredBoards[board._id]"/>
+                  <BoardTile v-for="(board, $boardIndex) of getRecentlyViewed" :key="$boardIndex" :board="board" :isStarred="false"/>
                 </ul>
               </div>
             </div>
@@ -70,7 +70,7 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :isStarred="getUser.starredBoards[board._id]"/>
+                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :isStarred="getStarredBoardsObj[board._id]"/>
                   <li class="boards-page-board-section-list-item">
                     <div @click.prevent='openModal' class="board-tile mod-add">
                       <p><span>Create new board</span></p>
@@ -119,7 +119,7 @@ export default {
     BackgroundTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
   },
   mounted () {
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)

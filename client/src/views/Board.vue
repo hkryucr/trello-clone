@@ -3,7 +3,7 @@
     <NavBar />
     <div class="flex flex-col">
       <div v-bind:class="{'sideMenuOpen': this.sideMenu}">
-        <BoardHeader :board="board" />
+        <BoardHeader :board="board" :sideMenu="sideMenu"/>
         <div class="relative">
           <div
             :class="[board && board.background && board.background.backgroundType === 'image' ? 'board-gradient' : '']"
@@ -54,7 +54,7 @@
       <div class="task-bg" v-if="isTaskOpen" @click.self="close">
         <router-view></router-view>
       </div>
-    <div @click.stop v-bind:class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
+    <div @click.stop class="board-menu" :class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
       <div v-if='this.sideMenu' class='side-menu-container'>
         <Splash v-if="this.component === 'splash'" :board="board"/>
         <ChangeBackground v-if="this.component === 'changeBackground'" :board="board"/>
@@ -285,19 +285,29 @@ export default {
   background: rgba(0, 0, 0, 0.5);
 }
 .sideMenuOpen {
-  margin-right: 339px;
+  margin: 0 339px 0 0 ;
+  transition: margin 500ms;
 }
-.side-menu-container {
-  width: 339px;
+.board-menu {
+  transition-property: transform,width;
+  transition-duration: .1s;
+  transition-timing-function: ease-in;
+  transform: translateX(339px);
   height: calc(100vh - 40px);
-  background: #fff;
+  width: 339px;
+  z-index: 5;
+  background-color: #f4f5f7;
   top: 40px;
-  right: 0;
   position: absolute;
+}
+.board-menu {
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  top: 40;
+}
+.side-menu-active.board-menu {
   box-shadow: 0 12px 24px -6px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+  transform: translateX(0);
 }
-.side-menu-inactive {
-  transform: translateX(339px)
-}
-
 </style>

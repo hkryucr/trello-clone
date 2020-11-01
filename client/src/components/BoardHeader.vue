@@ -36,7 +36,7 @@
       <span class="board-header-btn-divider"></span>
       <span class="board-header-user-icon">{{this.initials}}</span>
     </div>
-    <div @click.stop.prevent='toggleSideMenu' class="board-header-right">
+    <div @click.stop.prevent='toggleSideMenu' class="board-header-right" v-if="!sideMenu">
       <div class="flex my-auto header-board-link justify-self-end">
         <span class="icon-sm icon-overflow-menu-horizontal board-header-btn-icon text-white"></span>
         <span>Show Menu</span>
@@ -49,7 +49,7 @@
 import EventBus from '../utils/eventBus'
 
 export default {
-  props: ['board'],
+  props: ['board', 'sideMenu'],
   data () {
     return {
       boardName: '',

@@ -97,7 +97,6 @@ export default {
       return `${(curBoard.background.backgroundType === 'color') ? ('background-color:' + curBoard.background.template) : ('background-image: url(' + curBoard.background.template + ');')}`
     }
   },
-  mounted () { console.log(this.$router, 'this.$router') },
   watch: {
     '$route' (to, from) {
       if (to !== from) location.reload()

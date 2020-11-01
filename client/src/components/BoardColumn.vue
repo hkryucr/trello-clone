@@ -143,7 +143,6 @@ export default {
     },
     outsideClickListener (event) {
       if (event.target.closest(`#task-${this.columnIndex}`) === null && event.target.closest(`#composer-${this.columnIndex}`) === null) {
-        console.log('closing')
         this.closeAddCard()
       }
     },

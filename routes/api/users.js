@@ -149,6 +149,7 @@ router.get("/:id", (req, res) => {
       });
 
       const userObj = selectFields(user);
+      delete userObj['starredBoards']
       res.json(userObj);
     });
 });

@@ -1,12 +1,6 @@
 <script>
 export default {
   props: ['bkgrd']
-  // methods: {
-  //   updateIdx () {
-  //     this.$emit('click', this.idx)
-  //     console.log(this.idx)
-  //   }
-  // }
 }
 </script>
 <template>

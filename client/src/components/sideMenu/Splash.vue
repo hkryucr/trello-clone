@@ -1,8 +1,8 @@
 <template>
 <div>
-  <div class='side-menu-splash-header-container'>
-    <div class='side-menu-splash-header'>Menu</div>
-    <div class='side-menu-splash-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
+  <div class='side-menu-header-container'>
+    <div class='side-menu-header'>Menu</div>
+    <div class='side-menu-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
   </div>
   <div class='side-menu-splash-options-container'>
     <div class='side-menu-splash-option'>
@@ -14,11 +14,11 @@
         <div class='side-menu-splash-description'>Add a description to your board</div>
       </div>
     </div>
-    <div class='side-menu-splash-option'>
+    <div @click.stop.prevent="updateComponent('changeBackground')" class='side-menu-splash-option'>
       <div class='side-menu-splash-bkgrd-icon-container'>
         <img class="side-menu-splash-bkgrd" src="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/128x192/e01af9b7d066f493aead02b94d8b2094/photo-1603408619685-47e71db52d0c.jpg" img>
       </div>
-      <div class='side-menu-splash-text'>Change Background</div>
+      <div  class='side-menu-splash-text'>Change Background</div>
     </div>
     <div class='side-menu-splash-option'>
       <div class='side-menu-splash-bkgrd-icon-container'>
@@ -31,18 +31,34 @@
       </div>
       <div class='side-menu-splash-text'>Stickers</div>
     </div>
+    <div @click.stop.prevent="deleteBoard" class='side-menu-splash-option'>
+      <div class='side-menu-splash-text'>Delete Board</div>
+    </div>
   </div>
 </div>
 </template>
 
 <script>
-export default {
+import EventBus from '../../utils/eventBus'
 
+export default {
+  props: ['board'],
+  methods: {
+    deleteBoard () {
+      this.$store.dispatch('deleteBoard', this.board._id)
+    },
+    updateComponent (component) {
+      EventBus.$emit('updateComponent', component)
+    },
+    closeModal () {
+      EventBus.$emit('closeSideMenu')
+    }
+  }
 }
 </script>
 
 <style lang="css">
-.side-menu-splash-header-container {
+.side-menu-header-container {
   margin: 0 10px;
   margin-bottom: 8px;
   padding: 0 12px;
@@ -53,7 +69,7 @@ export default {
   border-bottom: 1px solid rgba(9,30,66,.13);
   height: 48px;
 }
-.side-menu-splash-header {
+.side-menu-header {
   color: #172b4d;
   line-height: 50px;
   margin: 0;
@@ -61,7 +77,7 @@ export default {
   grid-row: 1;
   font-weight: 700;
 }
-.side-menu-splash-close {
+.side-menu-close {
   cursor: pointer;
   grid-column: 3;
   grid-row: 1;
@@ -77,6 +93,7 @@ export default {
 }
 .side-menu-splash-option:hover{
   background-color: rgba(9,30,66,.08);
+  cursor: pointer;
 }
 .side-menu-splash-option {
   display: flex;

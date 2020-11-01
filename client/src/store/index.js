@@ -203,7 +203,7 @@ export default new Vuex.Store({
       state.session.isLoggedIn = true
       router.push({ name: 'boards' }).catch(err => {
         if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
-          console.log(err)
+          console.error(err)
         }
       })
     },
@@ -295,6 +295,7 @@ export default new Vuex.Store({
     },
     SOCKET_DELETED_BOARD (state, boardId) {
       state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
+      delete state.session.currentUser.starredBoards[boardId]
       router.push({ name: 'boards' })
     },
     OPEN_MODAL (state, modal) {

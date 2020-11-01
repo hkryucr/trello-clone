@@ -47,7 +47,6 @@ class BoardController {
     });
   }
   async updateBoardViewDate(io, socket, data) {
-    console.log('updating board view date')
     const { boardId } = data;
     const boardObj = await Board.findById(boardId);
     boardObj.viewedAt = Date.now()

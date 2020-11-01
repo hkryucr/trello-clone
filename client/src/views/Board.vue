@@ -56,7 +56,10 @@
       </div>
     <div @click.stop v-bind:class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
       <div v-if='this.sideMenu' class='side-menu-container'>
-        <Splash />
+        <Splash v-if="this.component === 'splash'" :board="board"/>
+        <ChangeBackground v-if="this.component === 'changeBackground'" :board="board"/>
+        <Color v-if="this.component === 'color'" :board="board" />
+        <Photo v-if="this.component === 'photo'" :board="board" />
       </div>
     </div>
     </div>
@@ -70,6 +73,9 @@ import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
 import BoardHeader from '@/components/BoardHeader'
 import Splash from '../components/sideMenu/Splash'
+import ChangeBackground from '../components/sideMenu/ChangeBackground'
+import Color from '../components/sideMenu/Color'
+import Photo from '../components/sideMenu/Photo'
 import EventBus from '../utils/eventBus'
 
 export default {
@@ -77,13 +83,17 @@ export default {
     BoardColumn,
     NavBar,
     BoardHeader,
-    Splash
+    Splash,
+    ChangeBackground,
+    Color,
+    Photo
   },
   data () {
     return {
       newColumnName: '',
       boardName: '',
-      sideMenu: false
+      sideMenu: false,
+      component: 'splash'
     }
   },
   computed: {
@@ -112,6 +122,9 @@ export default {
     })
     EventBus.$on('closeSideMenu', function () {
       vm.sideMenu = false
+    })
+    EventBus.$on('updateComponent', function (component) {
+      vm.component = component
     })
   },
   methods: {
@@ -253,11 +266,12 @@ export default {
 }
 .side-menu-container {
   width: 339px;
-  height: 100vh;
+  height: calc(100vh - 40px);
   background: #fff;
   top: 40px;
   right: 0;
   position: absolute;
+  box-shadow: 0 12px 24px -6px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
 }
 .side-menu-inactive {
   transform: translateX(339px)

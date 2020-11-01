@@ -85,7 +85,7 @@ import EventBus from '../utils/eventBus'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
-console.log(_.debounce, 'lodash')
+
 library.add(faUserSecret)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -132,33 +132,35 @@ export default {
       this.$refs.searchInputDOM.focus()
     },
     closeSearchModal () {
-      // this.$refs.searchInputDOM.blur()
       this.isSearchInputClicked = false
       this.searchInput = ''
+      this.$store.commit('RESET_SEARCH_RESULT')
     },
     updateSearchInput (e) {
       this.searchInput = e.target.value
+      if (this.searchInput === '') {
+        this.$store.commit('RESET_SEARCH_RESULT')
+        return
+      }
+      this.fetchSearchResult()
+    },
+    fetchSearchResult: _.debounce(function () {
       const searchObj = {
         text: this.searchInput,
-        userId: this.getUser.id
+        userId: this.getUser._id
       }
-      if (this.searchInput === '') return
-
-      _.debounce(() => {
-        console.log('this is debouncing')
-        this.$store.dispatch('searchBoard', searchObj)
-          .then(async (res) => {
-            await this.$store.commit('UPDATE_SEARCH_RESULT', res.data)
-            console.log(this.$store.state.searchResult)
-          })
-          .catch(err => {
-            this.errors = []
-            for (let key in err.response.data) {
-              this.errors.push(err.response.data[key])
-            }
-          })
-      }, 2000)
-    }
+      this.$store.dispatch('searchBoardsAndTasks', searchObj)
+        .then(async (res) => {
+          await this.$store.commit('UPDATE_SEARCH_RESULT', res.data)
+        })
+        .catch(err => {
+          console.error(err, 'error from searchBooardsAndTasks')
+          this.errors = []
+          for (let key in err.response.data) {
+            this.errors.push(err.response.data[key])
+          }
+        })
+    }, 1000)
   },
   computed: {
     ...mapGetters(['getNavModal', 'getUser']),

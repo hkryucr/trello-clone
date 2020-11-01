@@ -9,5 +9,9 @@ export const initialState = () => ({
   },
   user: {},
   backgrounds: {},
-  searchResult: []
+  searchResult: {
+    loaded: false,
+    boards: [],
+    tasks: []
+  }
 })

@@ -4,7 +4,7 @@ import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
-import { searchBoard } from '../utils/BoardApiUtil.js'
+import { searchBoardsAndTasks } from '../utils/BoardApiUtil.js'
 import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
@@ -18,14 +18,20 @@ export default new Vuex.Store({
   plugins: [createPersistedState(), saveStatePlugin],
   state: initialState(),
   getters: {
-    getSearchResult: state => {
-      return state.searchResult
+    getSearchResultBoards: state => {
+      return state.searchResult.boards
+    },
+    getSearchResultTasks: state => {
+      return state.searchResult.tasks
+    },
+    getSearchResultLoaded: state => {
+      return state.searchResult.loaded
     },
     isCurrentUser: state => {
       return state.session.isLoggedIn
     },
     getUser: state => {
-      return state.user
+      return state.session.currentUser
     },
     getCurrentUser: state => {
       return state.session.currentUser
@@ -71,13 +77,13 @@ export default new Vuex.Store({
   actions: {
     login: ({ commit }, credentials) => AuthUtil.login(credentials),
     signup: ({ commit }, credentials) => AuthUtil.signup(credentials),
-    searchBoard: ({ commit }, searchObj) => searchBoard(searchObj),
+    searchBoardsAndTasks: ({ commit }, searchObj) => searchBoardsAndTasks(searchObj),
     logout: ({ commit }) => {
       commit('RESET', '')
     },
     fetchUser: ({ commit }, userId) => fetchUser(userId),
-    createTask: ({ state, commit }, { name, columnId }) => {
-      VueInstance.$socket.emit('createTask', { name, columnId })
+    createTask: ({ state, commit }, { name, columnId, userId }) => {
+      VueInstance.$socket.emit('createTask', { name, columnId, userId })
     },
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
@@ -156,8 +162,16 @@ export default new Vuex.Store({
     fetchBackgrounds: () => fetchBackgrounds()
   },
   mutations: {
+    RESET_SEARCH_RESULT: (state) => {
+      state.searchResult = {
+        loaded: false,
+        boards: [],
+        tasks: []
+      }
+    },
     UPDATE_SEARCH_RESULT: (state, data) => {
       state.searchResult = data
+      state.searchResult.loaded = true
     },
     UPDATE_BOARD_NAME: (state, { name }) => {
       state.board.name = name

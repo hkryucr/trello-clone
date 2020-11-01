@@ -20,10 +20,10 @@ const selectFields = (user) => {
     email: user.email,
     fullName: user.fullName,
     password: user.password,
+    initials: user.initials,
     boards: user.boards,
     starredBoards: user.starredBoards,
-    bio: user.bi,
-    city: user.city,
+    bio: user.bio
   };
 }
 
@@ -96,7 +96,6 @@ router.post("/login", (req, res) => {
     // handle success
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        // const payload = selectFields(user);
         const payload = selectFields(user)
 
         jwt.sign(payload, keys.secretOrKey, {

@@ -46,7 +46,7 @@ export default new Vuex.Store({
       if (_.isEmpty(state.user) || _.isEmpty(state.user.boards)) return []
       const sortedRecentlyViewed = Object.assign([], state.user.boards)
       sortedRecentlyViewed.sort((a, b) => Date.parse(b.viewedAt) - Date.parse(a.viewedAt))
-      return sortedRecentlyViewed.filter(el => Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
+      return sortedRecentlyViewed.filter(el => !state.user.starredBoards[el._id] && Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
     },
     getStarredBoards: state => {
       if (_.isEmpty(state.user) || _.isEmpty(state.user.boards) || _.isEmpty(state.user.starredBoards)) return []

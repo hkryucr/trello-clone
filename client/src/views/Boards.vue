@@ -44,7 +44,7 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getStarredBoards" :key="$boardIndex" :board=board />
+                  <BoardTile v-for="(board, $boardIndex) of getStarredBoards" :key="$boardIndex" :board=board :isStarred="true"/>
                 </ul>
               </div>
             </div>

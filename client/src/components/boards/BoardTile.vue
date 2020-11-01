@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  props: ['board'],
+  props: ['board', 'isStarred'],
   computed: {
     ...mapGetters(['getUser', 'getCurrentUser', 'getBoards']),
     insertBackground () {

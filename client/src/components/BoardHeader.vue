@@ -58,11 +58,6 @@ export default {
   },
   methods: {
     updateWidth () {
-      // this.$refs.boardName.style.width = 'auto'
-      // const inputLength = this.$refs.boardName.scrollWidth + 8
-      // const inputLength = this.$refs.boardName.value.length * 10 + 30
-      // this.$refs.boardName.style.width = inputLength.toString() + 'px'
-
       const canvas = document.createElement('canvas')
       const context = canvas.getContext('2d')
       context.font = window.getComputedStyle(this.$refs.boardName, null).getPropertyValue('font')
@@ -83,7 +78,9 @@ export default {
       } else {
         this.nameInputClicked = false
         this.$refs.boardName.classList.remove('input-show')
-        this.$store.dispatch('updateBoard', { name: e.target.value })
+        if (this.board.name !== e.target.value) {
+          this.$store.dispatch('updateBoard', { name: e.target.value })
+        }
       }
     },
     deleteBoard () {

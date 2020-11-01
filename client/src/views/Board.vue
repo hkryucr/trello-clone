@@ -39,7 +39,7 @@
                     placeholder="Enter list title..."
                   />
                   <div class="add-list-controls">
-                    <input type="submit" class="primary" value="Add List" />
+                    <input type="submit" class="primary" value="Add List" style="font-weight: 600;" />
                     <button
                       @click="removeAddList"
                       class="icon-lg icon-close dark-hover"
@@ -56,7 +56,10 @@
       </div>
     <div @click.stop v-bind:class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
       <div v-if='this.sideMenu' class='side-menu-container'>
-        <Splash />
+        <Splash v-if="this.component === 'splash'" :board="board"/>
+        <ChangeBackground v-if="this.component === 'changeBackground'" :board="board"/>
+        <Color v-if="this.component === 'color'" :board="board" />
+        <Photo v-if="this.component === 'photo'" :board="board" />
       </div>
     </div>
     </div>
@@ -70,6 +73,9 @@ import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
 import BoardHeader from '@/components/BoardHeader'
 import Splash from '../components/sideMenu/Splash'
+import ChangeBackground from '../components/sideMenu/ChangeBackground'
+import Color from '../components/sideMenu/Color'
+import Photo from '../components/sideMenu/Photo'
 import EventBus from '../utils/eventBus'
 
 export default {
@@ -77,13 +83,17 @@ export default {
     BoardColumn,
     NavBar,
     BoardHeader,
-    Splash
+    Splash,
+    ChangeBackground,
+    Color,
+    Photo
   },
   data () {
     return {
       newColumnName: '',
       boardName: '',
-      sideMenu: false
+      sideMenu: false,
+      component: 'splash'
     }
   },
   computed: {
@@ -113,6 +123,9 @@ export default {
     })
     EventBus.$on('closeSideMenu', function () {
       vm.sideMenu = false
+    })
+    EventBus.$on('updateComponent', function (component) {
+      vm.component = component
     })
   },
   methods: {
@@ -174,7 +187,7 @@ export default {
   );
 }
 .column {
-  @apply bg-grey-light p-2 text-left shadow rounded;
+  @apply p-2 text-left shadow rounded;
   width: 272px;
   margin: 0 4px;
 }
@@ -185,6 +198,7 @@ export default {
   margin-right: 8px;
 }
 .column-name {
+  font-size: 14px;
   width: 100%;
 }
 .column.mod-add {
@@ -206,12 +220,21 @@ export default {
   display: none;
   padding: 6px 8px;
   transition: color 85ms ease-in;
+  font-weight: 600;
 }
-
+.column.mod-add .add-list-button {
+  font-size: 14px;
+  line-height: 20px;
+}
+.column.mod-add .add-list-button > span{
+  font-size: 16px
+}
 .column.mod-add.is-idle .add-list-button {
   display: block;
 }
-
+.column .add-list-form {
+  margin: 2px;
+}
 .column.mod-add.is-idle .icon-add {
   color: #fff;
   margin-right: 2px;
@@ -221,11 +244,19 @@ export default {
   overflow: hidden;
   margin: 4px 0 0;
   transition: margin 85ms ease-in, height 85ms ease-in;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
+.column.mod-add .add-list-controls button {
+  margin: 4px 4px 0 0;
+}
 .column.mod-add.is-idle .add-list-controls {
   height: 0;
   margin: 0;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .column.mod-add .add-list-title {
@@ -236,6 +267,8 @@ export default {
   margin: 0;
   transition: margin 85ms ease-in, background-color 85ms ease-in;
   width: 100%;
+  font-size: 14px;
+  padding: 8px 12px;
 }
 .column.mod-add.is-idle .add-list-title {
   background-color: none;
@@ -244,6 +277,8 @@ export default {
   cursor: pointer;
   display: none;
   margin: 0;
+  font-size: 14px;
+  padding: 8px 12px;
 }
 .task-bg {
   @apply pin absolute;
@@ -254,11 +289,12 @@ export default {
 }
 .side-menu-container {
   width: 339px;
-  height: 100vh;
+  height: calc(100vh - 40px);
   background: #fff;
   top: 40px;
   right: 0;
   position: absolute;
+  box-shadow: 0 12px 24px -6px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
 }
 .side-menu-inactive {
   transform: translateX(339px)

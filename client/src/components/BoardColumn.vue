@@ -6,6 +6,7 @@
     @dragenter.prevent
     @dragstart.self="pickupColumn($event, columnIndex)"
     draggable
+    style="background-color: #ebecf0;"
   >
     <div class="flex justify-between mb-2 font-bold">
         <div class="input-main-header">
@@ -49,7 +50,7 @@
         />
       </div>
       <div class="task-controls">
-        <input type="submit" class="primary" value="Add Card" @click.prevent="createTask">
+        <input type="submit" class="primary" value="Add Card" @click.prevent="createTask" style="margin: 4px 4px 0 0;font-size: 14px; font-weight: 400">
         <a href="#" class="icon-lg icon-close dark-hover js-cancel" @click.prevent="closeAddCard"></a>
       </div>
     </div>
@@ -186,6 +187,7 @@ textarea.task-composer-textarea {
   overflow: hidden;
   overflow-wrap: break-word;
   padding: 0;
+  font-size: 14px;
 }
 
 .task-composer-container {
@@ -201,11 +203,13 @@ textarea.task-composer-textarea {
   display: block;
   flex: 1 0 auto;
   /* margin: 2px 0 8px 8px; */
-  padding: 6px 8px 12px 16px;
+  padding: 6px 8px 12px 6px;
   position: relative;
   text-decoration: none;
   -webkit-user-select: none;
   user-select: none;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .open-task-composer span {
@@ -217,4 +221,7 @@ textarea.task-composer-textarea {
   display: none;
 }
 
+.task-controls > input[type="submit"] {
+  margin: 4px 4px 0 0;
+}
 </style>

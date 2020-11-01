@@ -14,4 +14,12 @@ router.get("/:id", async (req, res) => {
     });
 });
 
+// router.get("/search", async (req, res) => {
+  // Task.find({
+  //   $text: { $search: term },
+  // })
+  //   .then(products => console.log(products))
+  //   .catch(e => console.error(e));
+// })
+
 module.exports = router;

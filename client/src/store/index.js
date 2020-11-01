@@ -4,10 +4,13 @@ import { saveStatePlugin } from '../utils'
 import createPersistedState from 'vuex-persistedstate'
 import VueInstance from '../main'
 import AuthUtil, { setAuthToken } from '../utils/AuthUtil.js'
+import { searchBoardsAndTasks } from '../utils/BoardApiUtil.js'
 import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
 import { initialState } from '../utils/InitialState'
+import _ from 'lodash'
+
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.use(Vuex)
@@ -17,10 +20,20 @@ export default new Vuex.Store({
   plugins: [createPersistedState(), saveStatePlugin],
   state: initialState(),
   getters: {
+    getSearchResultBoards: state => {
+      return state.searchResult.boards
+    },
+    getSearchResultTasks: state => {
+      return state.searchResult.tasks
+    },
+    getSearchResultLoaded: state => {
+      return state.searchResult.loaded
+    },
     isCurrentUser: state => {
       return state.session.isLoggedIn
     },
     getUser: state => {
+      if (_.isEmpty(state.user)) return state.session.currentUser
       return state.user
     },
     getCurrentUser: state => {
@@ -29,11 +42,15 @@ export default new Vuex.Store({
     getBoards: state => {
       return state.user && state.user.boards
     },
+    getRecentlyViewed: state => {
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards)) return []
+      const sortedRecentlyViewed = Object.assign([], state.user.boards)
+      sortedRecentlyViewed.sort((a, b) => Date.parse(b.viewedAt) - Date.parse(a.viewedAt))
+      return sortedRecentlyViewed.filter(el => Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
+    },
     getStarredBoards: state => {
-      if (!state.user || !state.user.boards || !state.user.starredBoards) return
-      return state.user.boards.filter(board => {
-        return state.user.starredBoards[board._id]
-      })
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards) || _.isEmpty(state.user.starredBoards)) return []
+      return state.user.boards.filter(board => state.user.starredBoards[board._id])
     },
     getNavModal: state => {
       return state.ui && state.ui.navModal
@@ -67,12 +84,13 @@ export default new Vuex.Store({
   actions: {
     login: ({ commit }, credentials) => AuthUtil.login(credentials),
     signup: ({ commit }, credentials) => AuthUtil.signup(credentials),
+    searchBoardsAndTasks: ({ commit }, searchObj) => searchBoardsAndTasks(searchObj),
     logout: ({ commit }) => {
       commit('RESET', '')
     },
     fetchUser: ({ commit }, userId) => fetchUser(userId),
-    createTask: ({ state, commit }, { name, columnId }) => {
-      VueInstance.$socket.emit('createTask', { name, columnId })
+    createTask: ({ state, commit }, { name, columnId, userId }) => {
+      VueInstance.$socket.emit('createTask', { name, columnId, userId })
     },
     createColumn: ({ state, commit }, newColumn) => {
       VueInstance.$socket.emit('createColumn', newColumn)
@@ -108,6 +126,12 @@ export default new Vuex.Store({
       commit('UPDATE_BOARD_NAME', name)
       VueInstance.$socket.emit('updateBoard', {
         name,
+        boardId
+      })
+    },
+    updateBoardViewDate: ({ state, commit }) => {
+      const boardId = state.board._id
+      VueInstance.$socket.emit('updateBoardViewDate', {
         boardId
       })
     },
@@ -151,6 +175,17 @@ export default new Vuex.Store({
     fetchBackgrounds: () => fetchBackgrounds()
   },
   mutations: {
+    RESET_SEARCH_RESULT: (state) => {
+      state.searchResult = {
+        loaded: false,
+        boards: [],
+        tasks: []
+      }
+    },
+    UPDATE_SEARCH_RESULT: (state, data) => {
+      state.searchResult = data
+      state.searchResult.loaded = true
+    },
     UPDATE_BOARD_NAME: (state, { name }) => {
       state.board.name = name
     },
@@ -179,8 +214,9 @@ export default new Vuex.Store({
     SET_BACKGROUNDS: (state, backgrounds) => {
       state.backgrounds = backgrounds
     },
-    SOCKET_UPDATE_BOARD (state, { name }) {
+    SOCKET_UPDATE_BOARD (state, { name, viewedAt }) {
       this.state.board.name = name
+      this.state.board.viewedAt = viewedAt
     },
     SOCKET_UPDATE_COLUMN (state, newColumn) {
       const targetColumn = state.board.columns.find(

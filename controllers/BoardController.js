@@ -41,6 +41,16 @@ class BoardController {
     const { boardId, name } = data;
     const boardObj = await Board.findById(boardId);
     boardObj.name = name;
+    boardObj.viewedAt = Date.now
+    boardObj.save().then((board) => {
+      io.sockets.emit("UPDATE_BOARD", board);
+    });
+  }
+  async updateBoardViewDate(io, socket, data) {
+    console.log('updating board view date')
+    const { boardId } = data;
+    const boardObj = await Board.findById(boardId);
+    boardObj.viewedAt = Date.now()
     boardObj.save().then((board) => {
       io.sockets.emit("UPDATE_BOARD", board);
     });

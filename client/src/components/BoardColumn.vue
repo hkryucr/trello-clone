@@ -65,6 +65,7 @@
 <script>
 import ColumnTask from '@/components/ColumnTask'
 import movingTasksAndColumns from '@/mixins/movingTasksAndColumns'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { ColumnTask },
@@ -75,6 +76,9 @@ export default {
       nameInputClicked: false,
       throttling: false
     }
+  },
+  computed: {
+    ...mapGetters(['getUser'])
   },
   methods: {
     updateHeight () {
@@ -102,7 +106,8 @@ export default {
     createTask (e) {
       const data = {
         name: this.newTaskName,
-        columnId: this.column._id
+        columnId: this.column._id,
+        userId: this.getUser._id
       }
       this.$store.dispatch('createTask', data)
       this.newTaskName = ''

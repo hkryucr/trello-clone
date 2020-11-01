@@ -13,8 +13,6 @@ export default {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }
-  // mounted: {
-  // }
 }
 </script>
 <template>
@@ -32,20 +30,17 @@ export default {
           </div>
           <div class="board-tile-details-sub-container">
             <span class="board-tile-options">
-              <span @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+              <span @click.prevent="toggleStar(getUser._id, board._id, getUser.starredBoards[board._id])" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
             </span>
           </div>
         </div>
       </div>
     </router-link>
-    <!-- <div @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
-      {{getUser.starredBoards[board._id]}}
-    </div> -->
   </li>
 </template>
 <style>
 .boards-page-board-section-list-item {
-  width: 23.5%;
+  width: 23%;
   padding: 0;
   margin: 0 2% 2% 0;
   transform: translate(0);
@@ -63,12 +58,12 @@ export default {
 }
 @media (min-width: 992px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 25%;
   }
 }
 @media (min-width: 1200px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 23%;
   }
 }
 .board-tile {

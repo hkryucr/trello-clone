@@ -58,11 +58,6 @@ export default {
   },
   methods: {
     updateWidth () {
-      // this.$refs.boardName.style.width = 'auto'
-      // const inputLength = this.$refs.boardName.scrollWidth + 8
-      // const inputLength = this.$refs.boardName.value.length * 10 + 30
-      // this.$refs.boardName.style.width = inputLength.toString() + 'px'
-
       const canvas = document.createElement('canvas')
       const context = canvas.getContext('2d')
       context.font = window.getComputedStyle(this.$refs.boardName, null).getPropertyValue('font')
@@ -83,7 +78,9 @@ export default {
       } else {
         this.nameInputClicked = false
         this.$refs.boardName.classList.remove('input-show')
-        this.$store.dispatch('updateBoard', { name: e.target.value })
+        if (this.board.name !== e.target.value) {
+          this.$store.dispatch('updateBoard', { name: e.target.value })
+        }
       }
     },
     deleteBoard () {
@@ -108,20 +105,20 @@ export default {
   cursor: pointer;
   padding: 5px;
   border-radius: 2px;
-  font-weight: 600;
+  font-weight: 700;
   vertical-align: center;
 }
 .board-main-header .input-name {
-  font-size: 14px;
+  font-size: 1.125rem;
 }
 .board-name {
-  font-size: 18px;
+  /* font-size: 18px; */
   padding: 5px 12px;
 }
 .input-name:hover {
   background: rgba(255, 255, 255, 0.171);
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 /* consider renaming the class */
 .input-main-header {
@@ -130,6 +127,8 @@ export default {
 }
 .board-main-header {
   font-size: 18px;
+  display: flex;
+  align-items: center;
 }
 .input-main-header > input {
   height: 100%;
@@ -181,9 +180,10 @@ export default {
   width: auto;
   height: 32px;
   margin: 0 5px;
-  padding: 5px;
+  padding: 5px 8px;
   color: #fff;
-  border-radius: 2px;
+  border-radius: 3px;
+  font-size: 14px;
 }
 .header-board-link:hover {
   background-color: rgba(255, 255, 255, 0.15);

@@ -39,7 +39,7 @@
                     placeholder="Enter list title..."
                   />
                   <div class="add-list-controls">
-                    <input type="submit" class="primary" value="Add List" />
+                    <input type="submit" class="primary" value="Add List" style="font-weight: 600;" />
                     <button
                       @click="removeAddList"
                       class="icon-lg icon-close dark-hover"
@@ -111,10 +111,11 @@ export default {
   },
   mounted () {
     let boardId = this.$route.params.id
-    fetchBoard(boardId).then((res) => {
-      this.$store.commit('UPDATE_BOARD_STATE', {
+    fetchBoard(boardId).then(async (res) => {
+      await this.$store.commit('UPDATE_BOARD_STATE', {
         board: res.data
       })
+      this.$store.dispatch('updateBoardViewDate')
     })
     const vm = this
     EventBus.$on('toggleSideMenu', function () {
@@ -186,7 +187,7 @@ export default {
   );
 }
 .column {
-  @apply bg-grey-light p-2 text-left shadow rounded;
+  @apply p-2 text-left shadow rounded;
   width: 272px;
   margin: 0 4px;
 }
@@ -197,6 +198,7 @@ export default {
   margin-right: 8px;
 }
 .column-name {
+  font-size: 14px;
   width: 100%;
 }
 .column.mod-add {
@@ -218,12 +220,21 @@ export default {
   display: none;
   padding: 6px 8px;
   transition: color 85ms ease-in;
+  font-weight: 600;
 }
-
+.column.mod-add .add-list-button {
+  font-size: 14px;
+  line-height: 20px;
+}
+.column.mod-add .add-list-button > span{
+  font-size: 16px
+}
 .column.mod-add.is-idle .add-list-button {
   display: block;
 }
-
+.column .add-list-form {
+  margin: 2px;
+}
 .column.mod-add.is-idle .icon-add {
   color: #fff;
   margin-right: 2px;
@@ -233,11 +244,19 @@ export default {
   overflow: hidden;
   margin: 4px 0 0;
   transition: margin 85ms ease-in, height 85ms ease-in;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
+.column.mod-add .add-list-controls button {
+  margin: 4px 4px 0 0;
+}
 .column.mod-add.is-idle .add-list-controls {
   height: 0;
   margin: 0;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .column.mod-add .add-list-title {
@@ -248,6 +267,8 @@ export default {
   margin: 0;
   transition: margin 85ms ease-in, background-color 85ms ease-in;
   width: 100%;
+  font-size: 14px;
+  padding: 8px 12px;
 }
 .column.mod-add.is-idle .add-list-title {
   background-color: none;
@@ -256,6 +277,8 @@ export default {
   cursor: pointer;
   display: none;
   margin: 0;
+  font-size: 14px;
+  padding: 8px 12px;
 }
 .task-bg {
   @apply pin absolute;

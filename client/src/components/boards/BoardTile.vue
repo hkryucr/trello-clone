@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  props: ['board'],
+  props: ['board', 'isStarred'],
   computed: {
     ...mapGetters(['getUser', 'getCurrentUser', 'getBoards']),
     insertBackground () {
@@ -13,8 +13,6 @@ export default {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }
-  // mounted: {
-  // }
 }
 </script>
 <template>
@@ -22,8 +20,6 @@ export default {
     <router-link :to="`board/${board._id}`" :class="[ board.background.backgroundType === 'image' ? 'bg-image' : 'bg-color','board-tile', 'mod-light-background']" :style="insertBackground">
       <div class="board-tile-hover"></div>
       <div class="board-tile-container board-tile-details">
-        <!-- <div class='board-tile-name'>{{board.name}}</div>
-        <span style="color: #fff; padding-bottom: 10px;" class="icon-sm icon-star board-tile-options-star-icon"></span> -->
         <div class="board-tile-details is-badged">
           <div title="Trello" dir="auto" class="board-tile-details-name">
             <div style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2; font-weight: 800;">
@@ -31,21 +27,21 @@ export default {
             </div>
           </div>
           <div class="board-tile-details-sub-container">
-            <span class="board-tile-options">
-              <span @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+            <span class="board-tile-options" v-if="isStarred">
+              <span @click.prevent="toggleStar(getUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+            </span>
+            <span class="board-tile-options-2" v-if="!isStarred">
+              <span @click.prevent="toggleStar(getUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star board-tile-options-star-icon"></span>
             </span>
           </div>
         </div>
       </div>
     </router-link>
-    <!-- <div @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
-      {{getUser.starredBoards[board._id]}}
-    </div> -->
   </li>
 </template>
 <style>
 .boards-page-board-section-list-item {
-  width: 23.5%;
+  width: 23%;
   padding: 0;
   margin: 0 2% 2% 0;
   transform: translate(0);
@@ -63,12 +59,12 @@ export default {
 }
 @media (min-width: 992px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 25%;
   }
 }
 @media (min-width: 1200px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 23%;
   }
 }
 .board-tile {
@@ -172,5 +168,32 @@ export default {
 }
 .icon-star:hover {
   font-size: 17px;
+}
+.board-tile-options-2{
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: 4px;
+  overflow: hidden;
+  position: relative;
+  right: -4px;
+}
+.board-tile-options-2 .board-tile-options-star-icon {
+  display: block;
+  line-height: 18px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  color: #fff;
+  font-size: 14px;
+  width: 0;
+  height: 18px;
+  opacity: 0;
+  transition-duration: .15s;
+  transition-property: color,background,opacity,transform,width,margin;
+  -webkit-transform: translateZ(0);
+}
+.board-tile-options-2 .board-tile-options-star-icon:hover {
+  transform: scale(1.2);
 }
 </style>

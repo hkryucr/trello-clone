@@ -19,11 +19,11 @@ const selectFields = (user) => {
     _id: user._id,
     email: user.email,
     fullName: user.fullName,
-    password: user.password,
+    // password: user.password,
+    initials: user.initials,
     boards: user.boards,
     starredBoards: user.starredBoards,
-    bio: user.bi,
-    city: user.city,
+    bio: user.bio
   };
 }
 
@@ -96,7 +96,6 @@ router.post("/login", (req, res) => {
     // handle success
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        // const payload = selectFields(user);
         const payload = selectFields(user)
 
         jwt.sign(payload, keys.secretOrKey, {
@@ -148,15 +147,8 @@ router.get("/:id", (req, res) => {
       if (err) return res.status(404).json({
         nouserfound: "No user found with that id"
       });
-      const userObj = {
-        id: user._id,
-        bio: user.bio,
-        boards: user.boards,
-        email: user.email,
-        initials: user.initials,
-        fullName: user.fullName,
-        starredBoards: user.starredBoards
-      }
+
+      const userObj = selectFields(user);
       res.json(userObj);
     });
 });

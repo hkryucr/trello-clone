@@ -10,7 +10,7 @@
           </div>
           <div :class="[{ 'search-input-clicked': isSearchInputClicked }, '_3Z6i0FBUukKNYK']" @click.stop.prevent="openSearchModal('modalSearch')">
             <span class="H-W6qp3xgoZvbe" id="search-input-label-text">Search Trello</span>
-            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="text" aria-labelledby="search-input-label-text" v-model="searchInput" ref="searchInputDOM">
+            <input autocomplete="off" autocorrect="off" spellcheck="false" class="_1CyMivLdH2a8dA" id="bOzGXajER38WrMCJUQtLelwWmN5nnRZA" type="text" aria-labelledby="search-input-label-text" @input="updateSearchInput($event)" :value=searchInput ref="searchInputDOM">
             <span class="_2baX9YmlCebcUG">
               <label for="bOzGXajER38WrMCJUQtLelwWmN5nnRZA">
                 <span class="nch-icon _2_Q6rrYCFblD3M _3Dk1GPoKnJxuep _35K2W68MBDEnev">
@@ -64,7 +64,7 @@
         <ModalInformation class="modal-border" v-if="getNavModal === 'modalInformation'" :closeModal="closeModal"/>
         <ModalNotification class="modal-border" v-if="getNavModal === 'modalNotification'" :closeModal="closeModal"/>
         <ModalAccount class="modal-border" v-if="getNavModal === 'modalAccount'" :closeModal="closeModal"/>
-        <ModalSearch class="modal-border" v-if="isSearchInputClicked"/>
+        <ModalSearch class="modal-border" v-if="isSearchInputClicked" :searchInput="searchInput"/>
       </div>
     </div>
    </div>
@@ -84,6 +84,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import EventBus from '../utils/eventBus'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 
 library.add(faUserSecret)
 
@@ -131,13 +132,38 @@ export default {
       this.$refs.searchInputDOM.focus()
     },
     closeSearchModal () {
-      // this.$refs.searchInputDOM.blur()
       this.isSearchInputClicked = false
       this.searchInput = ''
-    }
+      this.$store.commit('RESET_SEARCH_RESULT')
+    },
+    updateSearchInput (e) {
+      this.searchInput = e.target.value
+      if (this.searchInput === '') {
+        this.$store.commit('RESET_SEARCH_RESULT')
+        return
+      }
+      this.fetchSearchResult()
+    },
+    fetchSearchResult: _.debounce(function () {
+      const searchObj = {
+        text: this.searchInput,
+        userId: this.getUser._id
+      }
+      this.$store.dispatch('searchBoardsAndTasks', searchObj)
+        .then(async (res) => {
+          await this.$store.commit('UPDATE_SEARCH_RESULT', res.data)
+        })
+        .catch(err => {
+          console.error(err, 'error from searchBooardsAndTasks')
+          this.errors = []
+          for (let key in err.response.data) {
+            this.errors.push(err.response.data[key])
+          }
+        })
+    }, 1000)
   },
   computed: {
-    ...mapGetters(['getNavModal']),
+    ...mapGetters(['getNavModal', 'getUser']),
     initials () {
       return this.$store.getters.getUser.initials
     },

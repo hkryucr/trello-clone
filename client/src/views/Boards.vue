@@ -44,11 +44,11 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getStarredBoards" :key="$boardIndex" :board=board />
+                  <BoardTile v-for="(board, $boardIndex) of getStarredBoards" :key="$boardIndex" :board="board" :isStarred="true"/>
                 </ul>
               </div>
             </div>
-            <div class="my-boards" v-if="getBoards && getBoards.length">
+            <div class="my-boards" v-if="getRecentlyViewed && getRecentlyViewed.length">
               <div class="my-boards-section-header">
                 <div class="boards-page-icon">
                   <span class="icon-lg icon-clock"></span>
@@ -57,7 +57,7 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
+                  <BoardTile v-for="(board, $boardIndex) of getRecentlyViewed" :key="$boardIndex" :board="board" :isStarred="getUser.starredBoards[board._id]"/>
                 </ul>
               </div>
             </div>
@@ -70,7 +70,7 @@
               </div>
               <div class="boards-container">
                 <ul class="board-tile-list">
-                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board=board />
+                  <BoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :isStarred="getUser.starredBoards[board._id]"/>
                   <li class="boards-page-board-section-list-item">
                     <div @click.prevent='openModal' class="board-tile mod-add">
                       <p><span>Create new board</span></p>
@@ -119,7 +119,7 @@ export default {
     BackgroundTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds'])
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed'])
   },
   mounted () {
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
@@ -176,7 +176,7 @@ export default {
       const boardObj = {
         name: this.boardName,
         columns: [],
-        user: this.$store.state.user.id,
+        user: this.getUser._id,
         background: this.$store.state.backgrounds[this.idx]._id
       }
       this.createBoard = false
@@ -187,7 +187,6 @@ export default {
   },
   data () {
     return {
-      // boards: [],
       activeTab: 'boards',
       createBoard: false,
       boardName: '',

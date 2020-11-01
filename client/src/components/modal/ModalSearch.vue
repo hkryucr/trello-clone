@@ -15,9 +15,12 @@
               <div>We couldn't find any cards or boards that matched your search.</div>
             </section>
             <section v-if="getState === 'loading'" class="_1luI_RCj-NvNUa before-search">
-              <div class="_2kZPe8bLxh7VDx">Searches</div>
+              <!-- <div class="_2kZPe8bLxh7VDx">Searches</div> -->
               <hr class="muh5vQ3i3GUU8A">
-              <div>It's loading .........</div>
+              <div class="flex flex-col justify-center align-center">
+                <div style="text-align: center; margin-bottom: 1rem">SEARCH DATA BEING LOADED</div>
+                <img src="../../assets/svg-loaders/three-dots.svg"/>
+              </div>
             </section>
             <!-- <div class="_1tZa9wiJrnTFXJ">
               <div class="_2yrcsjyci0RjVT">
@@ -32,7 +35,7 @@
               <ul class="_25qVpdeW8QY-I0">
                 <li v-for="(curBoard, $index) in getSearchResultBoards" :key="$index">
                   <div class="_1fp0H2u2NFTsxl">
-                    <router-link :to="`board/${curBoard.boardId}`" class="_1-xqt-RbCBt-Sv" title="curBoard.name">
+                    <router-link :to="`/board/${curBoard.boardId}`" class="_1-xqt-RbCBt-Sv" :title="`${curBoard.name}`">
                       <div class="_26ZVKC32nK5LUz" :style="insertBackground(curBoard)"></div>
                       <div class="_3ip-7S5md5RzJ-" :style="insertBackground(curBoard)"></div>
                       <div class="_2o1voqefI-Jq7G">
@@ -49,13 +52,13 @@
                 <li v-for="(curTask, $index) in getSearchResultTasks" :key="$index" class="_3ZHW8sRWeDebce" style="max-width: 100%">
                   <div class="_1I2bHC5OCLUBmu">
                     <div class="_2cmBd7gM0NLK7q">
-                      <router-link :to="`board/${curTask.board._id}/task/${curTask.taskId}`" class="_172nZG1kck9ovt"></router-link>
+                      <router-link :to="`/board/${curTask.board._id}/task/${curTask.taskId}`" class="_172nZG1kck9ovt"></router-link>
                       <div class="_3qyS0qUsS-VZpY">
                         <div class="kbyD4YtX9f__Fj">{{curTask.name}}</div>
                       </div>
                     </div>
                     <div class="_2LlqX5oXojKxky">
-                      <router-link :to="`board/${curTask.board._id}/task/${curTask.taskId}`" class="KNAq7Q4nceUrmV">{{curTask.name}}</router-link>
+                      <router-link :to="`/board/${curTask.board._id}/task/${curTask.taskId}`" class="KNAq7Q4nceUrmV">{{curTask.name}}</router-link>
                       <div class="_3oYLCroL1JOcbq">
                         in <strong>{{curTask.board.name}}</strong> on <span><strong>{{curTask.column.name}}</strong></span>
                       </div>
@@ -92,6 +95,12 @@ export default {
   methods: {
     insertBackground (curBoard) {
       return `${(curBoard.background.backgroundType === 'color') ? ('background-color:' + curBoard.background.template) : ('background-image: url(' + curBoard.background.template + ');')}`
+    }
+  },
+  mounted () { console.log(this.$router, 'this.$router') },
+  watch: {
+    '$route' (to, from) {
+      if (to !== from) location.reload()
     }
   }
 }
@@ -161,13 +170,13 @@ export default {
   display: flex;
   font-weight: 700;
   height: 36px;
-  overflow: hidden;
+  /* overflow: hidden; */
   padding: 0;
   position: relative;
   text-decoration: none;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
+  /* -webkit-user-select: none; */
+  /* user-select: none; */
+  /* -webkit-user-drag: none; */
 }
 ._26ZVKC32nK5LUz {
   background-size: cover;

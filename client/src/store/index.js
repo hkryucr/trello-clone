@@ -9,6 +9,8 @@ import { fetchBackgrounds } from '../utils/BackgroundUtil'
 import { fetchUser } from '../utils/UserApiUtil'
 import router from '../router'
 import { initialState } from '../utils/InitialState'
+import _ from 'lodash'
+
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.use(Vuex)
@@ -31,7 +33,8 @@ export default new Vuex.Store({
       return state.session.isLoggedIn
     },
     getUser: state => {
-      return state.session.currentUser
+      if (_.isEmpty(state.user)) return state.session.currentUser
+      return state.user
     },
     getCurrentUser: state => {
       return state.session.currentUser
@@ -39,11 +42,15 @@ export default new Vuex.Store({
     getBoards: state => {
       return state.user && state.user.boards
     },
+    getRecentlyViewed: state => {
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards)) return []
+      const sortedRecentlyViewed = Object.assign([], state.user.boards)
+      sortedRecentlyViewed.sort((a, b) => Date.parse(b.viewedAt) - Date.parse(a.viewedAt))
+      return sortedRecentlyViewed.filter(el => Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
+    },
     getStarredBoards: state => {
-      if (!state.user || !state.user.boards || !state.user.starredBoards) return
-      return state.user.boards.filter(board => {
-        return state.user.starredBoards[board._id]
-      })
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards) || _.isEmpty(state.user.starredBoards)) return []
+      return state.user.boards.filter(board => state.user.starredBoards[board._id])
     },
     getNavModal: state => {
       return state.ui && state.ui.navModal
@@ -119,6 +126,12 @@ export default new Vuex.Store({
       commit('UPDATE_BOARD_NAME', name)
       VueInstance.$socket.emit('updateBoard', {
         name,
+        boardId
+      })
+    },
+    updateBoardViewDate: ({ state, commit }) => {
+      const boardId = state.board._id
+      VueInstance.$socket.emit('updateBoardViewDate', {
         boardId
       })
     },
@@ -201,8 +214,9 @@ export default new Vuex.Store({
     SET_BACKGROUNDS: (state, backgrounds) => {
       state.backgrounds = backgrounds
     },
-    SOCKET_UPDATE_BOARD (state, { name }) {
+    SOCKET_UPDATE_BOARD (state, { name, viewedAt }) {
       this.state.board.name = name
+      this.state.board.viewedAt = viewedAt
     },
     SOCKET_UPDATE_COLUMN (state, newColumn) {
       const targetColumn = state.board.columns.find(

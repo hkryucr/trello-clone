@@ -1,6 +1,6 @@
 <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
-<svg width="220" height="10" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#026aa7">
-    <circle cx="15" cy="15" r="15">
+<svg width="200" height="10" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#026aa7">
+    <circle cx="0" cy="15" r="15">
         <animate attributeName="r" from="15" to="15"
                  begin="0s" dur="0.8s"
                  values="15;9;15" calcMode="linear"
@@ -10,7 +10,7 @@
                  values="1;.5;1" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+    <circle cx="45" cy="15" r="9" fill-opacity="0.3">
         <animate attributeName="r" from="9" to="9"
                  begin="0s" dur="0.8s"
                  values="9;15;9" calcMode="linear"
@@ -20,7 +20,7 @@
                  values=".5;1;.5" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="105" cy="15" r="15">
+    <circle cx="90" cy="15" r="15">
         <animate attributeName="r" from="15" to="15"
                  begin="0s" dur="0.8s"
                  values="15;9;15" calcMode="linear"
@@ -30,7 +30,7 @@
                  values="1;.5;1" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="160" cy="15" r="9" fill-opacity="0.3">
+    <circle cx="135" cy="15" r="9" fill-opacity="0.3">
         <animate attributeName="r" from="9" to="9"
                  begin="0s" dur="0.8s"
                  values="9;15;9" calcMode="linear"
@@ -40,7 +40,7 @@
                  values=".5;1;.5" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="205" cy="15" r="15">
+    <circle cx="180" cy="15" r="15">
         <animate attributeName="r" from="15" to="15"
                  begin="0s" dur="0.8s"
                  values="15;9;15" calcMode="linear"
@@ -50,7 +50,7 @@
                  values="1;.5;1" calcMode="linear"
                  repeatCount="indefinite" />
     </circle>
-    <circle cx="250" cy="15" r="9" fill-opacity="0.3">
+    <circle cx="225" cy="15" r="9" fill-opacity="0.3">
         <animate attributeName="r" from="9" to="9"
                  begin="0s" dur="0.8s"
                  values="9;15;9" calcMode="linear"

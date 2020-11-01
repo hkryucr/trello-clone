@@ -101,10 +101,11 @@ export default {
   },
   mounted () {
     let boardId = this.$route.params.id
-    fetchBoard(boardId).then((res) => {
-      this.$store.commit('UPDATE_BOARD_STATE', {
+    fetchBoard(boardId).then(async (res) => {
+      await this.$store.commit('UPDATE_BOARD_STATE', {
         board: res.data
       })
+      this.$store.dispatch('updateBoardViewDate')
     })
     const vm = this
     EventBus.$on('toggleSideMenu', function () {

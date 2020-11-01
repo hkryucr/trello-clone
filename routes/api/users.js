@@ -19,7 +19,7 @@ const selectFields = (user) => {
     _id: user._id,
     email: user.email,
     fullName: user.fullName,
-    password: user.password,
+    // password: user.password,
     initials: user.initials,
     boards: user.boards,
     starredBoards: user.starredBoards,
@@ -147,15 +147,8 @@ router.get("/:id", (req, res) => {
       if (err) return res.status(404).json({
         nouserfound: "No user found with that id"
       });
-      const userObj = {
-        id: user._id,
-        bio: user.bio,
-        boards: user.boards,
-        email: user.email,
-        initials: user.initials,
-        fullName: user.fullName,
-        starredBoards: user.starredBoards
-      }
+
+      const userObj = selectFields(user);
       res.json(userObj);
     });
 });

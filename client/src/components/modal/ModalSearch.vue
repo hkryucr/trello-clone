@@ -19,7 +19,7 @@
               <hr class="muh5vQ3i3GUU8A">
               <div class="flex flex-col justify-center align-center">
                 <div style="text-align: center; margin-bottom: 1rem">SEARCH DATA BEING LOADED</div>
-                <img src="../../assets/svg-loaders/three-dots.svg"/>
+                <img src="../../assets/svg-loaders/three-dots.svg" style="margin-right: 32px;"/>
               </div>
             </section>
             <!-- <div class="_1tZa9wiJrnTFXJ">

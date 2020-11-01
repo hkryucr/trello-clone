@@ -36,14 +36,11 @@ export default {
         </div>
       </div>
     </router-link>
-    <!-- <div @click.prevent="toggleStar(getUser.id, board._id, getUser.starredBoards[board._id])">
-      {{getUser.starredBoards[board._id]}}
-    </div> -->
   </li>
 </template>
 <style>
 .boards-page-board-section-list-item {
-  width: 23.5%;
+  width: 23%;
   padding: 0;
   margin: 0 2% 2% 0;
   transform: translate(0);
@@ -61,12 +58,12 @@ export default {
 }
 @media (min-width: 992px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 25%;
   }
 }
 @media (min-width: 1200px){
   .boards-page-board-section-list-item {
-    width: 23.5%;
+    width: 23%;
   }
 }
 .board-tile {

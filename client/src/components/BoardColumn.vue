@@ -8,21 +8,22 @@
     draggable
     style="background-color: #ebecf0;"
   >
-    <div class="flex justify-between mb-2 font-bold">
-        <div class="input-main-header">
-          <h3 class="input-name  column-name" @click.prevent="clickColumnName($event)" v-show="!nameInputClicked">{{column.name}}</h3>
+    <div class="flex justify-between mb-3 font-bold">
+        <div class="input-main-header w-full">
           <textarea
             ref="columnName"
-            class="text-lg input-hide"
-            v-bind:class="{'input-show': nameInputClicked}"
+            class="text-lg input-show"
             type="text"
+            rows="1"
+            @input="updateHeight($event)"
             @blur="updateColumn($event)"
-            @keyup.enter="updateColumn($event)"
+            @keydown.enter.exact.prevent
+            @keyup.enter.exact="updateColumn($event)"
             @keyup.esc="updateColumn($event)"
             v-bind:value="column.name"
           />
         </div>
-        <button @click.prevent="deleteColumn">
+        <button @click.prevent="deleteColumn" class="self-start">
           <span class="icon-sm icon-close"></span>
         </button>
     </div>
@@ -44,9 +45,9 @@
             class="block p-2 w-full bg-transparent task-composer-textarea"
             placeholder="Enter a title for this card…"
             v-model="newTaskName"
-            @input="updateHeight"
+            @input="updateHeight($event)"
             @keyup.enter="createTask"
-            @keyup.esc="createTask"
+            @keyup.esc="closeAddCard"
         />
       </div>
       <div class="task-controls">
@@ -67,6 +68,7 @@
 import ColumnTask from '@/components/ColumnTask'
 import movingTasksAndColumns from '@/mixins/movingTasksAndColumns'
 import { mapGetters } from 'vuex'
+import autosize from 'autosize'
 
 export default {
   components: { ColumnTask },
@@ -74,19 +76,25 @@ export default {
   data () {
     return {
       newTaskName: '',
-      nameInputClicked: false,
-      throttling: false
+      throttling: false,
+      updating: false
     }
   },
   computed: {
     ...mapGetters(['getUser'])
   },
+  mounted () {
+    this.$refs.columnName.style.display = 'none'
+    autosize(this.$refs.columnName)
+    autosize(this.$refs.newTaskInput)
+    this.$refs.columnName.style.display = ''
+    autosize.update(this.$refs.columnName)
+  },
   methods: {
-    updateHeight () {
+    updateHeight (e) {
       if (!this.throttling) {
         this.throttling = true
-        this.$refs.newTaskInput.style.height = 'auto'
-        this.$refs.newTaskInput.style.height = this.$refs.newTaskInput.scrollHeight + 5 + 'px'
+        autosize.update(e.target)
         window.setTimeout(() => {
           this.throttling = false
         }, 100)
@@ -114,18 +122,18 @@ export default {
       this.newTaskName = ''
     },
     updateColumn (e) {
-      if (
-        !this.nameInputClicked ||
-        e.target.value.replace(/ /g, '').length === 0
-      ) {
-        this.nameInputClicked = false
-      } else {
-        this.nameInputClicked = false
+      if (e.target.value.replace(/ /g, '').length !== 0 && this.column.name !== e.target.value && !this.updating) {
         this.$refs.columnName.classList.remove('input-show')
+        this.updating = true
         this.$store.dispatch('updateColumn', {
           name: e.target.value,
           columnId: this.column._id
+        }).then(() => {
+          this.$refs.columnName.blur()
+          this.updating = false
         })
+      } else {
+        this.$refs.columnName.blur()
       }
     },
     openAddCard () {
@@ -161,17 +169,29 @@ export default {
 
 <style lang="css">
 .input-main-header > textarea {
-  @apply rounded;
-  height: 100%;
   width: 100%;
-  box-sizing: border-box;
-  outline: transparent;
-  padding: 4px;
-  padding-left: 4px;
   font-size: 14px;
-  font-weight: 600;
   white-space: wrap;
+  line-height: 20px;
+  transition-property: background-color,border-color,box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+  background: transparent;
+  border-radius: 3px;
+  box-shadow: none;
+  font-weight: 600;
+  margin: -4px 0;
+  height: 20px;
+  min-height: 20px;
+  padding: 4px 8px;
+  padding-left: 4px;
   resize: none;
+  max-height: 256px;
+}
+
+.input-main-header > textarea:focus {
+  box-shadow: inset 0 0 0 2px #0079bf;
+  background: #fff;
 }
 
 textarea.task-composer-textarea {

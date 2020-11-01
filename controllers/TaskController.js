@@ -54,13 +54,14 @@ class TaskController {
   }
 
   async createTask(io, socket, data) {
-    const { name, columnId } = data;
+    const { name, columnId, userId } = data;
     const column = await Column.findById(columnId);
 
     const task = new Task({
       name,
       column: columnId,
       board: column.board,
+      user: userId
     });
     // return
     task.save().then((task) => {

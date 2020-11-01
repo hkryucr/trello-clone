@@ -8,5 +8,10 @@ export const initialState = () => ({
     navModal: 'empty'
   },
   user: {},
-  backgrounds: {}
+  backgrounds: {},
+  searchResult: {
+    loaded: false,
+    boards: [],
+    tasks: []
+  }
 })

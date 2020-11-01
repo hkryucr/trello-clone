@@ -109,6 +109,7 @@ export default {
   vertical-align: center;
 }
 .board-main-header .input-name {
+  color: #fff;
   font-size: 1.125rem;
 }
 .board-name {

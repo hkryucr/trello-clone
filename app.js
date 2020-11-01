@@ -61,6 +61,10 @@ io.on("connection", (socket) => {
     new BoardController().updateBoard(io, socket, data);
   });
 
+  socket.on("updateBoardViewDate", async (data) => {
+    new BoardController().updateBoardViewDate(io, socket, data);
+  });
+
   socket.on("starBoard", async(data) => {
     new UserController().starBoard(io, socket, data);
   })

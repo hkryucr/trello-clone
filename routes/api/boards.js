@@ -14,6 +14,7 @@ router.get("/", async (req, res) => {
 
 router.get("/search", async (req, res) => {
   const searchObj = JSON.parse(req.query.searchObj)
+  console.log(searchObj)
   const searchResult = {
     boards: [],
     tasks: []

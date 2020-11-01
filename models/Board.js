@@ -22,6 +22,10 @@ const BoardSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  viewedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = Board = mongoose.model("Board", BoardSchema);

@@ -85,6 +85,7 @@ import EventBus from '../utils/eventBus'
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
+// import { BModal } from '../../node_modules/bootstrap-vue/src/components/modal/'
 
 library.add(faUserSecret)
 
@@ -120,12 +121,14 @@ export default {
       } else {
         this.$store.commit('OPEN_MODAL', modal)
       }
+      EventBus.$emit('closeSideMenu')
     },
     homepage: function () {
       this.$router.push('/')
     },
-    closeModal () {
+    async closeModal () {
       this.$store.commit('CLOSE_MODAL')
+      await EventBus.$emit('closeSideMenu')
     },
     openSearchModal (modal) {
       this.isSearchInputClicked = true

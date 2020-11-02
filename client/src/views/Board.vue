@@ -1,5 +1,5 @@
 <template>
-  <div class="board flex flex-col" ref="board" :style="insertBackground">
+  <div v-if="board" class="board flex flex-col" ref="board" :style="insertBackground">
     <NavBar />
     <div class="flex flex-col">
       <div v-bind:class="{'sideMenuOpen': this.sideMenu}">
@@ -109,14 +109,22 @@ export default {
     }
   },
   mounted () {
-    let boardId = this.$route.params.id
-    fetchBoard(boardId).then(async (res) => {
-      await this.$store.commit('UPDATE_BOARD_STATE', {
-        board: res.data
-      })
-      this.$store.dispatch('updateBoardViewDate')
-    })
+    console.log(this.board === true, 'board')
     const vm = this
+
+    let boardId = vm.$route.params.id
+    fetchBoard(boardId)
+      .then(async (res) => {
+        await vm.$store.commit('UPDATE_BOARD_STATE', {
+          board: res.data
+        })
+        vm.$store.dispatch('updateBoardViewDate')
+      })
+      .catch(err => {
+        console.error(err)
+        this.$router.push({ name: 'malformedURL' })
+      })
+
     EventBus.$on('toggleSideMenu', function () {
       vm.sideMenu = !vm.sideMenu
     })

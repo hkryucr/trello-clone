@@ -215,17 +215,17 @@ export default new Vuex.Store({
       localStorage.setItem(AUTH_TOKEN_KEY, '')
     },
     UPDATE_BOARD_STATE (state, { board }) {
-      this.state.board = board
+      state.board = board
     },
     SET_BACKGROUNDS: (state, backgrounds) => {
       state.backgrounds = backgrounds
     },
     SOCKET_UPDATE_BOARD (state, { name, viewedAt }) {
-      this.state.board.name = name
-      this.state.board.viewedAt = viewedAt
+      state.board.name = name
+      state.board.viewedAt = viewedAt
     },
     SOCKET_UPDATE_BACKGROUND (state, background) {
-      this.state.board.background = background
+      state.board.background = background
     },
     SOCKET_UPDATE_COLUMN (state, newColumn) {
       const targetColumn = state.board.columns.find(
@@ -262,7 +262,7 @@ export default new Vuex.Store({
       //   boardId: newBoard._id,
       //   bool: false
       // }
-      // this.starBoard(starObj)
+      // starBoard(starObj)
       router.push({ name: 'board', params: { id: newBoard._id } })
     },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {

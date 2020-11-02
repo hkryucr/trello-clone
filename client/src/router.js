@@ -6,6 +6,7 @@ import Task from './views/Task.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
 import Boards from './views/Boards.vue'
+import MalformedURL from './views/MalformedURL.vue'
 import store from './store/index'
 
 Vue.use(Router)
@@ -66,6 +67,11 @@ const routes = [
     }
   },
   {
+    path: '/malformedURL',
+    name: 'malformedURL',
+    component: MalformedURL
+  },
+  {
     path: '/board/:id',
     name: 'board',
     component: Board,
@@ -83,6 +89,10 @@ const routes = [
         next()
       }
     }
+  },
+  {
+    path: '*',
+    redirect: '/malformedURL'
   }
 ]
 

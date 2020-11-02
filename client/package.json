@@ -16,6 +16,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.0",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/vue-fontawesome": "^0.1.5",
+    "autosize": "^4.0.2",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.18.1",
@@ -27,7 +28,8 @@
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.10",
     "vuex": "^3.0.1",
-    "vuex-persistedstate": "^3.1.0"
+    "vuex-persistedstate": "^3.1.0",
+    "tailwindcss": "^0.7.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.1.0",

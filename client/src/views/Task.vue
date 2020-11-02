@@ -3,7 +3,7 @@
     <div class="w-full">
       <router-link class="icon-md icon-close dialog-close-button" :to="{ name: 'board', params: { id: this.$route.params.id } }"></router-link>
       <div class="flex flex-col flex-grow items-start justify-between">
-        <div class="w-full">
+        <div class="w-full overflow-hidden">
           <div class="task-header relative">
             <span
               class="window-header-icon task-header-icon icon-lg js-card-header-icon icon-card absolute"
@@ -113,7 +113,8 @@ import { fetchBoard } from '../utils/BoardApiUtil'
 export default {
   data () {
     return {
-      loaded: false
+      loaded: false,
+      updating: false
     }
   },
   computed: {
@@ -157,13 +158,18 @@ export default {
       })
     },
     updateTaskName (e) {
-      if (e.target.value.replace(/ /g, '').length !== 0 && e.target.value !== this.task.name) {
+      if (e.target.value.replace(/ /g, '').length !== 0 && e.target.value !== this.task.name && !this.updating) {
+        this.updating = true
         this.$store.dispatch('updateTask', {
           body: e.target.value,
           taskId: this.task._id,
           type: 'name'
+        }).then(() => {
+          this.$refs.taskName.blur()
+          this.updating = false
         })
-        // this.$refs.taskName.blur()
+      } else {
+        this.$refs.taskName.blur()
       }
     },
     updateTaskDescription (e) {

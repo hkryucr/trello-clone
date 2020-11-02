@@ -6,10 +6,10 @@
     </div>
     <div class='modal-account-1'>
         <div class="modal-account-user-container">
-            <div class='modal-account-initials'>{{ this.initials }}</div>
+            <div class='modal-account-initials'>{{ initials }}</div>
             <div class='modal-account-user-information'>
-              <div class='modal-account-user-name'>{{ this.fullName }}</div>
-              <div class='modal-account-user-email'>{{ this.email }}</div>
+              <div class='modal-account-user-name'>{{ fullName }}</div>
+              <div class='modal-account-user-email'>{{ email }}</div>
             </div>
         </div>
         <div @click.stop.prevent="deadMessage" class='modal-account-add-container'>
@@ -42,6 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -51,15 +52,21 @@ export default {
   },
   data () {
     return {
-      initials: this.$store.getters.getUser.initials,
-      fullName: this.$store.getters.getUser.fullName,
-      email: this.$store.getters.getUser.email,
       giphs: ['https://media.giphy.com/media/jUZmz3kAiAuLC/giphy.gif', 'https://media.giphy.com/media/11xBk5MoWjrYoE/giphy.gif', 'https://media.giphy.com/media/xonOzxf2M8hNu/giphy.gif', 'https://media.giphy.com/media/bAplZhiLAsNnG/giphy.gif'],
       idx: 0
     }
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getCurrentUser']),
+    initials () {
+      return _.get(this.getCurrentUser, 'initials', '')
+    },
+    fullName () {
+      return _.get(this.getCurrentUser, 'fullName', '')
+    },
+    email () {
+      return _.get(this.getCurrentUser, 'email', '')
+    }
   },
   methods: {
     async logout () {

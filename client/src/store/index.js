@@ -33,7 +33,6 @@ export default new Vuex.Store({
       return state.session.isLoggedIn
     },
     getUser: state => {
-      if (_.isEmpty(state.user)) return state.session.currentUser
       return state.user
     },
     getCurrentUser: state => {
@@ -46,14 +45,15 @@ export default new Vuex.Store({
       if (_.isEmpty(state.user) || _.isEmpty(state.user.boards)) return []
       const sortedRecentlyViewed = Object.assign([], state.user.boards)
       sortedRecentlyViewed.sort((a, b) => Date.parse(b.viewedAt) - Date.parse(a.viewedAt))
-      return sortedRecentlyViewed.filter(el => !state.session.currentUser.starredBoards[el._id] && Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
+      return sortedRecentlyViewed.filter(el => !state.user.starredBoards[el._id] && Date.parse(el.viewedAt) > (Date.now() - 604800000)).slice(0, 6)
     },
     getStarredBoards: state => {
-      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards) || _.isEmpty(state.session.currentUser.starredBoards)) return []
-      return state.user.boards.filter(board => state.session.currentUser.starredBoards[board._id])
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.boards) || _.isEmpty(state.user.starredBoards)) return []
+      return state.user.boards.filter(board => state.user.starredBoards[board._id])
     },
     getStarredBoardsObj: state => {
-      return state.session.currentUser.starredBoards
+      if (_.isEmpty(state.user) || _.isEmpty(state.user.starredBoards)) return {}
+      return state.user.starredBoards
     },
     getNavModal: state => {
       return state.ui && state.ui.navModal
@@ -255,15 +255,13 @@ export default new Vuex.Store({
     },
     SOCKET_CREATED_BOARD (state, newBoard) {
       state.board = newBoard
-      state.user.boards.push(newBoard)
-      state.session.currentUser.starredBoards[newBoard._id] = false
-      // const starObj = {
-      //   userId: newBoard.user,
-      //   boardId: newBoard._id,
-      //   bool: false
-      // }
-      // starBoard(starObj)
-      router.push({ name: 'board', params: { id: newBoard._id } })
+      state.user.boards = [...state.user.boards, newBoard]
+      state.user.starredBoards = Object.assign({}, state.user.starredBoard)
+      state.user.starredBoards[newBoard._id] = false
+      router.push({
+        name: 'board',
+        params: { id: newBoard._id }
+      })
     },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
       const fromTasks = state.board.columns[fromColumn].tasks
@@ -277,7 +275,7 @@ export default new Vuex.Store({
       columnList.splice(toColumnIndex, 0, columnToMove)
     },
     SOCKET_UPDATE_USER_STARRED_BOARDS (state, { boardId, bool }) {
-      state.session.currentUser.starredBoards[boardId] = bool
+      state.user.starredBoards[boardId] = bool
     },
     UPDATE_TASK (state, { task, key, value }) {
       task[key] = value
@@ -297,7 +295,7 @@ export default new Vuex.Store({
       if (!(_.isEmpty(state.user) || _.isEmpty(state.user.boards))) {
         state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
       }
-      delete state.session.currentUser.starredBoards[boardId]
+      delete state.user.starredBoards[boardId]
       router.push({ name: 'boards' })
     },
     OPEN_MODAL (state, modal) {

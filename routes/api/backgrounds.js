@@ -5,7 +5,7 @@ const fs = require('fs');
 
 router.get("/", async (req, res) => {
   const bg = await Background.find({})
-  res.json(bg)
+  res.json(bg.reverse())
 });
 
 router.get("/:id", async (req, res) => {

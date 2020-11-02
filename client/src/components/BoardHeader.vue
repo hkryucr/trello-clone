@@ -27,7 +27,7 @@
       <span class="board-header-btn-divider"></span>
       <div
         class="flex my-auto header-board-link"
-        @click.prevent="toggleStar(getUser._id, board._id, isStarred)"
+        @click.prevent="toggleStar(getCurrentUser._id, board._id, isStarred)"
       >
         <span class="icon-sm icon-star board-header-btn-icon" :class="{ 'is-starred': isStarred }"></span>
       </div>
@@ -37,7 +37,7 @@
         <span>Private</span>
       </div>
       <span class="board-header-btn-divider"></span>
-      <span class="board-header-user-icon text-xs">{{this.initials}}</span>
+      <span class="board-header-user-icon text-xs">{{initials}}</span>
     </div>
     <div @click.stop.prevent='toggleSideMenu' class="board-header-right" v-if="!sideMenu">
       <div class="flex my-auto header-board-link justify-self-end">
@@ -51,6 +51,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import EventBus from '../utils/eventBus'
+import _ from 'lodash'
 
 export default {
   props: ['board', 'sideMenu'],
@@ -61,11 +62,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoardsObj']),
+    ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoardsObj']),
     initials () {
-      return this.$store.getters.getUser.initials
+      return _.get(this.getCurrentUser, 'initials', '')
     },
     isStarred () {
+      console.log('computed', this.getStarredBoardsObj)
+      console.log('computed board', this.board._id)
       return this.getStarredBoardsObj[this.board._id]
     }
   },
@@ -103,6 +106,8 @@ export default {
       EventBus.$emit('toggleSideMenu')
     },
     toggleStar (userId, boardId, bool) {
+      console.log(this.getStarredBoardsObj[this.board._id])
+      console.log(this.isStarred)
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }

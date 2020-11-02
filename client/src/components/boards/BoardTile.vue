@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 export default {
   props: ['board', 'isStarred'],
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards']),
+    ...mapGetters(['getCurrentUser', 'getBoards']),
     insertBackground () {
       return `${(this.board.background.backgroundType === 'color') ? ('background-color:' + this.board.background.template) : ('background-image: url(' + this.board.background.template + ');')}`
     }
@@ -28,10 +28,10 @@ export default {
           </div>
           <div class="board-tile-details-sub-container">
             <span class="board-tile-options" v-if="isStarred">
-              <span @click.prevent="toggleStar(getUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+              <span @click.prevent="toggleStar(getCurrentUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
             </span>
             <span class="board-tile-options-2" v-if="!isStarred">
-              <span @click.prevent="toggleStar(getUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star board-tile-options-star-icon"></span>
+              <span @click.prevent="toggleStar(getCurrentUser._id, board._id, isStarred)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star board-tile-options-star-icon"></span>
             </span>
           </div>
         </div>

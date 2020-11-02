@@ -118,7 +118,7 @@ export default {
     BackgroundTile
   },
   computed: {
-    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
+    ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
   },
   mounted () {
     const vm = this
@@ -180,13 +180,13 @@ export default {
       const boardObj = {
         name: this.boardName,
         columns: [],
-        user: this.getUser._id,
+        user: this.getCurrentUser._id,
         background: this.$store.state.backgrounds[this.idx]._id
       }
       this.createBoard = false
       this.boardName = ''
       this.idx = 0
-      this.$store.dispatch('createBoard', boardObj).then(board => console.log(board))
+      this.$store.dispatch('createBoard', boardObj)
     }
   },
   data () {

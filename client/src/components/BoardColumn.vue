@@ -83,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getCurrentUser'])
   },
   mounted () {
     this.$refs.columnName.style.display = 'none'
@@ -122,7 +122,7 @@ export default {
         const data = {
           name: this.newTaskName,
           columnId: this.column._id,
-          userId: this.getUser._id
+          userId: this.getCurrentUser._id
         }
         this.$store.dispatch('createTask', data)
         this.newTaskName = ''

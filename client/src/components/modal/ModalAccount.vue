@@ -6,10 +6,10 @@
     </div>
     <div class='modal-account-1'>
         <div class="modal-account-user-container">
-            <div class='modal-account-initials'>{{ this.initials }}</div>
+            <div class='modal-account-initials'>{{ initials }}</div>
             <div class='modal-account-user-information'>
-              <div class='modal-account-user-name'>{{ this.fullName }}</div>
-              <div class='modal-account-user-email'>{{ this.email }}</div>
+              <div class='modal-account-user-name'>{{ fullName }}</div>
+              <div class='modal-account-user-email'>{{ email }}</div>
             </div>
         </div>
         <div class='modal-account-add-container'>
@@ -38,6 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -45,15 +46,17 @@ export default {
       type: Function
     }
   },
-  data () {
-    return {
-      initials: this.$store.getters.getUser.initials,
-      fullName: this.$store.getters.getUser.fullName,
-      email: this.$store.getters.getUser.email
-    }
-  },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getCurrentUser']),
+    initials () {
+      return _.get(this.getCurrentUser, 'initials', '')
+    },
+    fullName () {
+      return _.get(this.getCurrentUser, 'fullName', '')
+    },
+    email () {
+      return _.get(this.getCurrentUser, 'email', '')
+    }
   },
   methods: {
     async logout () {

@@ -13,13 +13,20 @@ router.get("/", async (req, res) => {
   const users = await User.find({})
   res.json(users)
 });
+const selectSessionFields = (user) => {
+  return { 
+    _id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    initials: user.initials
+  }
+}
 
-const selectFields = (user) => {
+const selectUserFields = (user) => {
   return {
     _id: user._id,
     email: user.email,
     fullName: user.fullName,
-    // password: user.password,
     initials: user.initials,
     boards: user.boards,
     starredBoards: user.starredBoards,
@@ -57,7 +64,7 @@ router.post('/signup', (req, res) => {
           newUser.password = hash;
           newUser.save()
             .then((user) => {
-              const payload = selectFields(user);
+              const payload = selectSessionFields(user);
               jwt.sign(payload, keys.secretOrKey, {
                 expiresIn: 3600
               }, (err, token) => {
@@ -96,7 +103,7 @@ router.post("/login", (req, res) => {
     // handle success
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        const payload = selectFields(user)
+        const payload = selectSessionFields(user);
 
         jwt.sign(payload, keys.secretOrKey, {
           expiresIn: 3600
@@ -119,15 +126,6 @@ router.post("/login", (req, res) => {
   });
 });
 
-// router.get("/deleteAll", async (req, res) => {
-//   User.deleteMany({}, function (err) {
-//     console.log("User collection removed");
-//     User.find().then(users => {
-//       res.json(users);
-//     });
-//   });
-// });
-
 router.get("/:id", (req, res) => {
   User
     .findById(req.params.id)
@@ -147,8 +145,7 @@ router.get("/:id", (req, res) => {
         nouserfound: "No user found with that id"
       });
 
-      const userObj = selectFields(user);
-      delete userObj['starredBoards']
+      const userObj = selectUserFields(user);
       res.json(userObj);
     });
 });

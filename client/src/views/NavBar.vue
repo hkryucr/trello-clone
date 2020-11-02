@@ -111,7 +111,6 @@ export default {
     EventBus.$on('closeSearchModal', function (payLoad) {
       vm.closeSearchModal()
     })
-    console.log(this.getUser)
   },
   methods: {
     stopTheEvent: (event) => event.stopPropagation(),
@@ -148,7 +147,7 @@ export default {
     fetchSearchResult: _.debounce(function () {
       const searchObj = {
         text: this.searchInput,
-        userId: this.getUser._id
+        userId: this.getCurrentUser._id
       }
       this.$store.dispatch('searchBoardsAndTasks', searchObj)
         .then(async (res) => {
@@ -164,9 +163,9 @@ export default {
     }, 1000)
   },
   computed: {
-    ...mapGetters(['getNavModal', 'getUser']),
+    ...mapGetters(['getNavModal', 'getCurrentUser']),
     initials () {
-      return this.getUser.initials
+      return _.get(this.getCurrentUser, 'initials', '')
     },
     pathName () {
       return this.$router.currentRoute.name

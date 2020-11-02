@@ -116,6 +116,7 @@ export default {
       })
       this.$store.dispatch('updateBoardViewDate')
     })
+    // if (state.)
     const vm = this
     EventBus.$on('toggleSideMenu', function () {
       vm.sideMenu = !vm.sideMenu

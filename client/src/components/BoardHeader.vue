@@ -25,8 +25,11 @@
         />
       </div>
       <span class="board-header-btn-divider"></span>
-      <div class="flex my-auto header-board-link">
-        <span class="icon-sm icon-star board-header-btn-icon text-white"></span>
+      <div
+        class="flex my-auto header-board-link"
+        @click.prevent="toggleStar(getUser._id, board._id, isStarred)"
+      >
+        <span class="icon-sm icon-star board-header-btn-icon" :class="{ 'is-starred': isStarred }"></span>
       </div>
       <span class="board-header-btn-divider"></span>
       <div class="flex my-auto header-board-link">
@@ -46,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import EventBus from '../utils/eventBus'
 
 export default {
@@ -57,8 +61,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoardsObj']),
     initials () {
       return this.$store.getters.getUser.initials
+    },
+    isStarred () {
+      return this.getStarredBoardsObj[this.board._id]
     }
   },
   methods: {
@@ -93,6 +101,9 @@ export default {
     },
     toggleSideMenu () {
       EventBus.$emit('toggleSideMenu')
+    },
+    toggleStar (userId, boardId, bool) {
+      this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }
 }
@@ -190,6 +201,12 @@ export default {
   color: #fff;
   border-radius: 3px;
   font-size: 14px;
+}
+.board-header-btn-icon {
+  color: #fff;
+}
+.board-header-btn-icon.is-starred {
+  color: #f2d600;
 }
 .header-board-link:hover {
   background-color: rgba(255, 255, 255, 0.15);

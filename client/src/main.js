@@ -8,6 +8,10 @@ import VueSocketIO from 'vue-socket.io'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { initialState } from './utils/InitialState'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.config.productionTip = false
@@ -44,6 +48,9 @@ Vue.use(
     }
   })
 )
+
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 // set auth header
 // Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`
 

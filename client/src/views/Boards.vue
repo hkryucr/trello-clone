@@ -90,8 +90,6 @@
               <div style="position: absolute; background-color: rgba(0, 0, 0, .2); left: 0; top: 0; right: 0; bottom: 0;"></div>
               <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
               <input @keydown.enter="submitBoard" v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
-              <!-- <div class='create-board-modal-no-team'>No Team</div>
-              <div class='create-board-modal-private'>Private</div> -->
             </form>
             <ul class='create-board-modal-bkgrd-opt-container'>
               <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
@@ -111,6 +109,7 @@ import { mapGetters } from 'vuex'
 import NavBar from '../views/NavBar'
 import BoardTile from '../components/boards/BoardTile'
 import BackgroundTile from '../components/boards/BackgroundTile'
+import EventBus from '../utils/eventBus'
 
 export default {
   components: {
@@ -122,6 +121,7 @@ export default {
     ...mapGetters(['getUser', 'getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
   },
   mounted () {
+    const vm = this
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
@@ -134,6 +134,10 @@ export default {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
       .catch(err => console.log(err))
+    EventBus.$on('openCreateBoard', function () {
+      vm.createBoard = true
+    })
+    this.createBoard = false
   },
   methods: {
     async signout () {
@@ -519,6 +523,7 @@ a {
   border-radius: 3px;
   font-size: 14px;
   text-align: center;
+  background: #F4F5F7;
 }
 .create-board-modal-submit-button-active{
   border: none;

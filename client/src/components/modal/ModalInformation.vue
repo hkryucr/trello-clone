@@ -4,7 +4,7 @@
         <div class='modal-information-header'>Information</div>
         <div class='modal-information-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
-    <a href="https://trello.com/guide?utm_source=trello&utm_medium=inapp&utm_content=header-tips&utm_campaign=guide" class='modal-information-photo-container'>
+    <a @click.stop.prevent="deadMessage" class='modal-information-photo-container'>
       <img class='modal-information-photo' src="../../assets/information.png" alt="information">
       <div style="display: flex; justify-content: center">
         <div class='modal-information-new-link'>New To Trello? Check Out The Guide</div>
@@ -22,6 +22,10 @@
           <div class='modal-information-bottom-link'>More...</div>
       </div>
     </div>
+    <b-modal id="modal-2" title="Under Construction">
+      <p class="my-4">Sorry we're still working on this section!</p>
+      <img style="width: 100px; height: 100px;" src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif" alt="">
+    </b-modal>
   </div>
 </template>
 <script>
@@ -29,6 +33,11 @@ export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  methods: {
+    deadMessage () {
+      this.$bvModal.show('modal-2')
     }
   }
 }

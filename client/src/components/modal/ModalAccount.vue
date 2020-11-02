@@ -43,22 +43,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
-import { BModal, VBModal } from 'bootstrap-vue'
-
-console.log(BModal, 'BModal')
-console.log(VBModal, 'VBModal')
 
 export default {
-  components: {
-    BModal
-  },
   props: {
     closeModal: {
       type: Function
     }
-  },
-  directives: {
-    'b-modal': VBModal
   },
   data () {
     return {
@@ -90,8 +80,7 @@ export default {
   }
 }
 </script>
-
-<style lang="css" >
+<style lang="css">
 .modal-account {
   display: flex;
   flex-direction: column;

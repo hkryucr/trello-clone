@@ -229,7 +229,6 @@ textarea.task-composer-textarea {
   color: #5e6c84;
   display: block;
   flex: 1 0 auto;
-  /* margin: 2px 0 8px 8px; */
   padding: 6px 8px 12px 6px;
   position: relative;
   text-decoration: none;

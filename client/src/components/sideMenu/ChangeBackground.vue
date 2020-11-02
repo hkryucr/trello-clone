@@ -41,7 +41,6 @@ export default {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
       .catch(err => console.log(err))
-    console.log(this.$store.state)
   }
 }
 </script>

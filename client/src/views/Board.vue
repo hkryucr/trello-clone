@@ -53,7 +53,7 @@
       <div class="task-bg" v-if="isTaskOpen" @click.self="close">
         <router-view></router-view>
       </div>
-    <div @click.stop class="board-menu" :class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
+    <div @click.stop.prevent="closeDeleteWarningModal" class="board-menu" :class="{'side-menu-active': this.sideMenu, 'side-menu-inactive': !this.sideMenu}">
       <div v-if='this.sideMenu' class='side-menu-container'>
         <Splash v-if="this.component === 'splash'" :board="board"/>
         <ChangeBackground v-if="this.component === 'changeBackground'" :board="board"/>
@@ -128,6 +128,9 @@ export default {
     })
   },
   methods: {
+    closeDeleteWarningModal () {
+      EventBus.$emit('closeDeleteWarningModal')
+    },
     close () {
       this.$router.push({ name: 'board' })
     },

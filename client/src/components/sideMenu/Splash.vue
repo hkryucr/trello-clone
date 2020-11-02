@@ -31,28 +31,65 @@
       </div>
       <div class='side-menu-splash-text'>Stickers</div>
     </div>
-    <div @click.stop.prevent="deleteBoard" class='side-menu-splash-option'>
+    <div @click.stop.prevent="openDeleteWarningModal" class='side-menu-splash-option'>
+      <div class='side-menu-splash-bkgrd-icon-container flex justify-center items-center w-full'>
+        <font-awesome-icon icon="trash-alt"/>
+      </div>
       <div class='side-menu-splash-text'>Delete Board</div>
+    </div>
+    <div class="delete-warning-modal-container" style="position:relative;" v-if="isDeleteWarningModalOpen">
+      <DeleteWarningModal
+      :deleteTarget="deleteBoard"
+      :cancel="closeDeleteWarningModal"
+      :target="'board'"
+      />
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import DeleteWarningModal from '../DeleteWarningModal'
 import EventBus from '../../utils/eventBus'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faTrashAlt)
 
 export default {
+  components: {
+    DeleteWarningModal
+  },
+  data () {
+    return {
+      isDeleteWarningModalOpen: false
+    }
+  },
   props: ['board'],
   methods: {
-    deleteBoard () {
-      this.$store.dispatch('deleteBoard', this.board._id)
+    async deleteBoard () {
+      await this.$store.dispatch('deleteBoard', this.board._id)
+      this.isDeleteWarningModalOpen = false
     },
     updateComponent (component) {
+      EventBus.$emit('closeDeleteWarningModal')
       EventBus.$emit('updateComponent', component)
     },
     closeModal () {
       EventBus.$emit('closeSideMenu')
+    },
+    openDeleteWarningModal () {
+      this.isDeleteWarningModalOpen = !this.isDeleteWarningModalOpen
+    },
+    closeDeleteWarningModal () {
+      this.isDeleteWarningModalOpen = false
     }
+  },
+  mounted () {
+    const vm = this
+    EventBus.$on('closeDeleteWarningModal', function () {
+      vm.closeDeleteWarningModal()
+    })
   }
 }
 </script>

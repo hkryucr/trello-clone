@@ -294,7 +294,9 @@ export default new Vuex.Store({
       state.board.columns.splice(idx, 1)
     },
     SOCKET_DELETED_BOARD (state, boardId) {
-      state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
+      if (!(_.isEmpty(state.user) || _.isEmpty(state.user.boards))) {
+        state.user.boards = state.user.boards.filter((board) => boardId !== board._id)
+      }
       delete state.session.currentUser.starredBoards[boardId]
       router.push({ name: 'boards' })
     },

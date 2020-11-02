@@ -10,21 +10,21 @@
         <div class='modal-information-new-link'>New To Trello? Check Out The Guide</div>
       </div>
     </a>
-    <div style="display: flex; justify-content: center">
+    <div @click.stop.prevent="deadMessage" style="display: flex; justify-content: center">
       <div class='modal-information-new-tip'>Get a new tip</div>
     </div>
     <div class='modal-information-bottom'>
       <div class='modal-information-bottom-container'>
-          <div class='modal-information-bottom-link'>Pricing</div>
-          <div class='modal-information-bottom-link'>Apps</div>
-          <div class='modal-information-bottom-link'>Blog</div>
-          <div class='modal-information-bottom-link'>Privacy</div>
-          <div class='modal-information-bottom-link'>More...</div>
+          <div @click.stop.prevent="deadMessage" class='modal-information-bottom-link'>Pricing</div>
+          <div @click.stop.prevent="deadMessage" class='modal-information-bottom-link'>Apps</div>
+          <div @click.stop.prevent="deadMessage" class='modal-information-bottom-link'>Blog</div>
+          <div @click.stop.prevent="deadMessage" class='modal-information-bottom-link'>Privacy</div>
+          <div @click.stop.prevent="deadMessage" class='modal-information-bottom-link'>More...</div>
       </div>
     </div>
     <b-modal id="modal-2" title="Under Construction">
       <p class="my-4">Sorry we're still working on this section!</p>
-      <img style="width: 100px; height: 100px;" src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif" alt="">
+      <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
     </b-modal>
   </div>
 </template>
@@ -37,7 +37,14 @@ export default {
   },
   methods: {
     deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
       this.$bvModal.show('modal-2')
+    }
+  },
+  data () {
+    return {
+      giphs: ['https://media.giphy.com/media/fVeAI9dyD5ssIFyOyM/giphy.gif', 'https://media.giphy.com/media/JRbBb90Az3zxUc7bWj/giphy.gif', 'https://media.giphy.com/media/T8Dhl1KPyzRqU/giphy.gif', 'https://media.giphy.com/media/vqJAJMr4klojK/giphy.gif'],
+      idx: 0
     }
   }
 }

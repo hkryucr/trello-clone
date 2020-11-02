@@ -73,4 +73,8 @@ textarea:focus, input:focus, button:focus{
 .container {
   @apply mx-auto;
 }
+a:hover{
+  color: #fff;
+  text-decoration: none;
+}
 </style>

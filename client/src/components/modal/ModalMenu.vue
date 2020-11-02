@@ -62,7 +62,7 @@
     </div>
     <b-modal id="modal-1" title="Under Construction">
       <p class="my-4">Sorry we're still working on this section!</p>
-      <img style="width: 150px; height: 100px;" src="https://media.giphy.com/media/JRbBb90Az3zxUc7bWj/giphy.gif" alt="">
+      <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
     </b-modal>
   </div>
 </template>
@@ -75,7 +75,14 @@ export default {
   },
   methods: {
     deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
       this.$bvModal.show('modal-1')
+    }
+  },
+  data () {
+    return {
+      giphs: ['https://media.giphy.com/media/fVeAI9dyD5ssIFyOyM/giphy.gif', 'https://media.giphy.com/media/JRbBb90Az3zxUc7bWj/giphy.gif', 'https://media.giphy.com/media/T8Dhl1KPyzRqU/giphy.gif', 'https://media.giphy.com/media/vqJAJMr4klojK/giphy.gif'],
+      idx: 0
     }
   }
 }

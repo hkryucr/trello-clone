@@ -65,16 +65,10 @@ ol ol, ul ol {
 li {
   list-style: none;
 }
-
 textarea:focus, input:focus, button:focus{
     outline: none;
 }
-
 .container {
   @apply mx-auto;
-}
-a:hover{
-  color: #fff;
-  text-decoration: none;
 }
 </style>

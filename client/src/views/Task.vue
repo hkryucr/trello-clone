@@ -1,5 +1,5 @@
 <template>
-  <div class="task-view">
+  <div class="task-view" @click.prevent="closeEditing">
     <div class="w-full">
       <router-link class="icon-md icon-close dialog-close-button" :to="{ name: 'board', params: { id: this.$route.params.id } }"></router-link>
       <div class="flex flex-col flex-grow items-start justify-between">
@@ -19,7 +19,7 @@
                 v-bind:value="task.name"
               />
             </div>
-            <div class="text-sm">
+            <div class="text-sm" style="margin-top: 4px">
               in the list
               <router-link
                 class="text-gray-link"
@@ -39,15 +39,15 @@
               ></span>
               <h3>Description</h3>
               <div class="editable" ref="descriptionButton">
-                <div  v-if="task.description" class="description-edit-controls">
-                  <a href="#" class="description-edit-button" @click.prevent="openEditing">Edit</a>
+                <div v-if="task.description" class="description-edit-controls editable-button">
+                  <a href="#" class="description-edit-button" @click.stop.prevent="openEditing">Edit</a>
                 </div>
               </div>
             </div>
-            <div class="margin-left-40">
+            <div class="margin-left-40" @click.stop.prevent="openEditing">
               <div class="editable" ref="descriptionWrapper">
                 <div class="description-edit-controls">
-                  <p @click.prevent="openEditing">
+                  <p>
                     {{
                       task.description
                         ? task.description
@@ -58,25 +58,22 @@
                 <div class="description-input">
                   <textarea
                     ref="taskDescription"
-                    class="task-description-input relative overflow-hidden bg-trransparent w-full px-2 border mt-2 h-64 border-none leading-normal resize-none"
+                    class="task-description-input relative overflow-hidden bg-trransparent w-full border h-64 border-none leading-normal resize-none"
                     placeholder="Add a more detailed description…"
                     :value="task.description"
+                    @click.stop
                     @change="updateTaskProperty($event, 'description')"
                   />
                   <input
                     class="primary"
                     type="submit"
                     value="Save"
-                    @click.prevent="updateTaskDescription($event)"
+                    @click.stop.prevent="updateTaskDescription($event)"
                   />
                   <button
                     class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
-                    @click.prevent="closeEditing"
+                    @click.stop.prevent="closeEditing"
                   ></button>
-                  <!-- <router-link
-                      class="text-gray-link icon-lg icon-close dark-hover cancel js-cancel-edit"
-                      :to="{ name: 'board', params: { id: this.$route.params.id } }"
-                    ></router-link> -->
                 </div>
               </div>
             </div>
@@ -95,8 +92,13 @@
                 </button>
               </li>
               <li class="flex flex-row">
-                <button class="button-link" @click.prevent="deleteTask">
-                  <span class="icon-sm icon-archive"></span>Delete
+                <button class="button-link" @click.stop.prevent="deleteWarning" v-if="!deleteConfirm">
+                  <span class="icon-sm icon-trash"></span>Delete
+                </button>
+              </li>
+              <li>
+                <button class="button-link button-link-delete-confirm" title="Delete" v-if="deleteConfirm" @click.stop.prevent="deleteTask">
+                  <span class="icon-sm icon-remove" style="color: white"></span>Delete
                 </button>
               </li>
             </ul>
@@ -108,13 +110,19 @@
 </template>
 
 <script>
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import _ from 'lodash'
 import { fetchBoard } from '../utils/BoardApiUtil'
+
+library.add(faTrashAlt)
+
 export default {
   data () {
     return {
       loaded: false,
-      updating: false
+      updating: false,
+      deleteConfirm: false
     }
   },
   computed: {
@@ -150,6 +158,9 @@ export default {
     }
   },
   methods: {
+    deleteWarning () {
+      this.deleteConfirm = true
+    },
     updateTaskProperty (e, key) {
       this.$store.commit('UPDATE_TASK', {
         task: this.task,
@@ -194,8 +205,9 @@ export default {
       this.$refs.taskDescription.select()
     },
     closeEditing () {
-      this.$refs.descriptionWrapper.classList.remove('editing')
-      this.$refs.descriptionButton.classList.remove('editing')
+      if (this.$refs.descriptionWrapper) this.$refs.descriptionWrapper.classList.remove('editing')
+      if (this.$refs.descriptionButton) this.$refs.descriptionButton.classList.remove('editing')
+      this.deleteConfirm = false
     }
   }
 }
@@ -206,6 +218,12 @@ export default {
   @apply relative flex flex-col pin mx-4 m-32 mx-auto pb-4 text-left rounded shadow;
   width: 768px;
   background: #f4f5f7;
+}
+.task-view .dialog-close-button {
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+  justify-content: center;
 }
 .task-header {
   margin: 12px 40px 8px 56px;
@@ -229,6 +247,10 @@ export default {
   width: 32px;
   z-index: 2;
   transition: background-color 85ms,color 85ms;
+}
+.dialog-close-button:hover {
+  background-color: rgba(9,30,66,.08);
+  color: #42526e;
 }
 .task-main-header > input {
   max-width: 100%;
@@ -263,7 +285,8 @@ export default {
   min-height: 48px;
   padding: 8px 0;
   position: relative;
-  margin: 0 0 4px 40px
+  margin: 0 0 0px 40px;
+  height: 3rem;
 }
 .description-header  h3 {
   font-size: 16px;
@@ -272,6 +295,8 @@ export default {
   min-height: 108px;
   overflow-wrap: break-word;
   border-radius: 3px;
+  font-size: 14px;
+  padding: 6px 12px;
 }
 .task-description-input:focus {
   box-shadow: inset 0 0 0 2px #0079bf;
@@ -290,7 +315,18 @@ export default {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  /* background-color: rgba(9,30,66,.04); */
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  min-height: 40px;
+  /* padding: 8px 12px; */
+  text-decoration: none;
 }
+/* .description-edit-controls:hover {
+  background-color: rgba(9, 30, 66, .08);
+} */
 .description-edit-controls p {
   margin: 0 0 8px;
   font-size: 14px;
@@ -317,7 +353,15 @@ export default {
 .editing .description-edit-controls {
   display: none;
 }
-
+.editable-button {
+  padding-left: 0 !important;
+  background: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.editable-button > a:hover {
+background-color: rgba(9, 30, 66, .08);
+}
 .editing .description-input {
   display: block;
   float: left;
@@ -371,5 +415,29 @@ input[type="submit"].primary:hover, button.primary:hover {
   transition-property: background-color, border-color, box-shadow;
   transition-duration: 85ms;
   transition-timing-function: ease;
+}
+.button-link:hover {
+  background-color: rgba(9,30,66,.08);
+  box-shadow: none;
+  border: none;
+}
+.button-link-delete-confirm {
+  background-color: #cf513d;
+  color: white
+}
+.button-link-delete-confirm:hover {
+  background-color: #eb5a46;
+  box-shadow: none;
+  border: none;
+  color: #fff;
+}
+.task-view-right > h3 {
+    padding: .25rem;
+}
+.task-view-right .button-link {
+  display: flex;
+}
+.task-view-right .button-link .icon-move, .task-view-right .button-link .icon-copy,.task-view-right .button-link .icon-trash,  .task-view-right .button-link .icon-remove{
+  margin-right: 6px;
 }
 </style>

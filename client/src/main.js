@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import './plugins/fontawesome'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import App from './App.vue'
 import router from './router'
 import store from './store/index'
@@ -8,6 +10,8 @@ import VueSocketIO from 'vue-socket.io'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { initialState } from './utils/InitialState'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
 const AUTH_TOKEN_KEY = 'authToken'
 
 Vue.config.productionTip = false
@@ -44,6 +48,9 @@ Vue.use(
     }
   })
 )
+
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 // set auth header
 // Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`
 

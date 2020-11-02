@@ -7,7 +7,7 @@
     <div class='modal-menu-body'>
       <section class='modal-switch-container'>
         <h1 class='modal-menu-switch'>Switch To</h1>
-        <div class='modal-icon-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-icon-container'>
           <div class='modal-icon-background'>
             <img class='modal-menu-icon' src='../../assets/trello-brands-modal.svg' alt="trello-brand">
           </div>
@@ -16,7 +16,7 @@
       </section>
       <section class='modal-menu-bottom-container'>
         <div class='modal-menu-discover'>Discover</div>
-        <div class='modal-menu-discover-item-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-menu-discover-item-container'>
           <div class='modal-discover-icon'>
             <img class='modal-discover-icon-svg' src="../../assets/modal-atlassian-confluence.svg" alt="confluence">
           </div>
@@ -30,7 +30,7 @@
               <div class='modal-confluence-text' style="text-align: start">Free document collaboration for up to 10 users</div>
             </div>
         </div>
-        <div class='modal-menu-discover-item-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-menu-discover-item-container'>
           <div class='modal-discover-icon'>
             <img class='modal-discover-icon-svg' src="../../assets/jira-software.svg" alt="confluence">
           </div>
@@ -41,7 +41,7 @@
               <div class='modal-confluence-text' style="text-align: start">Free project and issue tracking for up to 10 users</div>
             </div>
         </div>
-        <div class='modal-menu-discover-item-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-menu-discover-item-container'>
           <div class='modal-discover-icon'>
             <img class='modal-discover-icon-svg' src="../../assets/jira-service-desk.svg" alt="confluence">
           </div>
@@ -52,7 +52,7 @@
               <div class='modal-confluence-text' style="text-align: start">Free IT service and customer service desk for up to 3 agents</div>
             </div>
         </div>
-        <div class='modal-menu-discover-more-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-menu-discover-more-container'>
           <div class='modal-discover-icon'>
             <font-awesome-icon class='modal-discover-icon-svg' icon='compass'></font-awesome-icon>
           </div>
@@ -60,6 +60,10 @@
         </div>
       </section>
     </div>
+    <b-modal id="modal-1" title="Under Construction">
+      <p class="my-4">Sorry we're still working on this section!</p>
+      <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
+    </b-modal>
   </div>
 </template>
 <script>
@@ -67,6 +71,18 @@ export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  methods: {
+    deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
+      this.$bvModal.show('modal-1')
+    }
+  },
+  data () {
+    return {
+      giphs: ['https://media.giphy.com/media/fVeAI9dyD5ssIFyOyM/giphy.gif', 'https://media.giphy.com/media/JRbBb90Az3zxUc7bWj/giphy.gif', 'https://media.giphy.com/media/T8Dhl1KPyzRqU/giphy.gif', 'https://media.giphy.com/media/vqJAJMr4klojK/giphy.gif'],
+      idx: 0
     }
   }
 }

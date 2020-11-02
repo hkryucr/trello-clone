@@ -255,9 +255,13 @@ export default new Vuex.Store({
     },
     SOCKET_CREATED_BOARD (state, newBoard) {
       state.board = newBoard
-      state.user.boards.push(newBoard)
+      state.user.boards = [...state.user.boards, newBoard]
+      state.user.starredBoards = Object.assign({}, state.user.starredBoard)
       state.user.starredBoards[newBoard._id] = false
-      router.push({ name: 'board', params: { id: newBoard._id } })
+      router.push({
+        name: 'board',
+        params: { id: newBoard._id }
+      })
     },
     SOCKET_MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
       const fromTasks = state.board.columns[fromColumn].tasks

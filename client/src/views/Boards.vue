@@ -186,7 +186,7 @@ export default {
       this.createBoard = false
       this.boardName = ''
       this.idx = 0
-      this.$store.dispatch('createBoard', boardObj).then(board => console.log(board))
+      this.$store.dispatch('createBoard', boardObj)
     }
   },
   data () {

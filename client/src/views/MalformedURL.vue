@@ -8,7 +8,7 @@
           <h1>Malformed URL</h1>
           <p>The link you entered does not look like a valid Trello link. If someone gave you this link, you may need to ask them to check that it's correct.</p>
           <div class="_2IU8C6THJ9BrN6">
-            <span>Not <strong>{{getUser.fullName}}</strong>? </span>
+            <span>Not <strong>{{getCurrentUser.fullName}}</strong>? </span>
             <span class="logout-aa" to="/" @click="logout">Switch Accounts</span>
           </div>
         </div>
@@ -27,16 +27,13 @@ export default {
     NavBar
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getCurrentUser'])
   },
   methods: {
     async logout () {
       await this.$store.commit('RESET')
       this.$router.push({ name: 'login' })
     }
-  },
-  mounted () {
-    console.log(this.getUser)
   }
 }
 </script>

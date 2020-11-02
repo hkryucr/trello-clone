@@ -67,6 +67,8 @@ export default {
       return _.get(this.getCurrentUser, 'initials', '')
     },
     isStarred () {
+      console.log('computed', this.getStarredBoardsObj)
+      console.log('computed board', this.board._id)
       return this.getStarredBoardsObj[this.board._id]
     }
   },
@@ -104,6 +106,8 @@ export default {
       EventBus.$emit('toggleSideMenu')
     },
     toggleStar (userId, boardId, bool) {
+      console.log(this.getStarredBoardsObj[this.board._id])
+      console.log(this.isStarred)
       this.$store.dispatch('starBoard', { userId, boardId, bool })
     }
   }

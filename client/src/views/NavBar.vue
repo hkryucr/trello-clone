@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <div class='navbar-left'>
           <div @click.stop.prevent="openModal('modalMenu')" class='navbar-icon'><font-awesome-icon icon="th" :style="{ color: '#fff' }" class="icon" /></div>
-          <div class='navbar-icon'><font-awesome-icon icon="home" :style="{ color: '#fff' }" /></div>
+          <router-link to="/" class='navbar-icon'><font-awesome-icon icon="home" :style="{ color: '#fff' }" /></router-link>
           <div class='navbar-board-link' v-on:click.stop="openModal('modalBoard')">
             <img class='trello-icon'  src ='../assets/trello-brands.svg' >
             <div class='navbar-boards-text'>Boards</div>

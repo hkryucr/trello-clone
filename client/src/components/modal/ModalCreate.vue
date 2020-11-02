@@ -5,7 +5,7 @@
         <div class='modal-create-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
     <section class='create-body-container'>
-      <div class='create-body-link-container'>
+      <div @click.stop.prevent="createBoard" class='create-body-link-container'>
         <div class='create-link-header-container'>
           <div class='create-link-icon-container'>
             <img src="../../assets/modal-create/create-board.svg" alt="create">
@@ -14,7 +14,7 @@
         </div>
         <div class='create-link-paragraph'>A board is made up of cards ordered on lists.  Use it to manage projects, track information, or orgainize anything.</div>
       </div>
-      <div class='create-body-link-container'>
+      <div @click.stop.prevent="deadMessage" class='create-body-link-container'>
         <div class='create-link-header-container'>
           <div class='create-link-icon-container'>
             <img src="../../assets/modal-create/template.svg" alt="create">
@@ -24,7 +24,7 @@
         </div>
         <div class='create-link-paragraph'>Get started faster with a board template.</div>
       </div>
-      <div class='create-body-link-container'>
+      <div @click.stop.prevent="deadMessage" class='create-body-link-container'>
         <div class='create-link-header-container'>
           <div class='create-link-icon-container'>
             <img src="../../assets/modal-create/team.svg" alt="create">
@@ -33,7 +33,7 @@
         </div>
         <div class='create-link-paragraph'>A team is group of boards and people.  Use it to orgainize your company, side hustle, family, or friends.</div>
       </div>
-      <div class='create-body-link-container'>
+      <div @click.stop.prevent="deadMessage" class='create-body-link-container'>
         <div class='create-link-header-container'>
           <div class='create-link-icon-container'>
             <img src="../../assets/modal-create/business.svg" alt="create">
@@ -43,13 +43,34 @@
         <div class='create-link-paragraph'>With Business Class your team has more security, administrative controls, and unlimited Power-Ups.</div>
       </div>
     </section>
+    <b-modal id="modal-1" title="Under Construction">
+      <p class="my-4">Sorry we're still working on this section!</p>
+      <img style="width: 120px; height: 100px;" :src="giphs[idx]" alt="">
+    </b-modal>
   </div>
 </template>
 <script>
+import EventBus from '../../utils/eventBus'
 export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  methods: {
+    createBoard () {
+      this.closeModal()
+      EventBus.$emit('openCreateBoard')
+    },
+    deadMessage () {
+      this.idx = Math.floor(Math.random() * 3)
+      this.$bvModal.show('modal-1')
+    }
+  },
+  data () {
+    return {
+      giphs: ['https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif', 'https://media.giphy.com/media/11JTxkrmq4bGE0/giphy.gif', 'https://media.giphy.com/media/LHZyixOnHwDDy/giphy.gif'],
+      idx: 0
     }
   }
 }

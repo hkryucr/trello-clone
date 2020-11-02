@@ -4,7 +4,7 @@
         <div class='modal-notification-header'>Notifications</div>
         <div class='modal-notification-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
     </div>
-    <div class='modal-notification-view-all-container'>
+    <div @click.stop.prevent="deadMessage('3')" class='modal-notification-view-all-container'>
         <a class='modal-notification-view-all'>View All</a>
     </div>
     <div class='modal-notification-image-container'>
@@ -14,12 +14,20 @@
       <h1 class='modal-notification-message'>No Unread Messages</h1>
     </div>
     <div style="align-items: center">
-      <h3 class='modal-notfication-link'>Click <a class='modal-notification-view-all'>View All</a> to view all you're notifications</h3>
+      <h3 class='modal-notfication-link'>Click <a @click.stop.prevent="deadMessage('3')" class='modal-notification-view-all'>View All</a> to view all you're notifications</h3>
     </div>
     <div class='modal-notification-bottom-container'>
-      <div class='modal-notification-bottom-text'>Change Notification Email Frequency</div>
-      <div class='modal-notification-bottom-text'>Allow Desktop Notifications</div>
+      <div @click.stop.prevent="deadMessage('4')" class='modal-notification-bottom-text'>Change Notification Email Frequency</div>
+      <div @click.stop.prevent="deadMessage('4')" class='modal-notification-bottom-text'>Allow Desktop Notifications</div>
     </div>
+    <b-modal id="modal-3" title="Notifications">
+      <p class="my-4">You have no notifications!</p>
+      <img style="width: 200px; height: 100px;" src="https://media.giphy.com/media/26ufnwz3wDUli7GU0/giphy.gif" alt="">
+    </b-modal>
+    <b-modal id="modal-4" title="Under Construction">
+      <p class="my-4">Sorry we're still working on this section!</p>
+      <img style="width: 100px; height: 100px;" src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif" alt="">
+    </b-modal>
   </div>
 </template>
 <script>
@@ -27,6 +35,11 @@ export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  methods: {
+    deadMessage (num) {
+      this.$bvModal.show(`modal-${num}`)
     }
   }
 }

@@ -12,7 +12,7 @@
               <div class='modal-account-user-email'>{{ email }}</div>
             </div>
         </div>
-        <div class='modal-account-add-container'>
+        <div @click.stop.prevent="deadMessage" class='modal-account-add-container'>
           <div class='modal-account-add-text'>Add Another Account</div>
           <div class='modal-account-new-background'>
             <div>NEW</div>
@@ -21,18 +21,22 @@
         <div class='modal-account-line-break'></div>
     </div>
     <div class='modal-account-2'>
-        <div class='modal-account-2-link'>Profile and Visibility</div>
-        <div class='modal-account-2-link'>Activity</div>
-        <div class='modal-account-2-link'>Cards</div>
-        <div class='modal-account-2-link'>Settings</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-2-link'>Profile and Visibility</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-2-link'>Activity</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-2-link'>Cards</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-2-link'>Settings</div>
     </div>
     <div class='modal-account-3'>
-        <div class='modal-account-3-link'>Help</div>
-        <div class='modal-account-3-link'>Shortcuts</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-3-link'>Help</div>
+        <div @click.stop.prevent="deadMessage" class='modal-account-3-link'>Shortcuts</div>
     </div>
     <div class='modal-account-logout-container'>
         <div class='modal-account-logout-link' @click.prevent="logout">Log Out</div>
     </div>
+    <b-modal id="modal-5" title="Under Construction">
+      <p class="my-4">Sorry we're still working on this section!</p>
+      <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
+    </b-modal>
   </div>
 </template>
 
@@ -44,6 +48,12 @@ export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  data () {
+    return {
+      giphs: ['https://media.giphy.com/media/jUZmz3kAiAuLC/giphy.gif', 'https://media.giphy.com/media/11xBk5MoWjrYoE/giphy.gif', 'https://media.giphy.com/media/xonOzxf2M8hNu/giphy.gif', 'https://media.giphy.com/media/bAplZhiLAsNnG/giphy.gif'],
+      idx: 0
     }
   },
   computed: {
@@ -62,6 +72,10 @@ export default {
     async logout () {
       await this.$store.commit('RESET')
       this.$router.push({ name: 'login' })
+    },
+    deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
+      this.$bvModal.show('modal-5')
     }
   }
 }

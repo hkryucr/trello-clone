@@ -17,16 +17,13 @@
                 :columnIndex="$columnIndex"
                 :board="board"
               />
-              <div class="column mod-add is-idle" ref="listWrapper">
+              <div class="column mod-add is-idle" ref="listWrapper" @click.stop.prevent="openAddList" @blur="removeAddList">
                 <form
                   class="flex flex-row flex-wrap add-list-form"
-                  @submit.prevent="createColumn"
-                  @blur="removeAddList"
                 >
                   <a
                     href="#"
                     class="add-list-button"
-                    @click.prevent="openAddList"
                   >
                     <span class="icon-sm icon-add"></span>
                     Add a list
@@ -39,9 +36,11 @@
                     placeholder="Enter list title..."
                   />
                   <div class="add-list-controls">
-                    <input type="submit" class="primary" value="Add List" style="font-weight: 600;" />
+                    <button @click.stop.prevent="createColumn" class="primary" value="">
+                      Add List
+                    </button>
                     <button
-                      @click="removeAddList"
+                      @click.stop.prevent="removeAddList"
                       class="icon-lg icon-close dark-hover"
                     ></button>
                   </div>

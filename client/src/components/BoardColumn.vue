@@ -24,7 +24,10 @@
             v-bind:value="column.name"
           />
         </div>
-        <button @click.prevent="deleteColumn" class="self-start">
+        <button v-if="!deleteConfirm" @click.stop.prevent="deleteColumnConfirm" class="self-start self-start-button">
+          <span class="icon-sm icon-close"></span>
+        </button>
+        <button v-if="deleteConfirm" @click.stop.prevent="deleteColumn" class="self-start self-start-confirm-button">
           <span class="icon-sm icon-close"></span>
         </button>
     </div>
@@ -71,6 +74,7 @@ import ColumnTask from '@/components/ColumnTask'
 import movingTasksAndColumns from '@/mixins/movingTasksAndColumns'
 import { mapGetters } from 'vuex'
 import autosize from 'autosize'
+import EventBus from '../utils/eventBus'
 
 export default {
   components: { ColumnTask },
@@ -79,20 +83,31 @@ export default {
     return {
       newTaskName: '',
       throttling: false,
-      updating: false
+      updating: false,
+      deleteConfirm: false
     }
   },
   computed: {
     ...mapGetters(['getCurrentUser'])
   },
   mounted () {
+    const vm = this
     this.$refs.columnName.style.display = 'none'
     autosize(this.$refs.columnName)
     autosize(this.$refs.newTaskInput)
     this.$refs.columnName.style.display = ''
     autosize.update(this.$refs.columnName)
+    EventBus.$on('closeConfirmed', function () {
+      vm.deleteConfirm = false
+    })
   },
   methods: {
+    deleteColumnNotConfirm () {
+      this.deleteConfirm = false
+    },
+    deleteColumnConfirm () {
+      this.deleteConfirm = true
+    },
     selectAllText () {
       this.$refs.columnName.select()
     },
@@ -249,5 +264,27 @@ textarea.task-composer-textarea {
 
 .task-controls > input[type="submit"] {
   margin: 4px 4px 0 0;
+}
+.self-start-button > span {
+  font-size: 14px;
+}
+.self-start-button:hover {
+  background-color: rgba(9,30,66,.08);
+  border-radius: 15%;
+}
+.self-start-button > span:hover {
+  font-size: 16px;
+}
+.self-start-confirm-button {
+  /* background-color: #e26956; */
+  background-color: #eb5a46;
+  border-radius: 15%;
+}
+.self-start-confirm-button > span {
+  color: white;
+  font-size: 14px;
+}
+.self-start-confirm-button > span:hover {
+  font-size: 16px;
 }
 </style>

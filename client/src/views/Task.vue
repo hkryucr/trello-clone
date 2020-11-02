@@ -127,20 +127,11 @@ export default {
   },
   computed: {
     task () {
-      if (!this.loaded) {
-        return {
-          name: '',
-          description: ''
-        }
-      }
+      if (!this.loaded) return { name: '', description: '' }
       return this.$store.getters.getTask(this.$route.params.taskId)
     },
     column () {
-      if (!this.loaded) {
-        return {
-          name: ''
-        }
-      }
+      if (!this.loaded) return { name: '' }
       return this.$store.getters.getColumn(this.$route.params.taskId)
     }
   },
@@ -227,7 +218,6 @@ export default {
 }
 .task-header {
   margin: 12px 40px 8px 56px;
-  /* box-sizing: border-box; */
 }
 .task-main-header {
   padding: 3px 0;
@@ -315,18 +305,13 @@ export default {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  /* background-color: rgba(9,30,66,.04); */
   box-shadow: none;
   border: none;
   border-radius: 3px;
   display: block;
   min-height: 40px;
-  /* padding: 8px 12px; */
   text-decoration: none;
 }
-/* .description-edit-controls:hover {
-  background-color: rgba(9, 30, 66, .08);
-} */
 .description-edit-controls p {
   margin: 0 0 8px;
   font-size: 14px;

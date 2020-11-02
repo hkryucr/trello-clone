@@ -71,7 +71,7 @@ const routes = [
     name: 'malformedURL',
     component: MalformedURL,
     beforeEnter: (to, from, next) => {
-      if (store.state.session.isLoggedIn) {
+      if (!store.state.session.isLoggedIn) {
         next({
           name: 'login'
         })

@@ -15,6 +15,7 @@ export default {
       }
       await EventBus.$emit('closeSearchModal', 'close')
       await EventBus.$emit('closeSideMenu')
+      await EventBus.$emit('closeConfirmed')
     }
   }
 }

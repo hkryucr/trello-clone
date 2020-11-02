@@ -1,5 +1,5 @@
 <template>
-  <div class="board flex flex-col" ref="board" :style="insertBackground">
+  <div v-if="board" class="board flex flex-col" ref="board" :style="insertBackground">
     <NavBar />
     <div class="flex flex-col">
       <div v-bind:class="{'sideMenuOpen': this.sideMenu}">
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { fetchBoard } from '../utils/BoardApiUtil'
 import BoardColumn from '@/components/BoardColumn'
 import NavBar from './NavBar'
@@ -76,6 +76,7 @@ import ChangeBackground from '../components/sideMenu/ChangeBackground'
 import Color from '../components/sideMenu/Color'
 import Photo from '../components/sideMenu/Photo'
 import EventBus from '../utils/eventBus'
+import _ from 'lodash'
 
 export default {
   components: {
@@ -100,6 +101,7 @@ export default {
       return this.$route.name === 'task'
     },
     ...mapState(['board']),
+    ...mapGetters(['getCurrentUser']),
     insertBackground () {
       if (this.board && this.board.background) {
         return `${(this.board.background.backgroundType === 'color') ? ('background-color:' + this.board.background.template) : ('background-image: url(' + this.board.background.template + ');')}`
@@ -109,15 +111,29 @@ export default {
     }
   },
   mounted () {
-    let boardId = this.$route.params.id
-    fetchBoard(boardId).then(async (res) => {
-      await this.$store.commit('UPDATE_BOARD_STATE', {
-        board: res.data
-      })
-      this.$store.dispatch('updateBoardViewDate')
-    })
-    // if (state.)
     const vm = this
+    let boardId = vm.$route.params.id
+    if (_.isEmpty(this.$store.state.user)) {
+      this.$store.dispatch('fetchUser', this.getCurrentUser._id)
+        .then(async res => {
+          await this.$store.commit('UPDATE_USER', res.data)
+        })
+        .catch(err => {
+          console.log(err.response, 'err from boards mounted')
+        })
+    }
+    fetchBoard(boardId)
+      .then(async (res) => {
+        await vm.$store.commit('UPDATE_BOARD_STATE', {
+          board: res.data
+        })
+        vm.$store.dispatch('updateBoardViewDate')
+      })
+      .catch(err => {
+        console.error(err)
+        this.$router.push({ name: 'malformedURL' })
+      })
+
     EventBus.$on('toggleSideMenu', function () {
       vm.sideMenu = !vm.sideMenu
     })

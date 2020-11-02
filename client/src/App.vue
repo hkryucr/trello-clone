@@ -8,13 +8,13 @@ import EventBus from './utils/eventBus'
 
 export default {
   methods: {
-    closeModal () {
-      EventBus.$emit('closeDeleteWarningModal')
+    async closeModal () {
+      await EventBus.$emit('closeDeleteWarningModal')
       if (this.$store.state.ui.modal !== 'empty') {
-        this.$store.commit('CLOSE_MODAL')
+        await this.$store.commit('CLOSE_MODAL')
       }
-      EventBus.$emit('closeSearchModal', 'close')
-      EventBus.$emit('closeSideMenu')
+      await EventBus.$emit('closeSearchModal', 'close')
+      await EventBus.$emit('closeSideMenu')
     }
   }
 }

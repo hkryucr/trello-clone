@@ -34,7 +34,7 @@
         <div class='modal-account-logout-link' @click.prevent="logout">Log Out</div>
     </div>
     <b-modal id="modal-5" title="Under Construction">
-      <p class="my-4">Sorry we're still working on this section!</p>
+      <p class="my-4">Sorry we're still working on this account section!</p>
       <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
     </b-modal>
   </div>
@@ -43,12 +43,22 @@
 <script>
 import { mapGetters } from 'vuex'
 import _ from 'lodash'
+import { BModal, VBModal } from 'bootstrap-vue'
+
+console.log(BModal, 'BModal')
+console.log(VBModal, 'VBModal')
 
 export default {
+  components: {
+    BModal
+  },
   props: {
     closeModal: {
       type: Function
     }
+  },
+  directives: {
+    'b-modal': VBModal
   },
   data () {
     return {

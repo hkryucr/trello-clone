@@ -15,6 +15,7 @@
             class="text-lg input-show"
             type="text"
             rows="1"
+            @click.prevent="selectAllText"
             @input="updateHeight($event)"
             @blur="updateColumn($event)"
             @keydown.enter.exact.prevent
@@ -92,6 +93,9 @@ export default {
     autosize.update(this.$refs.columnName)
   },
   methods: {
+    selectAllText () {
+      this.$refs.columnName.select()
+    },
     updateHeight (e) {
       if (!this.throttling) {
         this.throttling = true
@@ -189,6 +193,7 @@ export default {
   padding: 4px 8px;
   padding-left: 4px;
   resize: none;
+  cursor: pointer;
   max-height: 256px;
 }
 

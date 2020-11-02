@@ -34,7 +34,7 @@
         <span>Private</span>
       </div>
       <span class="board-header-btn-divider"></span>
-      <span class="board-header-user-icon">{{this.initials}}</span>
+      <span class="board-header-user-icon text-xs">{{this.initials}}</span>
     </div>
     <div @click.stop.prevent='toggleSideMenu' class="board-header-right" v-if="!sideMenu">
       <div class="flex my-auto header-board-link justify-self-end">

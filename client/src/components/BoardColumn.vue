@@ -46,7 +46,8 @@
             placeholder="Enter a title for this card…"
             v-model="newTaskName"
             @input="updateHeight($event)"
-            @keyup.enter="createTask"
+            @keydown.enter.exact.prevent
+            @keyup.enter.exact="createTask"
             @keyup.esc="closeAddCard"
         />
       </div>
@@ -113,13 +114,15 @@ export default {
       e.dataTransfer.setData('type', 'column')
     },
     createTask (e) {
-      const data = {
-        name: this.newTaskName,
-        columnId: this.column._id,
-        userId: this.getUser._id
+      if (this.newTaskName.replace(/ /g, '').length !== 0) {
+        const data = {
+          name: this.newTaskName,
+          columnId: this.column._id,
+          userId: this.getUser._id
+        }
+        this.$store.dispatch('createTask', data)
+        this.newTaskName = ''
       }
-      this.$store.dispatch('createTask', data)
-      this.newTaskName = ''
     },
     updateColumn (e) {
       if (e.target.value.replace(/ /g, '').length !== 0 && this.column.name !== e.target.value && !this.updating) {

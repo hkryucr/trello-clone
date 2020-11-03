@@ -18,6 +18,18 @@ const UserController = require("./controllers/UserController");
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
 
+// Setup the routers
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(__dirname, "dist"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("EXPRESS SERVER IS RUNNING.");
+  });
+}
+
 // Check the environmental variable port. Use 5000 by default
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
@@ -35,19 +47,12 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-// Setup the routers
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(__dirname, "dist"));
-  app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("EXPRESS SERVER IS RUNNING.");
-  });
+var corsOptions = {
+  origin: 'https://trello2.herokuapp.com/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
-app.use("/api/users", users);
+app.use("/api/users", cors({corsOptions}), users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);
 app.use("/api/tasks", tasks);

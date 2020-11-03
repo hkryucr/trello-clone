@@ -16,17 +16,4 @@ router.get("/:id", async (req, res) => {
       }))
 });
 
-// router.get("/seed", async (req, res) => {
-//   const bg = JSON.parse(fs.readFileSync("seed/background_data.json"));
-//   for (let i = 0; i < bg.length; i++) {
-//     const curBG = bg[i]
-//     const bgObj = new Background({
-//       backgroundType: curBG.backgroundType,
-//       template: curBG.template
-//     })
-//     await bgObj.save()
-//   }
-//   const allBG = await Background.find({})
-//   res.json(allBG)
-// })
 module.exports = router;

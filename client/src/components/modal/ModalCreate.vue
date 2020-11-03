@@ -14,6 +14,7 @@
         </div>
         <div class='create-link-paragraph'>A board is made up of cards ordered on lists.  Use it to manage projects, track information, or orgainize anything.</div>
       </div>
+      <!-- modal | -->
       <div @click.stop.prevent="deadMessage" class='create-body-link-container'>
         <div class='create-link-header-container'>
           <div class='create-link-icon-container'>
@@ -60,7 +61,7 @@ export default {
   methods: {
     createBoard () {
       this.closeModal()
-      EventBus.$emit('openCreateBoard')
+      EventBus.$emit('openCreateBoardFromBoard')
     },
     deadMessage () {
       this.idx = Math.floor(Math.random() * 3)

@@ -5,7 +5,7 @@
     <div class='side-menu-close' v-on:click.prevent="closeModal"><img src="../../assets/exit.svg" alt=""></div>
   </div>
   <div class='side-menu-splash-options-container'>
-    <div class='side-menu-splash-option'>
+    <div @click.stop.prevent="deadMessage" class='side-menu-splash-option'>
       <div class='side-menu-splash-trello-icon-container'>
         <img src="../../assets/modal-create/create-board.svg" alt="create">
       </div>
@@ -20,12 +20,12 @@
       </div>
       <div  class='side-menu-splash-text'>Change Background</div>
     </div>
-    <div class='side-menu-splash-option'>
+    <div @click.stop.prevent="deadMessage" class='side-menu-splash-option'>
       <div class='side-menu-splash-bkgrd-icon-container'>
         <span style="font-size: 20px" class="icon-sm icon-search board-menu-navigation-item-link-icon"></span>      </div>
       <div class='side-menu-splash-text'>Search Cards</div>
     </div>
-    <div class='side-menu-splash-option'>
+    <div @click.stop.prevent="deadMessage" class='side-menu-splash-option'>
       <div class='side-menu-splash-bkgrd-icon-container'>
         <span style="font-size: 20px" class="icon-sm icon-sticker board-menu-navigation-item-link-icon"></span>
       </div>
@@ -45,6 +45,10 @@
       />
     </div>
   </div>
+  <b-modal id="modal-5" title="Under Construction">
+    <p class="my-4">Sorry we're still working on this account section!</p>
+    <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
+  </b-modal>
 </div>
 </template>
 
@@ -62,11 +66,17 @@ export default {
   },
   data () {
     return {
-      isDeleteWarningModalOpen: false
+      isDeleteWarningModalOpen: false,
+      giphs: ['https://media.giphy.com/media/jUZmz3kAiAuLC/giphy.gif', 'https://media.giphy.com/media/11xBk5MoWjrYoE/giphy.gif', 'https://media.giphy.com/media/xonOzxf2M8hNu/giphy.gif', 'https://media.giphy.com/media/bAplZhiLAsNnG/giphy.gif'],
+      idx: 0
     }
   },
   props: ['board'],
   methods: {
+    deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
+      this.$bvModal.show('modal-5')
+    },
     async deleteBoard () {
       await this.$store.dispatch('deleteBoard', this.board._id)
       this.isDeleteWarningModalOpen = false

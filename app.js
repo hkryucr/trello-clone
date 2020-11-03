@@ -56,7 +56,7 @@ app.use("/api/backgrounds", backgrounds);
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
-
+io.set('origins', '*:*');
 io.on("connection", (socket) => {
   socket.on("updateBoard", async (data) => {
     new BoardController().updateBoard(io, socket, data);

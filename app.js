@@ -20,6 +20,7 @@ const db = require("./config/keys").mongoURI;
 
 // Check the environmental variable port. Use 5000 by default
 const port = process.env.PORT || 5000;
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());

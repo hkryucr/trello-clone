@@ -5,6 +5,7 @@ const io = require('socket.io-client')
 // let socket = io(config[process.env.NODE_ENV].endpoint)
 
 const port = window.location.hostname
+console.log(port, 'port from window')
 let socket
 
 if (process.env.NODE_ENV === 'production') {

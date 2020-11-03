@@ -20,10 +20,9 @@ const db = require("./config/keys").mongoURI;
 
 // Check the environmental variable port. Use 5000 by default
 const port = process.env.PORT || 5000;
-
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // mongoose.set("useFindAndModify", false);
 mongoose
@@ -37,23 +36,23 @@ mongoose
   })
   .catch((err) => console.log(err));
 
+// Setup the routers
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("dist"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("EXPRESS SERVER IS RUNNING.");
+  });
+}
+
 app.use("/api/users", users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);
 app.use("/api/tasks", tasks);
 app.use("/api/backgrounds", backgrounds);
-
-// Setup the routers
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(__dirname, "dist"));
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
-  });
-} else {
-  app.get(/.*/, (req, res) => {
-    res.send("EXPRESS SERVER IS RUNNING.");
-  });
-}
 
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);

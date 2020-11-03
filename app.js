@@ -43,11 +43,10 @@ app.use("/api/columns", columns);
 app.use("/api/tasks", tasks);
 app.use("/api/backgrounds", backgrounds);
 
-
 // Setup the routers
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(__dirname, "/dist/"));
-  app.get("/", (req, res) => {
+  app.use(express.static(__dirname, "dist"));
+  app.get(/.*/, (req, res) => {
     res.sendFile(path.resolve(__dirname, "dist", "index.html"));
   });
 } else {

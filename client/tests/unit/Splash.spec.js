@@ -68,14 +68,7 @@ describe('quick-signup', () => {
     const handleClick = jest.fn()
     const wrapper = shallowMount(Splash)
     wrapper.setMethods({ handleClick })
-    // expect(wrapper.find('[data-testid="quick-signup"')).toBe(true)
-    // await wrapper.find('[data-testid="quick-signup-input"]').setValue('hello@gmail.com')
-    // debugger
     wrapper.find('[data-testid="quick-signup-form"]').trigger('submit.prevent')
-    // wrapper.find('form').trigger('submit.prevent')
-    // wrapper.find('[data-testid="quickSignupButton"]').trigger('submit')
-    // await wrapper.vm.$nextTick()
-    // debugger
     expect(handleClick).toHaveBeenCalled()
   })
 })

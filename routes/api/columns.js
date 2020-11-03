@@ -14,10 +14,4 @@ router.get("/:id", async (req, res) => {
     });
 });
 
-// export function createColumn({name, boardId}) {
-//   const column = new Column({name, board: boardId});
-//   column.save().then( (col) => {    
-//   })
-// }
-
 module.exports = router;

@@ -11,20 +11,22 @@
             </span>
             <div class='boards-side-menu-text'>Boards</div>
           </div>
-          <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'templates')">
+          <div :class="[activeTab === 'templates' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.stop.prevent="deadMessage">
             <span class="icon-container">
               <span class="icon-template-board icon-sm _2aV_KY1gTq1qWc"></span>
             </span>
             <div class='boards-side-menu-text'>Templates</div>
           </div>
-          <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.prevent="changeTab($event, 'home')">
+          <!-- @click.prevent="changeTab($event, 'templates')" -->
+          <div :class="[activeTab === 'home' ? 'boards-side-menu-option-selected' : 'boards-side-menu-option']" @click.stop.prevent="deadMessage">
             <span class="icon-container">
               <span class="icon-home icon-sm _2aV_KY1gTq1qWc"></span>
             </span>
             <div class='boards-side-menu-text'>Home</div>
           </div>
+          <!-- @click.prevent="changeTab($event, 'home')" -->
           <div class='boards-side-menu-teams'>Teams</div>
-        <div class='boards-side-menu-create-team'>
+        <div class='boards-side-menu-create-team' @click.stop.prevent="deadMessage">
           <div class='icon-wrapper'>
             <span class="icon-add icon-sm _2aV_KY1gTq1qWc"></span>
           </div>
@@ -84,23 +86,13 @@
       </div>
       </div>
       <div v-show='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
-        <div class='create-board-modal'>
-          <div class='create-board-modal-top' @click.stop>
-            <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
-              <div style="position: absolute; background-color: rgba(0, 0, 0, .2); left: 0; top: 0; right: 0; bottom: 0;"></div>
-              <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
-              <input @keydown.enter="submitBoard" v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
-            </form>
-            <ul class='create-board-modal-bkgrd-opt-container'>
-              <BackgroundTile @click.native="setBackgroundIdx($backgroundIndex)" class="create-board-modal-bkgrd-opt" v-for="(bkgrd, $backgroundIndex) of getBackgrounds" :key="$backgroundIndex" :bkgrd=bkgrd />
-            </ul>
-          </div>
-          <div class='create-board-modal-bottom' @click.stop>
-            <div @click.prevent.stop='submitBoard' v-bind:class="{'create-board-modal-submit-button-disabled': this.boardName.length === 0, 'create-board-modal-submit-button-active': this.boardName.length > 0 }">Create Board</div>
-          </div>
-        </div>
+        <CreateBoardModal :closeModal="closeModal"/>
       </div>
-</div>
+  </div>
+  <b-modal id="modal-5" title="Under Construction">
+    <p class="my-4">Sorry we're still working on this account section!</p>
+    <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
+  </b-modal>
 </div>
 </template>
 
@@ -108,14 +100,14 @@
 import { mapGetters } from 'vuex'
 import NavBar from '../views/NavBar'
 import BoardTile from '../components/boards/BoardTile'
-import BackgroundTile from '../components/boards/BackgroundTile'
+import CreateBoardModal from '../components/modal/CreateBoardModal'
 import EventBus from '../utils/eventBus'
 
 export default {
   components: {
     NavBar,
     BoardTile,
-    BackgroundTile
+    CreateBoardModal
   },
   computed: {
     ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
@@ -136,8 +128,8 @@ export default {
       .catch(err => console.log(err))
     EventBus.$on('openCreateBoard', function () {
       vm.createBoard = true
+      vm.openModal()
     })
-    this.createBoard = false
   },
   methods: {
     async signout () {
@@ -152,48 +144,22 @@ export default {
     },
     openModal () {
       this.createBoard = true
-      this.setBackground()
+      EventBus.$emit('setBackgroundCreateBoard')
     },
     closeModal () {
       this.createBoard = false
-      this.boardName = ''
-      this.idx = 0
+      EventBus.$emit('resetCreateBoard')
     },
-    setBackground () {
-      const selectedBackground = this.$store.state.backgrounds[this.idx]
-      if (selectedBackground.backgroundType === 'image') {
-        this.$refs.createBackground.style.backgroundColor = ''
-        this.$refs.createBackground.style.backgroundImage = `url(${selectedBackground.template})`
-      } else if (selectedBackground.backgroundType === 'color') {
-        this.$refs.createBackground.style.backgroundImage = ''
-        this.$refs.createBackground.style.backgroundColor = selectedBackground.template
-      }
-    },
-    setBackgroundIdx (idx) {
-      this.idx = idx
-      this.setBackground()
-    },
-    async submitBoard () {
-      if (this.boardName.length === 0) {
-        return
-      }
-      const boardObj = {
-        name: this.boardName,
-        columns: [],
-        user: this.getCurrentUser._id,
-        background: this.$store.state.backgrounds[this.idx]._id
-      }
-      this.createBoard = false
-      this.boardName = ''
-      this.idx = 0
-      this.$store.dispatch('createBoard', boardObj)
+    deadMessage () {
+      this.idx = Math.floor(Math.random() * 4)
+      this.$bvModal.show('modal-5')
     }
   },
   data () {
     return {
       activeTab: 'boards',
       createBoard: false,
-      boardName: '',
+      giphs: ['https://media.giphy.com/media/jUZmz3kAiAuLC/giphy.gif', 'https://media.giphy.com/media/11xBk5MoWjrYoE/giphy.gif', 'https://media.giphy.com/media/xonOzxf2M8hNu/giphy.gif', 'https://media.giphy.com/media/bAplZhiLAsNnG/giphy.gif'],
       idx: 0
     }
   }
@@ -368,14 +334,6 @@ export default {
 .my-boards {
   display: flex;
   flex-direction: column;
-  /* margin: 40px 16px;
-  width: 100%;
-  max-width: 825px;
-  min-width: 288px;
-  margin-bottom: 0; */
-}
-.boards-container {
-  /* display: flex; */
 }
 .board-tile-list {
   display: flex;
@@ -417,9 +375,6 @@ a {
   max-width: 825px;
   min-width: 288px;
 }
-/* .content-all-boards{
-
-} */
 .board-tile.mod-add{
   background-color: rgba(9,30,66,.04);
   box-shadow: none;
@@ -440,6 +395,16 @@ a {
 .board-tile.mod-add:hover {
   background-color: rgba(9, 30, 66, 0.08);
 }
+
+.create-board-modal{
+  background: none;
+  position: absolute;
+  top: 44px;
+  justify-content: center;
+}
+.closed{
+  display: none;
+}
 .create-board-modal-bkgrd{
   position: fixed;
   height: 100vh;
@@ -450,104 +415,5 @@ a {
   top: 0;
   display: flex;
   justify-content: center;
-}
-.create-board-modal{
-  background: none;
-  position: absolute;
-  top: 44px;
-  justify-content: center;
-}
-.create-board-modal-info{
-  border-radius: 3px;
-  box-sizing: border-box;
-  color: #fff;
-  height: 96px;
-  padding: 10px 10px 10px 16px;
-  position: relative;
-  width: 296px;
-  display: flex;
-  flex-direction: column;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-.create-board-modal-input{
-  border: none;
-  border-radius: 3px;
-  background: transparent;
-  box-shadow: none;
-  box-sizing: border-box;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  left: -3px;
-  line-height: 24px;
-  margin-bottom: 4px;
-  padding: 2px 8px;
-  position: relative;
-  width: calc(100% - 18px - 16px);
-  top: -20px;
-}
-.create-board-modal-input:hover {
-  background: rgba(0,0,0,.25)
-}
-.create-board-modal-input:focus {
-  background: hsla(0,0%,100%,.3)
-}
-.create-board-modal-top {
-  display: flex;
-}
-.create-board-modal-bkgrd-opt-container{
-  width: 110px;
-  height: 96px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  list-style: none;
-  margin: 0 0 0 8px;
-  overflow: auto;
-}
-.closed{
-  display: none;
-}
-.create-board-modal-bottom{
-  padding: 10px 0;
-  width: 109px;
-
-}
-.create-board-modal-submit-button-disabled{
-  border: none;
-  color: #a5adba;
-  cursor: not-allowed;
-  padding: 8px 5px;
-  border-radius: 3px;
-  font-size: 14px;
-  text-align: center;
-  background: #F4F5F7;
-}
-.create-board-modal-submit-button-active{
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 8px 5px;
-  border-radius: 3px;
-  font-size: 14px;
-  text-align: center;
-  background-color: #5aac44;
-}
-.create-board-modal-no-team, .create-board-modal-private{
-  margin-top: -25px;
-  width: fit-content;
-  padding: 5px;
-  font-size: 14px;
-  font-weight: 400;
-  border-radius: 3px;
-}
-.create-board-modal-private{
-  margin-top: 0;
-}
-.create-board-modal-no-team:hover, .create-board-modal-private:hover {
-  background-color: hsla(0,0%,100%,.3);
-  cursor: pointer;
 }
 </style>

@@ -182,8 +182,9 @@ export default {
   padding-left: 8px;
 }
 .modal-trello {
-  padding-left: 15px;
+  padding-left: 9px;
   font-weight: 500;
+  font-size: 15px;
 }
 .modal-menu-bottom-container {
   box-shadow: 0 8px 16px -4px rgba(9,30,66,.25);

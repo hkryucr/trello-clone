@@ -4,6 +4,7 @@ keys_dev.js
 
 # production
 /build
+/dist
 
 
 # misc

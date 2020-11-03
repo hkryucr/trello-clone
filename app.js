@@ -22,6 +22,7 @@ const db = require("./config/keys").mongoURI;
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // mongoose.set("useFindAndModify", false);
 mongoose
@@ -35,23 +36,24 @@ mongoose
   })
   .catch((err) => console.log(err));
 
+app.use("/api/users", users);
+app.use("/api/boards", boards);
+app.use("/api/columns", columns);
+app.use("/api/tasks", tasks);
+app.use("/api/backgrounds", backgrounds);
+
+
 // Setup the routers
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("dist"));
+  app.use(express.static(__dirname, "/dist/"));
   app.get("/", (req, res) => {
     res.sendFile(path.resolve(__dirname, "dist", "index.html"));
   });
 } else {
-  app.get("/", (req, res) => {
+  app.get(/.*/, (req, res) => {
     res.send("EXPRESS SERVER IS RUNNING.");
   });
 }
-
-app.use("/api/users", cors(), users);
-app.use("/api/boards", cors(), boards);
-app.use("/api/columns", cors(), columns);
-app.use("/api/tasks", cors(), tasks);
-app.use("/api/backgrounds", cors(), backgrounds);
 
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);

@@ -9,6 +9,7 @@ import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { initialState } from './utils/InitialState'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import pkg from '../package.json'
 import './assets/_custom.scss'
 
 Vue.use(BootstrapVue)
@@ -37,7 +38,15 @@ if (savedAuthToken) {
   axios.defaults.headers.common['Authorization'] = ''
 }
 
-var SocketInstance = socketio(process.env.VUE_APP_SOCKET_SERVER_URL)
+const port = window.location.hostname
+
+let socketURL
+if (process.env.NODE_ENV === 'production') {
+  socketURL = port
+} else if (process.env.NODE_ENV === 'development') {
+  socketURL = pkg.proxy
+}
+var SocketInstance = socketio(socketURL)
 
 Vue.use(
   new VueSocketIO({

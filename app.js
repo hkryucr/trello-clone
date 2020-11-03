@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const path = require('path');
-// const cors = require('cors')
+const cors = require('cors')
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
@@ -22,7 +22,6 @@ const db = require("./config/keys").mongoURI;
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(cors());
 
 // mongoose.set("useFindAndModify", false);
 mongoose

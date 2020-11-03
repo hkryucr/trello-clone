@@ -18,9 +18,7 @@ const UserController = require("./controllers/UserController");
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
 
-// Check the environmental variable port. Use 5000 by defaul
-app.use(cors())
-
+// Check the environmental variable port. Use 5000 by default
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -49,11 +47,11 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use("/api/users", users);
-app.use("/api/boards", boards);
-app.use("/api/columns", columns);
-app.use("/api/tasks", tasks);
-app.use("/api/backgrounds", backgrounds);
+app.use("/api/users", cors(), users);
+app.use("/api/boards", cors(), boards);
+app.use("/api/columns", cors(), columns);
+app.use("/api/tasks", cors(), tasks);
+app.use("/api/backgrounds", cors(), backgrounds);
 
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);

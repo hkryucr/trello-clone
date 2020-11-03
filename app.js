@@ -37,7 +37,7 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-app.use("/api/users", users);
+app.use("/api/users", cors(), users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);
 app.use("/api/tasks", tasks);

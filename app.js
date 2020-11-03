@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const path = require('path');
+const cors = require('cors')
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
@@ -18,6 +19,7 @@ const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
 
 // Check the environmental variable port. Use 5000 by defaul
+app.use(cors())
 
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
@@ -119,4 +121,6 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(port);
+http.listen(port, ()=>{
+  console.log(`Http listening on port ${port}`);
+});

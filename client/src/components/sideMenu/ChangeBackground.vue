@@ -40,7 +40,6 @@ export default {
       .then(async res => {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
-      .catch(err => console.log(err))
   }
 }
 </script>

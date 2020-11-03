@@ -118,14 +118,10 @@ export default {
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
       })
-      .catch(err => {
-        console.log(err.response, 'err from boards mounted')
-      })
     this.$store.dispatch('fetchBackgrounds')
       .then(async res => {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
-      .catch(err => console.log(err))
     EventBus.$on('openCreateBoard', function () {
       vm.createBoard = true
       vm.openModal()

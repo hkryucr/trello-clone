@@ -157,7 +157,6 @@ export default {
           await this.$store.commit('UPDATE_SEARCH_RESULT', res.data)
         })
         .catch(err => {
-          console.error(err, 'error from searchBooardsAndTasks')
           this.errors = []
           for (let key in err.response.data) {
             this.errors.push(err.response.data[key])

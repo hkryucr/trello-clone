@@ -124,9 +124,6 @@ export default {
         .then(async res => {
           await this.$store.commit('UPDATE_USER', res.data)
         })
-        .catch(err => {
-          console.log(err.response, 'err from boards mounted')
-        })
     }
     fetchBoard(boardId)
       .then(async (res) => {
@@ -135,8 +132,7 @@ export default {
         })
         vm.$store.dispatch('updateBoardViewDate')
       })
-      .catch(err => {
-        console.error(err)
+      .catch(() => {
         this.$router.push({ name: 'malformedURL' })
       })
 
@@ -144,7 +140,6 @@ export default {
       .then(async res => {
         await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
-      .catch(err => console.log(err))
 
     EventBus.$on('toggleSideMenu', function () {
       vm.sideMenu = !vm.sideMenu

@@ -22,11 +22,11 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/modal";
-@import "../node_modules/bootstrap-vue/src/components/modal/index";
+// @import "../node_modules/bootstrap/scss/functions";
+// @import "../node_modules/bootstrap/scss/variables";
+// @import "../node_modules/bootstrap/scss/mixins";
+// @import "../node_modules/bootstrap/scss/modal";
+// @import "../node_modules/bootstrap-vue/src/components/modal/index";
 </style>
 
 <style>

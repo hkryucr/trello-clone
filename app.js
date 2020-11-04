@@ -35,7 +35,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// mongoose.set("useFindAndModify", false);
 mongoose
   .connect(db, {
     useUnifiedTopology: true,
@@ -46,7 +45,7 @@ mongoose
     console.log("Connected to mongoDB");
   })
   .catch((err) => console.log(err));
-
+  
 app.use("/api/users", users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);

@@ -32,6 +32,11 @@ export default {
 <style lang="css">
 @import 'fonts/font.css';
 @import 'assets/styles/tailwind.postcss';
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap-vue/src/components/modal/index";
 
 .modal-header {
   display: flex;

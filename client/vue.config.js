@@ -10,5 +10,8 @@ module.exports = {
         changeOrigin: true
       }
     }
+  },
+  css: {
+    requireModuleExtension: false
   }
 }

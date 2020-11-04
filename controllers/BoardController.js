@@ -9,29 +9,31 @@ class BoardController {
     const board = new Board(data)
     const user = await User.findById(data.user)
     board.save().then(board => {
-      user.boards.push(board._id)
-      const query = { _id: board.user };
-
-      let sb = `starredBoards.${board._id}`;
-
-      User.findByIdAndUpdate(query, {
-        $set: {
-          [sb]: false
-        }
-      }, { new: true },
-        function (err, doc) {
-          io.sockets.emit("UPDATE_USER_STARRED_BOARDS", {
-            boardId: board._id,
-            bool: false
-          });
-        })
-      user.save()
-      .then(user => {
-        io.sockets.emit("CREATED_BOARD", board)
-      })
-      .catch(err => {
-        io.sockets.emit("error", err)
-      })
+      board.populate('background', function(err) {
+        user.boards.push(board._id)
+        const query = { _id: board.user };
+  
+        let sb = `starredBoards.${board._id}`;
+  
+        User.findByIdAndUpdate(query, {
+          $set: {
+            [sb]: false
+          }
+        }, { new: true },
+          function (err, doc) {
+            io.sockets.emit("UPDATE_USER_STARRED_BOARDS", {
+              boardId: board._id,
+              bool: false
+            });
+          })
+        user.save()
+          .then(user => {
+            io.sockets.emit("CREATED_BOARD", board)
+          })
+          .catch(err => {
+            io.sockets.emit("error", err)
+          })
+      });
     })
     .catch(err => {
       io.sockets.emit("error", err)

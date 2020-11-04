@@ -201,11 +201,7 @@ export default new Vuex.Store({
     SET_USER: (state, user) => {
       state.session.currentUser = user
       state.session.isLoggedIn = true
-      router.push({ name: 'boards' }).catch(err => {
-        if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) {
-          console.error(err)
-        }
-      })
+      router.push({ name: 'boards' })
     },
     UPDATE_USER: (state, user) => {
       state.user = user

@@ -62,6 +62,9 @@
       </div>
     </div>
     </div>
+    <div v-show='createBoard' @click.prevent='closeModal' class='create-board-modal-bkgrd'>
+      <CreateBoardModal :closeModal="closeModal"/>
+    </div>
   </div>
 </template>
 
@@ -75,6 +78,7 @@ import Splash from '../components/sideMenu/Splash'
 import ChangeBackground from '../components/sideMenu/ChangeBackground'
 import Color from '../components/sideMenu/Color'
 import Photo from '../components/sideMenu/Photo'
+import CreateBoardModal from '../components/modal/CreateBoardModal'
 import EventBus from '../utils/eventBus'
 import _ from 'lodash'
 
@@ -86,14 +90,16 @@ export default {
     Splash,
     ChangeBackground,
     Color,
-    Photo
+    Photo,
+    CreateBoardModal
   },
   data () {
     return {
       newColumnName: '',
       boardName: '',
       sideMenu: false,
-      component: 'splash'
+      component: 'splash',
+      createBoard: false
     }
   },
   computed: {
@@ -118,9 +124,6 @@ export default {
         .then(async res => {
           await this.$store.commit('UPDATE_USER', res.data)
         })
-        .catch(err => {
-          console.log(err.response, 'err from boards mounted')
-        })
     }
     fetchBoard(boardId)
       .then(async (res) => {
@@ -129,9 +132,13 @@ export default {
         })
         vm.$store.dispatch('updateBoardViewDate')
       })
-      .catch(err => {
-        console.error(err)
+      .catch(() => {
         this.$router.push({ name: 'malformedURL' })
+      })
+
+    this.$store.dispatch('fetchBackgrounds')
+      .then(async res => {
+        await this.$store.commit('SET_BACKGROUNDS', res.data)
       })
 
     EventBus.$on('toggleSideMenu', function () {
@@ -142,6 +149,11 @@ export default {
     })
     EventBus.$on('updateComponent', function (component) {
       vm.component = component
+    })
+
+    EventBus.$on('openCreateBoardFromBoard', function () {
+      vm.createBoard = true
+      vm.openModal()
     })
   },
   methods: {
@@ -180,6 +192,14 @@ export default {
     },
     removeClickListener () {
       document.removeEventListener('click', this.outsideClickListener)
+    },
+    openModal () {
+      this.createBoard = true
+      EventBus.$emit('setBackgroundCreateBoard')
+    },
+    closeModal () {
+      this.createBoard = false
+      EventBus.$emit('resetCreateBoard')
     }
   }
 }

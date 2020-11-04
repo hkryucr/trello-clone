@@ -13,9 +13,7 @@ export default {
     handleClick: function (target) {
       switch (target) {
         case 'email-signup':
-          this.$router.push({ name: 'signup', params: { 'email': this.email } }).catch(err => {
-            if (err.name !== 'NavigationDuplicated' && !err.message.includes('Avoided redundant navigation to current location')) console.log(err)
-          })
+          this.$router.push({ name: 'signup', params: { 'email': this.email } })
           break
         case 'demo-login':
           const credentials = { email: 'achong@amazon.com', password: 'anson chong' }
@@ -23,9 +21,6 @@ export default {
             .then(async (res) => {
               await this.$store.commit('SET_TOKEN', res.data.token)
               await this.$store.commit('SET_USER', res.data.user)
-            })
-            .catch(err => {
-              console.log(err.response, 'login error')
             })
           break
       }

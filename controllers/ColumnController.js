@@ -62,25 +62,6 @@ class ColumnController {
       }
     );
   }
-  // async createTask(io, socket, data) {
-  //   const { name, columnId } = data;
-  //   const column = await Column.findById(columnId);
-  //   const task = new Task({
-  //     name,
-  //     column: columnId
-  //   })
-
-  //   task.save().then(task => {
-  //     column.tasks.push(task._id);
-  //     column.save()
-  //       .then(column => {
-  //         task.columnId = columnId
-  //         io.sockets.emit("CREATE_TASK", task);
-  //       }).catch(err => {
-  //         socket.emit("error", err);
-  //       })
-  //   })
-  // }
 }
 
 module.exports = ColumnController;

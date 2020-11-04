@@ -82,7 +82,8 @@ export default {
 .modal-board-input {
   border: 1px solid lightgray;
   padding: 8px 12px;
-  width: 90%;
+  width: 83%;
+  border-radius: 5px;
 }
 .modal-board-input-container {
   display: flex;

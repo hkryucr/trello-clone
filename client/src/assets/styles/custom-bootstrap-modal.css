@@ -1,0 +1,47 @@
+.modal-header {
+  display: flex;
+  justify-content: center !important;
+}
+.modal-title {
+  font-size: 18px;
+}
+.modal-header > button {
+  display: none;
+}
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modal-body > p {
+  margin-top: 0 !important;
+}
+.modal-body > img {
+  border-radius: 5px;
+}
+.modal-footer {
+  display: flex;
+  justify-content: center;
+}
+.modal-footer > button:first-child {
+  display: none;
+}
+.modal-footer > button:last-child {
+  visibility: hidden;
+  position: relative;
+  font-size: 14px;
+}
+.modal-footer > button:last-child::after {
+  visibility: visible;
+  content: "Go back to the page";
+  background-color: #026aa7;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  padding: .7rem 9rem 0.7rem 8rem;
+  margin-right: 1rem;
+}
+.modal-footer > button:last-child::after:hover {
+  background-color: rgb(0, 121, 191);
+}

@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const path = require('path');
+// const cors = require('cors')
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");
@@ -16,11 +18,22 @@ const UserController = require("./controllers/UserController");
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
 
-// Check the environmental variable port. Use 5000 by defaul
-
+// Check the environmental variable port. Use 5000 by default
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Setup the routers
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.resolve(__dirname, 'dist')));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("EXPRESS SERVER IS RUNNING.");
+  });
+}
 
 // mongoose.set("useFindAndModify", false);
 mongoose
@@ -34,18 +47,6 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-// Setup the routers
-if (process.env.NODE_ENV === "production") {
-  // app.use(express.static("frontend/build"));
-  app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("EXPRESS SERVER IS RUNNING.");
-  });
-}
-
 app.use("/api/users", users);
 app.use("/api/boards", boards);
 app.use("/api/columns", columns);
@@ -54,8 +55,29 @@ app.use("/api/backgrounds", backgrounds);
 
 // WEBSOCKET CONFIGURATION
 const http = require("http").createServer(app);
-const io = require("socket.io")(http);
-
+// const io = require("socket.io")(http, {
+//   handlePreflightRequest: (req, res) => {
+//     const headers = {
+//         "Access-Control-Allow-Headers": "Content-Type, Authorization",
+//         "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+//         "Access-Control-Allow-Credentials": true
+//     };
+//     res.writeHead(200, headers);
+//     res.end();
+//   }
+// });
+const io = require("socket.io")(http)
+// io.set('origins', '*:*');
+// {
+  // handlePreflightRequest: (req, res) => {
+  //   const headers = {
+  //       "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  //       "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+  //       "Access-Control-Allow-Credentials": true
+  //   };
+  //   res.writeHead(200, headers);
+  //   res.end();
+  // }
 io.on("connection", (socket) => {
   socket.on("updateBoard", async (data) => {
     new BoardController().updateBoard(io, socket, data);
@@ -118,4 +140,6 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(port);
+http.listen(port, ()=>{
+  console.log(`Http listening on port ${port}`);
+});

@@ -83,9 +83,6 @@ export default {
           await this.$store.commit('SET_TOKEN', res.data.token)
           await this.$store.commit('SET_USER', res.data.user)
         })
-        .catch(err => {
-          console.log(err.response, 'login error')
-        })
     }
   }
 }

@@ -40,7 +40,7 @@
             <div class="my-boards" v-if="getStarredBoards && getStarredBoards.length">
               <div class="my-boards-section-header">
                 <div class="boards-page-icon">
-                  <span class="icon-lg icon-star"></span>
+                  <span class="icon-lg icon-star icon-star-board-top"></span>
                 </div>
                 <h3 class="boards-page-header-name">Starred Boards</h3>
               </div>
@@ -411,5 +411,8 @@ a {
   top: 0;
   display: flex;
   justify-content: center;
+}
+.icon-star-board-top:hover {
+  font-size: 24px !important;
 }
 </style>

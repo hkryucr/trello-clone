@@ -74,7 +74,7 @@ export default {
   justify-content: center;
 }
 .background-img-container:hover{
-  opacity: 70%;
+  opacity: 0.7;
 }
 .background-option {
   display: flex;

@@ -3,6 +3,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const path = require('path');
 // const cors = require('cors')
+const history = require('connect-history-api-fallback');
+
+app.use(history());
 
 const users = require("./routes/api/users");
 const boards = require("./routes/api/boards");

@@ -122,6 +122,7 @@ export default {
         this.$store.commit('OPEN_MODAL', modal)
       }
       EventBus.$emit('closeSideMenu')
+      this.closeSearchModal()
     },
     homepage: function () {
       this.$router.push('/')
@@ -133,6 +134,7 @@ export default {
     openSearchModal (modal) {
       this.isSearchInputClicked = true
       this.$refs.searchInputDOM.focus()
+      this.closeModal()
     },
     closeSearchModal () {
       this.isSearchInputClicked = false

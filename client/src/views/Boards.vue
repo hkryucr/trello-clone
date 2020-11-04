@@ -136,6 +136,7 @@ export default {
       .catch(err => console.log(err))
     EventBus.$on('openCreateBoard', function () {
       vm.createBoard = true
+      vm.openModal()
     })
     this.createBoard = false
   },

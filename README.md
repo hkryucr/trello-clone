@@ -1,6 +1,6 @@
 # Trello-Clone
 
-Check out the live app.
+Check out the live [app](https://trello2.herokuapp.com/).
 
 <!-- [Yocal Design Documents](https://github.com/hkryucr/fsp-yocal/wiki) -->
 
@@ -12,7 +12,6 @@ Trello-Clone is a single-page web clone application inspired by Trello. Trello-C
 User Authentication
 - Users can create an account and sign-in and sign-out with secure authentication.
 - Users can log in through a demo account.
-- Users can't write ??????
 
 ### Board
 

@@ -80,8 +80,6 @@ After user logs in they will be directed to the home page where they will have a
 
 <img src="/client/public/board2.gif" width="100%"/>
 
-![TrelloCreate](/client/public/TrelloCreate.png)
-
 ### Board
 After user selects a board from home page they will be directed to the board page.  Here they will be able create/edit/delete all lists and tasks .  They'll also be able to change the background of their board and star it as well.  
 

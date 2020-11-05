@@ -27,11 +27,10 @@ After user selects a board from home page they will be directed to the board pag
 Trello-Clone is a single-page web application with technology stacks as follows: 
 
 #### Back-end
-Ruby on Rails 
 Trello-Clone uses Node.js, Express.js, MongoDB, Socket.io on the back-end.
 
 #### Database
-Trello-Clone uses a Mongo database to store its data to store.
+Trello-Clone uses a MongoDB database to store its data to store.
  
 #### Front-end
 #### Vue.js 

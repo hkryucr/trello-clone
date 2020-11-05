@@ -4,7 +4,7 @@ Check out the live [app](https://trello2.herokuapp.com/).
 
 Trello-Clone is a single-page full-stack web application modeled after Trello. Trello-Clone is built using Node.js, Express.js, MongoDB, Socket.io on the back-end, and Vue.js and Vuex on the front-end.  For image hosting, it utilizes Amazon Web Services. For instant data transfer, it uses socket.io to integrate Vue.js frontend with the rest of the node.js & express.js application.
 
-![TrelloSpalsh](/client/public/TrelloSplash.png)
+![TrelloSpalsh](/client/public/splash.gif)
 
 ## Why trello clone?
 Our dev team was inspired by beautiful and seamless frontend Trello's UIs. It is one of the most popular web-based Kanban-style list-making applications. Trello’s boards, lists, and cards enable users to organize and prioritize their projects and daily tasks in a fun, interactive, and rewarding way.

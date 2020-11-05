@@ -1,6 +1,6 @@
 # Trello-Clone
 
-![TrelloSpalsh](https://img.shields.io/static/v1?label=<LABEL>&message=<MESSAGE>&color=<COLOR>)
+![TrelloSpalsh](https://img.shields.io/static/v1?label=<MADE BY>&message=<RYAN LEUNG>&color=<COLOR>)
  
 Check out the live [app](https://trello2.herokuapp.com/).
 

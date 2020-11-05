@@ -6,7 +6,7 @@ Check out the live [app](https://trello2.herokuapp.com/).
 
 Trello-Clone is a single-page web clone application inspired by Trello. Trello-Clone is built using Node.js, Express.js, MongoDB, Socket.io on the back-end, and Vue.js and Vuex on the front-end. 
 
-![TrelloSpalsh](client/public/TrelloSplash.png)
+![TrelloSpalsh](/client/public/TrelloSplash.png)
 
 ### Key Features
 User Authentication

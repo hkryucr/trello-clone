@@ -27,6 +27,8 @@ export default {
 // @import "../node_modules/bootstrap/scss/mixins";
 // @import "../node_modules/bootstrap/scss/modal";
 // @import "../node_modules/bootstrap-vue/src/components/modal/index";
+@import "./assets/_custom.scss";
+
 </style>
 
 <style>

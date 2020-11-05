@@ -10,7 +10,7 @@ import axios from 'axios'
 import { initialState } from './utils/InitialState'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import pkg from '../package.json'
-import './assets/_custom.scss'
+// import './assets/_custom.scss'
 // client/node_modules/bootstrap/scss/_modal.scss
 
 Vue.use(BootstrapVue)

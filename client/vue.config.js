@@ -1,4 +1,10 @@
 const path = require('path')
+const loader = {
+  loader: 'sass-resources-loader',
+  options: {
+    resources: path.resolve(__dirname, './src/assets/_custom.scss')
+  }
+}
 
 module.exports = {
   outputDir: path.resolve(__dirname, '../dist'),
@@ -14,10 +20,17 @@ module.exports = {
   css: {
     requireModuleExtension: false
   },
-  pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: [path.resolve(__dirname, './src/assets/_custom.scss'), path.resolve(__dirname, './node_modules/bootstrap/scss/_funtions.scss'), path.resolve(__dirname, './node_modules/bootstrap/scss/_mixins.scss'), path.resolve(__dirname, './node_modules/bootstrap/scss/_modal.scss'), path.resolve(__dirname, './node_modules/bootstrap-vue/src/components/modal/index.scss')]
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.scss$/,
+          use: [
+            loader,
+            'sass-loader'
+          ]
+        }
+      ]
     }
   }
 }

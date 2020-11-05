@@ -129,7 +129,6 @@ export default {
   display: none;
   margin: 1em 0 1.2em 0;
   flex-direction: column;
-  /* justify-content: left; */
   align-items: flex-start;
 }
 .form-container-signup .error-message {

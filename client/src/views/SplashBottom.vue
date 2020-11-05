@@ -2,7 +2,6 @@
   <footer class="global-footer">
     <div class="global-footer-detail">
       <hr>
-      <!-- <img class="atlassian-logo-small white" src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/images/e4e8fa01ba058bce8e9f2bb7459516f9/atlassian-logo-white-small.svg" width="150"/> -->
       <img class="atlassian-logo-small" src="../assets/Log in to Trello-3.svg" width="150"/>
       <div>
         &nbsp;© Copyright 2020. All rights reserved.
@@ -19,7 +18,7 @@ export default {
 <style lang="css">
 .global-footer {
   width: 100%;
-  height: 7.5rem;            /* Footer height */
+  height: 7.5rem;
 }
 .global-footer {
     margin-top: 1rem;

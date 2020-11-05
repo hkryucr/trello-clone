@@ -249,7 +249,6 @@ export default {
   font-size: 14px;
 }
 .empty{
-  /* display: none; */
   width: 0
 }
 .modalMenu, .modalBoard {

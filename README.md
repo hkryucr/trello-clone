@@ -4,7 +4,7 @@ Check out the live [app](https://trello2.herokuapp.com/).
 
 Trello-Clone is a single-page full-stack web application modeled after Trello. Trello-Clone is built using Node.js, Express.js, MongoDB, Socket.io on the back-end, and Vue.js and Vuex on the front-end.  For image hosting, it utilizes Amazon Web Services. For instant data transfer, it uses socket.io to integrate Vue.js frontend with the rest of the node.js & express.js application.
 
-<img src="/client/public/splash.gif" width="100%"/>
+<img src="/client/public/splash.gif" width="80%"/>
 
 ## Why trello clone?
 Our dev team was inspired by beautiful and seamless frontend Trello's UIs. It is one of the most popular web-based Kanban-style list-making applications. Trello’s boards, lists, and cards enable users to organize and prioritize their projects and daily tasks in a fun, interactive, and rewarding way.
@@ -78,12 +78,12 @@ const routes = [
 ### Boards
 After user logs in they will be directed to the home page where they will have access to all their boards.  Here they will be able to star boards of more importance as well as create a new board.
 
-<img src="/client/public/board2.gif" width="100%"/>
+<img src="/client/public/board2.gif" width="80%"/>
 
 ### Board
 After user selects a board from home page they will be directed to the board page.  Here they will be able create/edit/delete all lists and tasks .  They'll also be able to change the background of their board and star it as well.  
 
-![TrelloBoardDemo](https://user-images.githubusercontent.com/55060570/98197721-34a81080-1edc-11eb-86f8-65dbe3e5bce0.gif)
+<img src="https://user-images.githubusercontent.com/55060570/98197721-34a81080-1edc-11eb-86f8-65dbe3e5bce0.gif" width="80%"/>
 
 
 #### Back-end

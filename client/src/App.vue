@@ -1,6 +1,7 @@
 <template>
   <div id="app" @click="closeModal">
     <router-view/>
+    <div class="modal fade show modal-dialog modal-md modal-content modal-header modal-title modal-body modal-footer modal-backdrop modal-open" style="display: none;"></div>
   </div>
 </template>
 <script>
@@ -21,7 +22,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="css">
 .modal-header {
   display: flex;
   justify-content: center !important;
@@ -69,9 +70,7 @@ export default {
 .modal-footer > button:last-child::after:hover {
   background-color: rgb(0, 121, 191);
 }
-</style>
 
-<style>
 @import 'fonts/font.css';
 @import 'assets/styles/tailwind.postcss';
 body,
@@ -129,9 +128,6 @@ button:focus {
 .container {
   @apply mx-auto;
 }
-</style>
-
-<style>
 
 .modal-backdrop {
   opacity: 0.5;

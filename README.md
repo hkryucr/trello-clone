@@ -8,14 +8,17 @@ Trello-Clone is a single-page web clone application inspired by Trello. Trello-C
 
 ![TrelloSpalsh](/client/public/TrelloSplash.png)
 
-### Key Features
-User Authentication
-- Users can create an account and sign-in and sign-out with secure authentication.
-- Users can log in through a demo account.
+## Features
+
+### Boards
+After user logs in they will be directed to the home page where they will have access to all their boards.  Here they will be able to star boards of more importance as well as create a new board.
+
+![TrelloBoards](/client/public/TrelloBoards.png)
+
+![TrelloCreate]/client/public/TrelloCreate.png)
 
 ### Board
 
-### Boards
 
 ### Technology Stack
 Trello-Clone is a single-page web application with technology stacks as follows: 

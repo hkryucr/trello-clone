@@ -78,7 +78,7 @@ const routes = [
 ### Boards
 After user logs in they will be directed to the home page where they will have access to all their boards.  Here they will be able to star boards of more importance as well as create a new board.
 
-<img src="/client/public/board.gif" width="100%"/>
+<img src="/client/public/board2.gif" width="100%"/>
 
 ![TrelloCreate](/client/public/TrelloCreate.png)
 

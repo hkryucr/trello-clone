@@ -15,7 +15,7 @@ After user logs in they will be directed to the home page where they will have a
 
 ![TrelloBoards](/client/public/TrelloBoards.png)
 
-![TrelloCreate]/client/public/TrelloCreate.png)
+![TrelloCreate](/client/public/TrelloCreate.png)
 
 ### Board
 

@@ -1,5 +1,11 @@
 # Trello-Clone
- [![Generic badge](https://img.shields.io/badge/Built%20by-Ryan%20Leung-blue)](https://shields.io/)
+ [![Generic badge](https://img.shields.io/badge/Vue.js-2.6-green)](https://shields.io/)
+ [![Generic badge](https://img.shields.io/badge/express.js-4.7-green)](https://shields.io/)
+ [![Generic badge](https://img.shields.io/badge/socket.io-2.3-green)](https://shields.io/)
+ [![Generic badge](https://img.shields.io/badge/Release-11%2F22%2F2020-orange)](https://shields.io/)
+ [![Generic badge](https://img.shields.io/badge/All%20Contributors-4-blue)](https://shields.io/)
+
+ 
 Check out the live [app](https://trello2.herokuapp.com/).
 
 Trello-Clone is a single-page full-stack web application modeled after Trello. Trello-Clone is built using Node.js, Express.js, MongoDB, Socket.io on the back-end, and Vue.js and Vuex on the front-end.  For image hosting, it utilizes Amazon Web Services. For instant data transfer, it uses socket.io to integrate Vue.js frontend with the rest of the node.js & express.js application.

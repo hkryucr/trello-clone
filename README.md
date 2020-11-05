@@ -1,6 +1,6 @@
 # Trello-Clone
 
-https://img.shields.io/static/v1?label=<LABEL>&message=<MESSAGE>&color=<COLOR>
+![TrelloSpalsh](https://img.shields.io/static/v1?label=<LABEL>&message=<MESSAGE>&color=<COLOR>)
  
 Check out the live [app](https://trello2.herokuapp.com/).
 

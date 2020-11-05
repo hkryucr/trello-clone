@@ -18,6 +18,9 @@ After user logs in they will be directed to the home page where they will have a
 ![TrelloCreate](/client/public/TrelloCreate.png)
 
 ### Board
+After user selects a board from home page they will be directed to the board page.  Here they will be able create/edit/delete all lists and tasks .  They'll also be able to change the background of their board and star it as well.  
+
+![TrelloBoardDemo](https://user-images.githubusercontent.com/55060570/98197721-34a81080-1edc-11eb-86f8-65dbe3e5bce0.gif)
 
 
 ### Technology Stack

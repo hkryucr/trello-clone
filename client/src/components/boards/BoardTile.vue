@@ -41,25 +41,25 @@ export default {
 </template>
 <style>
 .boards-page-board-section-list-item {
-  width: 23%;
+  width: 48%;
   padding: 0;
   margin: 0 2% 2% 0;
   transform: translate(0);
   list-style: none;
 }
-@media (min-width: 576px){
+@media (min-width: 600px){
   .boards-page-board-section-list-item {
-    width: 33%;
+    width: 48%;
   }
 }
 @media (min-width: 768px){
   .boards-page-board-section-list-item {
-    width: 25%;
+    width: 31%;
   }
 }
 @media (min-width: 992px){
   .boards-page-board-section-list-item {
-    width: 25%;
+    width: 23%;
   }
 }
 @media (min-width: 1200px){

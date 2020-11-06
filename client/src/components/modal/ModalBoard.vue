@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import EventBus from '../../utils/eventBus'
+
 export default {
   data () {
     return {
@@ -62,6 +64,30 @@ export default {
   props: {
     closeModal: {
       type: Function
+    }
+  },
+  computed: {
+    ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
+  },
+  mounted () {
+    const vm = this
+    this.$store.dispatch('fetchUser', this.getCurrentUser._id)
+      .then(async res => {
+        await this.$store.commit('UPDATE_USER', res.data)
+      })
+    this.$store.dispatch('fetchBackgrounds')
+      .then(async res => {
+        await this.$store.commit('SET_BACKGROUNDS', res.data)
+      })
+  },
+  methods: {
+    openCreateBoard () {
+      if (this.$router.currentRoute.name === 'board') {
+        EventBus.$emit('openCreateBoardFromBoard')
+      } else {
+        EventBus.$emit('openCreateBoard')
+      }
+      this.closeModal()
     }
   }
 }

@@ -63,13 +63,15 @@ export default {
       this.setBackground()
     },
     setBackground () {
-      const selectedBackground = this.$store.state.backgrounds[this.idx]
-      if (selectedBackground.backgroundType === 'image') {
-        this.$refs.createBackground.style.backgroundColor = ''
-        this.$refs.createBackground.style.backgroundImage = `url(${selectedBackground.template})`
-      } else if (selectedBackground.backgroundType === 'color') {
-        this.$refs.createBackground.style.backgroundImage = ''
-        this.$refs.createBackground.style.backgroundColor = selectedBackground.template
+      if (this.$refs.createBackground && this.$refs.createBackground.style) {
+        const selectedBackground = this.$store.state.backgrounds[this.idx]
+        if (selectedBackground.backgroundType === 'image') {
+          this.$refs.createBackground.style.backgroundColor = ''
+          this.$refs.createBackground.style.backgroundImage = `url(${selectedBackground.template})`
+        } else if (selectedBackground.backgroundType === 'color') {
+          this.$refs.createBackground.style.backgroundImage = ''
+          this.$refs.createBackground.style.backgroundColor = selectedBackground.template
+        }
       }
     }
   },

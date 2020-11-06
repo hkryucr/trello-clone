@@ -10,7 +10,6 @@ import axios from 'axios'
 import { initialState } from './utils/InitialState'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import pkg from '../package.json'
-import './assets/_custom.scss'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -54,15 +53,12 @@ Vue.use(
     connection: SocketInstance,
     vuex: {
       store,
-      // actionPrefix: 'socket_',
       mutationPrefix: 'SOCKET_'
     }
   })
 )
 
 // set auth header
-// Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`
-
 export default new Vue({
   router,
   store,

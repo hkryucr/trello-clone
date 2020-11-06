@@ -33,7 +33,7 @@
     <div class='modal-account-logout-container'>
         <div class='modal-account-logout-link' @click.prevent="logout">Log Out</div>
     </div>
-    <b-modal id="modal-5" title="Under Construction">
+    <b-modal id="modal-6" title="Under Construction">
       <p class="my-4">Sorry we're still working on this account section!</p>
       <img style="width: 150px; height: 100px;" :src="giphs[idx]" alt="">
     </b-modal>
@@ -75,7 +75,7 @@ export default {
     },
     deadMessage () {
       this.idx = Math.floor(Math.random() * 4)
-      this.$bvModal.show('modal-5')
+      this.$bvModal.show('modal-6')
     }
   }
 }

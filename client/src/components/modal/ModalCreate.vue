@@ -44,7 +44,7 @@
         <div class='create-link-paragraph'>With Business Class your team has more security, administrative controls, and unlimited Power-Ups.</div>
       </div>
     </section>
-    <b-modal id="modal-1" title="Under Construction">
+    <b-modal id="modal-7" title="Under Construction">
       <p class="my-4">Sorry we're still working on this section!</p>
       <img style="width: 120px; height: 100px;" :src="giphs[idx]" alt="">
     </b-modal>
@@ -60,12 +60,16 @@ export default {
   },
   methods: {
     createBoard () {
+      if (this.$router.currentRoute.name === 'board') {
+        EventBus.$emit('openCreateBoardFromBoard')
+      } else {
+        EventBus.$emit('openCreateBoard')
+      }
       this.closeModal()
-      EventBus.$emit('openCreateBoardFromBoard')
     },
     deadMessage () {
       this.idx = Math.floor(Math.random() * 3)
-      this.$bvModal.show('modal-1')
+      this.$bvModal.show('modal-7')
     }
   },
   data () {

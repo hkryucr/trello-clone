@@ -285,7 +285,6 @@ export default {
   }
 }
 .get-started-container {
-  /* width: 100%; */
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;

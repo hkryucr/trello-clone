@@ -162,7 +162,7 @@ export default {
   border-radius: 3px;
   padding: 25px 40px 16px 40px;
   box-shadow: rgba(0,0,0,0.1) 0 0 10px;
-  width: 400px;
+  max-width: 400px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 .signup-page{

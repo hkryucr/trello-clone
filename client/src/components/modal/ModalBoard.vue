@@ -6,7 +6,7 @@
     </form>
     <div class='modal-boards-star-container'>
       <div class='modal-boards-star-header'>
-        <div style="display: flex;">
+        <div style="display: flex; padding:0 5px;">
           <div class='modal-star-container'>
             <img src="../../assets/star.svg" alt="star">
           </div>
@@ -20,13 +20,13 @@
           Star your most important boards to keep them right at your fingertips.
         </div>
         <ul class='modal-board-list-container' v-else>
-          <ModalBoardTile v-for="(starBoard, $starBoardIndex) of getStarredBoards" :key="$starBoardIndex" :board="starBoard" :star="true"/>
+          <ModalBoardTile v-for="(starBoard, $starBoardIndex) of getStarredBoards" :key="$starBoardIndex" :board="starBoard" :user="getCurrentUser._id" :star="true"/>
         </ul>
       </div>
     </div>
     <div class='modal-boards-recent-container'>
       <div class='modal-boards-recent-header'>
-        <div style="display: flex;">
+        <div style="display: flex; padding:0 5px;">
           <div class='modal-recent-container'>
             <img src="../../assets/clock.svg" alt="star">
           </div>
@@ -37,13 +37,13 @@
       </div>
       <div v-show="recent">
         <ul class='modal-board-list-container'>
-          <ModalBoardTile v-for="(recentBoard, $recentBoardIndex) of getRecentlyViewed" :key="$recentBoardIndex" :board="recentBoard" :star="true"/>
+          <ModalBoardTile v-for="(recentBoard, $recentBoardIndex) of getRecentlyViewed" :key="$recentBoardIndex" :board="recentBoard" :star="false"/>
         </ul>
       </div>
     </div>
     <div class='modal-boards-personal-container'>
       <div class='modal-boards-personal-header'>
-        <div style="display: flex;">
+        <div style="display: flex; padding:0 5px;">
           <div class='modal-personal-container'>
             <img class='modal-boards-trello-icon' src="../../assets/modal-create/create-board.svg" alt="star">
           </div>
@@ -54,7 +54,7 @@
       </div>
       <div v-show="personal">
         <ul class='modal-board-list-container'>
-          <ModalBoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :star="true"/>
+          <ModalBoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :star="false"/>
         </ul>
       </div>
     </div>
@@ -150,7 +150,7 @@ export default {
 .modal-boards-star-container, .modal-boards-recent-container, .modal-boards-personal-container {
   display: flex;
   color: rgb(107, 119, 140);
-  padding: 10px;
+  padding: 10px 5px;
   font-weight: 600;
   font-size: 12px;
   flex-direction: column

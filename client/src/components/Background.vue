@@ -15,7 +15,9 @@ export default {
 </script>
 
 <style lang="css">
+
 .background {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -38,5 +40,10 @@ export default {
   right: 0;
   z-index: -999;
   max-width: 30%;
+}
+@media (min-width: 900px) {
+  .background {
+    display: block;
+  }
 }
 </style>

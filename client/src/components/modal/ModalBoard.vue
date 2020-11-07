@@ -12,10 +12,15 @@
           </div>
           <div class='modal-star-text'>Starred Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div v-if='star' @click.stop.prevent="toggleList('star')" class='modal-board-svg-container'><img src="../../assets/minus.svg" alt=""></div>
+        <div v-else @click.stop.prevent="toggleList('star')" class='modal-board-svg-container'><img src="../../assets/plus.svg" alt=""></div>
       </div>
-      <div class='modal-boards-star-body'>
+      <ul v-if="getStarredBoards && getStarredBoards.length">
+        <li v-for="(starBoard, $boardIndex) of getStarredBoards" :key="$boardIndex">
+          <router-link :to="`/board/${starBoard.boardId}`"></router-link>
+        </li>
+      </ul>
+      <div v-else class='modal-boards-star-body'>
         Star your most important boards to keep them right at your fingertips.
       </div>
     </div>
@@ -27,8 +32,8 @@
           </div>
           <div class='modal-recent-text'>Recent Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div v-if='recent' @click.stop.prevent="toggleList('recent')" class='modal-board-svg-container'><img src="../../assets/minus.svg" alt=""></div>
+        <div v-else @click.stop.prevent="toggleList('recent')" class='modal-board-svg-container'><img src="../../assets/plus.svg" alt=""></div>
       </div>
       <div class='modal-boards-star-body'>
         LI of recent boards
@@ -42,8 +47,8 @@
           </div>
           <div class='modal-personal-text'>Personal Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div v-if='personal' @click.stop.prevent="toggleList('personal')" class='modal-board-svg-container'><img src="../../assets/minus.svg" alt=""></div>
+        <div v-else @click.stop.prevent="toggleList('personal')" class='modal-board-svg-container'><img src="../../assets/plus.svg" alt=""></div>
       </div>
       <div class='modal-boards-star-body'>
         LI of personal boards
@@ -54,11 +59,14 @@
 
 <script>
 import EventBus from '../../utils/eventBus'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
-      star: true
+      star: 'open',
+      personal: 'open',
+      recent: 'open'
     }
   },
   props: {
@@ -70,7 +78,6 @@ export default {
     ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
   },
   mounted () {
-    const vm = this
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
@@ -88,6 +95,15 @@ export default {
         EventBus.$emit('openCreateBoard')
       }
       this.closeModal()
+    },
+    toggleList (list) {
+      if (list === 'star') {
+        this.star = (this.star === 'open') ? '' : 'open'
+      } else if (list === 'recent') {
+        this.recent = (this.recent === 'open') ? '' : 'open'
+      } else {
+        this.personal = (this.personal === 'open') ? '' : 'open'
+      }
     }
   }
 }
@@ -145,6 +161,7 @@ export default {
 .modal-boards-star-header, .modal-boards-recent-header, .modal-boards-personal-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .modal-boards-star-body {
   color: #7a869a;
@@ -158,4 +175,16 @@ export default {
 .modal-boards-trello-icon {
   fill: #7a869a
 }
+.modal-board-svg-container {
+  width: 20px;
+  height: 20px;
+  color: rgb(107, 119, 140);
+  border-radius: 3px;
+  padding: 4px;
+}
+.modal-board-svg-container:hover {
+  background-color: #d9dadb;
+  cursor: pointer;
+}
+
 </style>

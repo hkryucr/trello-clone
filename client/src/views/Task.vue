@@ -207,8 +207,10 @@ export default {
 <style>
 .task-view {
   @apply relative flex flex-col pin mx-4 m-32 mx-auto pb-4 text-left rounded shadow;
-  width: 768px;
+  width: auto;
   background: #f4f5f7;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 .task-view .dialog-close-button {
   display: flex;
@@ -268,6 +270,7 @@ export default {
 }
 .task-main {
   padding: 0 8px 8px 16px;
+  flex-direction: column;
 }
 .description-header {
   display: flex;
@@ -296,6 +299,10 @@ export default {
 }
 .button-list {
   list-style-type: none;
+}
+.button-list button {
+  font-size: 14px;
+  align-items: center;
 }
 .margin-left-40 {
   margin-left: 40px;
@@ -418,11 +425,37 @@ input[type="submit"].primary:hover, button.primary:hover {
 }
 .task-view-right > h3 {
     padding: .25rem;
+    font-size: 16px;
 }
 .task-view-right .button-link {
   display: flex;
 }
 .task-view-right .button-link .icon-move, .task-view-right .button-link .icon-copy,.task-view-right .button-link .icon-trash,  .task-view-right .button-link .icon-remove{
   margin-right: 6px;
+}
+.w-4\/5 {
+  width: auto
+}
+.w-1\/5 {
+  width: auto;
+  margin-left: 36px;
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .task-view {
+    width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .task-main {
+    /* width: auto */
+    flex-direction: row;
+  }
+  .w-4\/5 {
+    width: 80%;
+  }
+  .w-1\/5 {
+    width: 20%;
+  }
 }
 </style>

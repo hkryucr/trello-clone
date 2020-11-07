@@ -187,12 +187,19 @@ export default {
 .home-left-sidebar {
   position: sticky;
   top: 0px;
+  display: none;
 }
 .home-left-sidebar-container {
   margin: 40px 0 0;
   padding: 0 16px;
   width: 272px;
   top: 10;
+}
+
+@media (min-width: 600px){
+  .home-left-sidebar {
+    display: block
+  }
 }
 .boards-link {
   background-color: #e4f0f6;

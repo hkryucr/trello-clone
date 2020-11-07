@@ -47,10 +47,12 @@ export default {
 }
 .modal-footer {
   display: flex;
-  justify-content: center;
+  width: 100%;
+  justify-content: center !important;
 }
 .modal-footer > button:first-child {
   display: none;
+  width: 0;
 }
 .modal-footer > button:last-child {
   visibility: hidden;
@@ -64,8 +66,8 @@ export default {
   color: white;
   font-size: 1rem;
   border-radius: 5px;
-  padding: .7rem 9rem 0.7rem 8rem;
-  margin-right: 1rem;
+  padding: .7rem 4rem .7rem 4rem;
+  margin-right: 4px;
 }
 .modal-footer > button:last-child::after:hover {
   background-color: rgb(0, 121, 191);

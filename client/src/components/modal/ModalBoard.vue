@@ -12,11 +12,16 @@
           </div>
           <div class='modal-star-text'>Starred Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div @click.stop.prevent="toggleList('star')" class='modal-board-icon-container' v-if='star'><img src="../../assets/minus.svg" alt=""></div>
+        <div @click.stop.prevent="toggleList('star')" class='modal-board-icon-container' v-else><img src="../../assets/plus.svg" alt=""></div>
       </div>
-      <div class='modal-boards-star-body'>
-        Star your most important boards to keep them right at your fingertips.
+      <div v-show="star">
+        <div v-if="!getStarredBoards && !getStarredBoards.length" class='modal-boards-star-body'>
+          Star your most important boards to keep them right at your fingertips.
+        </div>
+        <ul class='modal-board-list-container' v-else>
+          <ModalBoardTile v-for="(starBoard, $starBoardIndex) of getStarredBoards" :key="$starBoardIndex" :board="starBoard" :star="true"/>
+        </ul>
       </div>
     </div>
     <div class='modal-boards-recent-container'>
@@ -27,11 +32,13 @@
           </div>
           <div class='modal-recent-text'>Recent Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div @click.stop.prevent="toggleList('recent')" class='modal-board-icon-container' v-if='recent'><img src="../../assets/minus.svg" alt=""></div>
+        <div @click.stop.prevent="toggleList('recent')" class='modal-board-icon-container' v-else><img src="../../assets/plus.svg" alt=""></div>
       </div>
-      <div class='modal-boards-star-body'>
-        LI of recent boards
+      <div v-show="recent">
+        <ul class='modal-board-list-container'>
+          <ModalBoardTile v-for="(recentBoard, $recentBoardIndex) of getRecentlyViewed" :key="$recentBoardIndex" :board="recentBoard" :star="true"/>
+        </ul>
       </div>
     </div>
     <div class='modal-boards-personal-container'>
@@ -42,11 +49,13 @@
           </div>
           <div class='modal-personal-text'>Personal Boards</div>
         </div>
-        <div v-if='star'>-</div>
-        <div v-else>+</div>
+        <div @click.stop.prevent="toggleList('personal')" class='modal-board-icon-container' v-if='personal'><img src="../../assets/minus.svg" alt=""></div>
+        <div @click.stop.prevent="toggleList('personal')" class='modal-board-icon-container' v-else><img src="../../assets/plus.svg" alt=""></div>
       </div>
-      <div class='modal-boards-star-body'>
-        LI of personal boards
+      <div v-show="personal">
+        <ul class='modal-board-list-container'>
+          <ModalBoardTile v-for="(board, $boardIndex) of getBoards" :key="$boardIndex" :board="board" :star="true"/>
+        </ul>
       </div>
     </div>
   </div>
@@ -54,11 +63,18 @@
 
 <script>
 import EventBus from '../../utils/eventBus'
+import { mapGetters } from 'vuex'
+import ModalBoardTile from './ModalBoardTile'
 
 export default {
+  components: {
+    ModalBoardTile
+  },
   data () {
     return {
-      star: true
+      star: true,
+      personal: true,
+      recent: true
     }
   },
   props: {
@@ -70,7 +86,6 @@ export default {
     ...mapGetters(['getCurrentUser', 'getBoards', 'getStarredBoards', 'getBackgrounds', 'getRecentlyViewed', 'getStarredBoardsObj'])
   },
   mounted () {
-    const vm = this
     this.$store.dispatch('fetchUser', this.getCurrentUser._id)
       .then(async res => {
         await this.$store.commit('UPDATE_USER', res.data)
@@ -88,6 +103,15 @@ export default {
         EventBus.$emit('openCreateBoard')
       }
       this.closeModal()
+    },
+    toggleList (list) {
+      if (list === 'star') {
+        this.star = !this.star
+      } else if (list === 'recent') {
+        this.recent = !this.recent
+      } else {
+        this.personal = !this.personal
+      }
     }
   }
 }
@@ -103,7 +127,8 @@ export default {
   font-size: 14px;
   font-weight: 400;
   box-shadow: 0 8px 16px -4px rgba(9,30,66,.25);
-
+  height: calc(100vh - 45px);
+  overflow: auto;
 }
 .modal-board-input {
   border: 1px solid lightgray;
@@ -157,5 +182,18 @@ export default {
 }
 .modal-boards-trello-icon {
   fill: #7a869a
+}
+.modal-board-icon-container {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 3px;
+}
+.modal-board-icon-container:hover {
+  background-color: #cccccc9d;
+  cursor: pointer;
+}
+.modal-board-list-container {
+  padding: 5px 0;
 }
 </style>

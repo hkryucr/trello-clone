@@ -29,13 +29,25 @@ Trello has numerous technical details over the entire applications. One good exa
 - CSS
 - Amazon Web Services
 
-## Features
+## Key Features
+
+### Easy, Drag-and-Drop & Inline Editing
+
+One of the main features in Trello is the simplest drag-and-drop and inline editing feature. The lists are customizable, meaning that you can follow exclusively metrics that are of interest to you.
+
+### Well-Organized Board and Card System & Searchable database
+
+Having a board assigned for each project, and a card for each task, there is little risk of confusion, as every assignments are in order. All boards and tasks for all assignments can be searched from the database, using regular expression. 
+
+### Mobile Optimization
+
+Trello is a mobile-friendly website that can be accessed from every device, including small size android and iOS devices, and big size desktop.
 
 ### User Authentication
 - Users can sign up or log in with an existing account.
-- Invalid login or signup attempts would trigger both front-end and back-end errors
-- Logged in users can access boards and board page.
-- Only logged out users can view the splash page. Logged in users are redirected to the boards page.
+- Invalid login or signup attempts would trigger error messages.
+- Only Logged in users can access boards and board page.
+- Only logged out users can acess the splash page. Logged in users are redirected to the boards page.
 
 ```
 // router.js

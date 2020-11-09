@@ -215,6 +215,7 @@ export default {
 .modal-boards-star-header, .modal-boards-recent-header, .modal-boards-personal-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .modal-boards-star-body {
   color: #7a869a;

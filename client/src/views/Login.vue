@@ -104,7 +104,7 @@ export default {
   line-height: 1.333;
   border-radius: 4px;
   border: 1px solid #EB5A46;
-  padding: .5em 1em;
+  /* padding: .5em 1em; */
   display: inline-block;
   white-space: nowrap;
   margin-bottom: 5px;
@@ -125,8 +125,12 @@ export default {
   border-radius: 3px;
   padding: 25px 40px 32px 40px;
   box-shadow: rgba(0,0,0,0.1) 0 0 10px;
-  width: 400px;
+  max-width: 400px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .login-page {
   display: flex;
@@ -154,6 +158,7 @@ export default {
 }
 .login-link-container {
   display: flex;
+  width: 100%;
   flex-direction: column;
   padding-bottom: 10px;
   border-bottom: 1px solid lightgrey;

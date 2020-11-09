@@ -3,7 +3,7 @@
     <div class='create-board-modal-top' @click.stop>
       <form @submit="submitBoard" class='create-board-modal-info' ref="createBackground">
         <div style="position: absolute; background-color: rgba(0, 0, 0, .2); left: 0; top: 0; right: 0; bottom: 0;"></div>
-        <button @click.prevent.stop='closeModal' style="color: #fff; float: right; position: relative; right: -250px; top: -2px" class="text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
+        <button @click.prevent.stop='closeModal' class="create-board-modal-info-button text-white-link icon-sm icon-close dark-hover cancel js-cancel-edit"></button>
         <input @keydown.enter="submitBoard" v-model="boardName" class='create-board-modal-input' placeholder="Add board title" type="text">
       </form>
       <ul class='create-board-modal-bkgrd-opt-container'>
@@ -95,7 +95,6 @@ export default {
   margin: 0 0 0 8px;
   overflow: auto;
 }
-
 .create-board-modal-input:hover {
   background: rgba(0,0,0,.25)
 }
@@ -168,11 +167,26 @@ export default {
   height: 96px;
   padding: 10px 10px 10px 16px;
   position: relative;
-  width: 296px;
+  width: 220px;
   display: flex;
   flex-direction: column;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+.create-board-modal-info-button {
+  color: #fff;
+  float: right;
+  position: relative;
+  right: -180px;
+  top: -2px;
+}
+@media (min-width: 440px) {
+  .create-board-modal-info{
+    width: 296px;
+  }
+  .create-board-modal-info-button {
+    right: -250px;
+  }
 }
 </style>

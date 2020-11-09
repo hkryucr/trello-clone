@@ -112,8 +112,9 @@ export default {
 
 <style lang="css">
 .board-header-container {
-  height: 48px;
+  min-height: 48px;
   padding: 8px 4px 4px 8px;
+  flex-wrap: wrap;
 }
 .board-header-gradient {
   background: rgba(0,0,0,.24);

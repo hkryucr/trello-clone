@@ -125,7 +125,6 @@ export default {
     },
     updateSearchInput (e) {
       this.search = e.target.value
-      console.log(this.getCurrentUser._id)
       if (this.search === '') {
         this.$store.commit('RESET_SEARCH_RESULT')
         return

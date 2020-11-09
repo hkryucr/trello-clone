@@ -1,17 +1,17 @@
 <template>
-  <div class="modal-board-tile-container">
-      <router-link :to="`board/${board._id}`" class="_1-xqt-RbCBt-Sv">
-        <div class="_26ZVKC32nK5LUz" :style="insertBackground(board)"></div>
-        <div class="_3ip-7S5md5RzJ-" :style="insertBackground(board)"></div>
+  <div @click.stop="closeModal" class="modal-board-tile-container">
+      <router-link  :to="`/board/${board._id}`" class="_1-xqt-RbCBt-Sv">
+        <div class="modal-board-tile-first-img" :style="insertBackground(board)"></div>
+        <div class="modal-board-tile-second-img" :style="insertBackground(board)"></div>
         <div class="modal-board-tile-text-container">
           <div class="modal-board-tile-text">{{board.name}}</div>
         </div>
         <div class="modal-board-tile-star-container">
           <span class="modal-board-star-option" v-if="star">
-            <span @click.prevent="toggleStar(user, board._id, star)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
+            <span @click.prevent.stop="toggleStar(user, board._id, star)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star is-starred board-tile-options-star-icon"></span>
           </span>
           <span class="modal-board-star-option-2" v-else>
-            <span @click.prevent="toggleStar(user, board._id, star)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star board-tile-options-star-icon"></span>
+            <span @click.prevent.stop="toggleStar(user, board._id, star)" title="Click to star this board. It will show up at the top of your boards list." class="icon-sm icon-star board-tile-options-star-icon"></span>
           </span>
         </div>
       </router-link>
@@ -20,13 +20,18 @@
 
 <script>
 export default {
-  props: ['board', 'star', 'user'],
+  props: ['board', 'star', 'user', 'closeModal'],
   methods: {
     insertBackground (curBoard) {
       return `${(curBoard.background.backgroundType === 'color') ? ('background-color:' + curBoard.background.template) : ('background-image: url(' + curBoard.background.template + ');')}`
     },
     toggleStar (userId, boardId, bool) {
       this.$store.dispatch('starBoard', { userId, boardId, bool })
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to !== from) location.reload()
     }
   }
 }
@@ -80,7 +85,42 @@ export default {
 }
 .modal-board-star-option-2:hover{
     transform: scale(1.2) !important;
-    opacity: 100;
-    width: 24px;
+}
+.modal-board-tile-first-img{
+  background-size: cover;
+  background-position: 50%;
+  position: absolute;
+  width: 100%;
+  height: 36px;
+  opacity: 1;
+  border-radius: 3px;
+}
+.modal-board-tile-first-img::before{
+  background: #fff;
+  bottom: 0;
+  content: "";
+  left: 0;
+  opacity: .9;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.modal-board-tile-second-img{
+  display: inline-block;
+  flex: 0 0 auto;
+  background-size: cover;
+  border-radius: 3px 0 0 3px;
+  height: 36px;
+  width: 36px;
+  position: relative;
+  opacity: .7;
+}
+.modal-board-tile-container:hover .modal-board-tile-second-img{
+  opacity: .9;
+}
+.modal-board-tile-container:hover .modal-board-star-option-2 {
+  opacity: 100;
+  width: 24px;
+  -webkit-transform: translateZ(10);
 }
 </style>

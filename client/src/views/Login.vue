@@ -158,6 +158,7 @@ export default {
 }
 .login-link-container {
   display: flex;
+  width: 100%;
   flex-direction: column;
   padding-bottom: 10px;
   border-bottom: 1px solid lightgrey;

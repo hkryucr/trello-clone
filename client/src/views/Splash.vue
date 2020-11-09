@@ -67,16 +67,16 @@ export default {
       </nav>
     </header>
     <section class="hero">
-      <div class="section-container text-white">
-        <div class="section-container-row">
-          <div class="section-container-row-left main-section-container-row-left">
+      <div class="container pt-7 pb-6 text-white">
+        <div class="flex flex-wrap flex-row items-center text-center text-md-left">
+          <div class="col-lg-6">
             <h1>Trello helps teams work more collaboratively and get more done.</h1>
-            <p>Trello’s boards, lists, and cards enable teams to organize and prioritize projects in a fun, flexible, and rewarding way.</p>
+            <p class="lead">Trello’s boards, lists, and cards enable teams to organize and prioritize projects in a fun, flexible, and rewarding way.</p>
           </div>
-          <div class="section-container-row-right main-section-container-row-right">
+          <div class="col-lg-6">
             <img src="../assets/hero-a.svg" alt="">
           </div>
-          <form data-testid="quick-signup-form" class="quick-signup" @submit.prevent="handleClick('email-signup')">
+          <form data-testid="quick-signup-form" class="quick-signup flex-wrap" @submit.prevent="handleClick('email-signup')">
             <input data-testid="quick-signup-input" name="email" class="quick-signup-email" type="email" placeholder="Email" v-model="email">
             <button data-testid="quick-signup-button" type="submit" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-success px-4">Sign Up – It’s Free!</button>
             <button data-testid="demo-login" @click.prevent="handleClick('demo-login')" data-analytics-button="greenSignupHeroButton" class="quick-signup-email-btn btn btn-demo-user px-4">Log In as a Demo User</button>
@@ -95,11 +95,11 @@ export default {
             </router-link>
           </div>
           <div class="section-container-row-right">
-            <img src="../assets/teamtask.png" alt="" style="max-width: 110%">
+            <img src="../assets/teamtask.png" alt="" style="max-width: 100%">
           </div>
         </div>
         <div class="section-container-row">
-          <div class="section-container-row-left">
+          <div class="section-container-row-left" id="image-disabled-smaller">
               <img src="../assets/card-back.svg" alt="">
           </div>
           <div class="section-container-row-right2">
@@ -119,7 +119,7 @@ export default {
             </ul>
           </div>
           <div class="section-container-row-right3">
-            <img src="../assets/butler.png" alt="">
+            <img src="../assets/butler.png" alt="" style="max-width: 95%">
           </div>
         </div>
       </div>
@@ -160,6 +160,14 @@ export default {
 </template>
 
 <style lang="css">
+#image-disabled-smaller {
+  display: none;
+}
+@media (min-width: 576px) {
+  #image-disabled-smaller {
+    display: block;
+  }
+}
 .splash-footer {
   display: flex;
   justify-content: center;
@@ -201,6 +209,7 @@ export default {
   width: 100%;
   transition: background-color .9s;
   @apply p-4;
+  z-index: 100;
 }
 .splash-header-fixed{
   height: 72px;
@@ -243,7 +252,75 @@ export default {
 }
 .hero{
   background: linear-gradient(135deg, #0079bf, #5067c5);
-  height: 720px;
+}
+.hero .container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .hero .container {
+      max-width: 576px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero .container {
+      max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero .container {
+      max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero .container {
+      max-width: 1140px;
+  }
+}
+
+.hero .pt-7, .hero .py-7 {
+  padding-top: 7rem !important;
+}
+.hero .pb-6, .hero .py-6 {
+  padding-bottom: 5rem !important;
+}
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 8px
+}
+.hero .lead {
+  font-size: 1.5625rem;
+  font-weight: 300;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+@media (min-width: 768px){
+  .hero .text-md-left {
+    text-align: left !important;
+  }
+}
+.col-lg-6 {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+@media (min-width: 992px){
+  .col-lg-6 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
 }
 .section-container {
   padding-top: 7rem;
@@ -252,7 +329,7 @@ export default {
 }
 @media (min-width: 576px){
   .section-container, .work-smarter-container, .get-started-container{
-    max-width: 540px;
+    max-width: 576px;
   }
   .work-smarter-container > .inner > .row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -260,7 +337,7 @@ export default {
 }
 @media (min-width: 768px){
   .section-container, .work-smarter-container, .get-started-container {
-    max-width: 720px;
+    max-width: 768px;
   }
   .get-started-container > .row > div {
     padding-top: 1.5rem !important;
@@ -270,7 +347,7 @@ export default {
 }
 @media (min-width: 992px){
   .section-container, .work-smarter-container, .get-started-container {
-    max-width: 960px;
+    max-width: 900px;
   }
   .work-smarter-container > .inner > .row {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -340,15 +417,53 @@ export default {
   flex-wrap: wrap;
   align-items: center !important;
   margin-bottom: 48px;
+  flex-direction: column;
 }
 .section-container-row-left, .section-container-row-right3 {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 0 41.66666666%;
-  -ms-flex: 0 0 41.66666666%;
-  flex: 0 0 41.66666666%;
-  max-width: 41.66666666%;
-  text-align: left;
-  padding: 0 1rem;
+  -webkit-flex: 0 0 90%;
+  -ms-flex: 0 0 90%;
+  flex: 0 0 90%;
+  max-width: 90%;
+  text-align: center;
+}
+.section-container-row-right, .section-container-row-right2, .section-container-row-left3{
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 90%;
+  -ms-flex: 0 0 90%;
+  flex: 0 0 90%;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+@media (min-width: 576px) {
+  .section-container-row {
+    flex-direction: row;
+  }
+  .section-container-row-left, .section-container-row-right3 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 41.66666666%;
+    -ms-flex: 0 0 41.66666666%;
+    flex: 0 0 41.66666666%;
+    max-width: 41.66666666%;
+    text-align: left;
+    padding: 0 1rem;
+  }
+  .section-container-row-right, .section-container-row-right2, .section-container-row-left3{
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 58.33333333%;
+    -ms-flex: 0 0 58.33333333%;
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+  }
 }
 .main-section-container-row-left {
   -webkit-box-flex: 0;
@@ -400,17 +515,10 @@ export default {
   font-weight: 500;
   line-height: 1.5;
   margin-bottom: 0.2rem;
-}
-.section-container-row-right, .section-container-row-right2, .section-container-row-left3{
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 58.33333333%;
-  -ms-flex: 0 0 58.33333333%;
-  flex: 0 0 58.33333333%;
-  max-width: 58.33333333%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  display: list-item;
+  text-align: -webkit-match-parent;
+  list-style: disc;
+  margin-left: 1.5rem;
 }
 .main-section-container-row-right {
   -webkit-box-flex: 0;
@@ -455,6 +563,9 @@ export default {
   font-weight: 400;
   line-height: 1.5;
 }
+.quick-signup button[type="submit"] {
+  border-radius: .3rem;
+}
 .quick-signup-email {
   flex-grow: 5;
   min-width: 0;
@@ -497,8 +608,13 @@ export default {
   text-decoration: none;
   transition: color .15s ease-in-out, background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+.quick-signup-email {
+  margin-right: 9px;
+  margin-bottom: 8px !important;
+}
 .quick-signup-email-btn{
-  margin-left: 8px;
+  margin-right: 9px;
+  margin-bottom: 8px;
 }
 .btn-success:hover{
   color: white;
@@ -509,7 +625,6 @@ export default {
   border-color: #6c9cb9;
   background-color: #3c8abb;
 }
-
 .bottom-gradient {
   background: linear-gradient(to bottom, #fff 0%, #f7ecff 46%, #d2ecff 74%, #fff 100%);
 }
@@ -530,7 +645,6 @@ export default {
   line-height: 1.5;
   margin-bottom: 1rem;
 }
-
 .work-smarter-container > .inner > .row {
   display: flex;
   -webkit-flex-wrap: wrap;

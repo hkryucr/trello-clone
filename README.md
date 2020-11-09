@@ -39,9 +39,13 @@ One of the main features in Trello is the simplest drag-and-drop and inline edit
 
 Having a board assigned for each project, and a card for each task, there is little risk of confusion, as every assignments are in order. All boards and tasks for all assignments can be searched from the database, using regular expression. 
 
+<img src="/client/public/search.gif" width="80%"/>
+
 ### Mobile Optimization
 
 Trello is a mobile-friendly website that can be accessed from every device, including small size android and iOS devices, and big size desktop.
+
+<img src="/client/public/board_mobile.gif" width="80%"/>
 
 ### User Authentication
 - Users can sign up or log in with an existing account.

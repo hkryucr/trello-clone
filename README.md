@@ -45,7 +45,7 @@ Having a board assigned for each project, and a card for each task, there is lit
 
 Trello is a mobile-friendly website that can be accessed from every device, including small size android and iOS devices, and big size desktop.
 
-<img src="/client/public/board_mobile2.gif" width="80%"/>
+<img src="/client/public/board_mobile.gif" width="80%"/>
 
 ### User Authentication
 - Users can sign up or log in with an existing account.

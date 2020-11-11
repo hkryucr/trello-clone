@@ -166,7 +166,7 @@ export default {
   height: 32px;
   font-size: 30px;
 }
-.icon-star:hover {
+.board-tile-options .icon-star:hover {
   font-size: 17px;
 }
 .board-tile-options-2{

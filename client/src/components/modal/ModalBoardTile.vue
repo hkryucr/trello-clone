@@ -1,6 +1,7 @@
 <template>
   <div @click.stop="closeModal" class="modal-board-tile-container">
       <router-link  :to="`/board/${board._id}`" class="_1-xqt-RbCBt-Sv">
+        <div class="modal-tile-hover"></div>
         <div class="modal-board-tile-first-img" :style="insertBackground(board)"></div>
         <div class="modal-board-tile-second-img" :style="insertBackground(board)"></div>
         <div class="modal-board-tile-text-container">
@@ -17,7 +18,6 @@
       </router-link>
   </div>
 </template>
-
 <script>
 export default {
   props: ['board', 'star', 'user', 'closeModal'],
@@ -59,6 +59,7 @@ export default {
 .modal-board-tile-star-container{
   display: flex;
   align-items: center;
+  z-index: 2;
 }
 .modal-board-star-option{
   display: flex;
@@ -68,8 +69,20 @@ export default {
   overflow: hidden;
   position: relative;
   right: -4px;
+  z-index: 2;
+}
+.modal-board-star-option:hover .board-tile-options-star-icon.is-starred{
+  line-height: 18px;
+  color: #42526e;
+  font-size: 14px;
+  height: 18px;
+  transition-duration: .15s;
+  transform: scale(1.4) !important;
+  transition-property: color, background, opacity, transform, width,margin;
+  -webkit-transform: translateZ(0);
 }
 .modal-board-star-option-2 {
+  z-index: 2;
   display: block;
   line-height: 18px;
   top: 0;
@@ -84,7 +97,7 @@ export default {
   -webkit-transform: translateZ(0);
 }
 .modal-board-star-option-2:hover{
-    transform: scale(1.2) !important;
+  transform: scale(1.2) !important;
 }
 .modal-board-tile-first-img{
   background-size: cover;
@@ -115,12 +128,21 @@ export default {
   position: relative;
   opacity: .7;
 }
-.modal-board-tile-container:hover .modal-board-tile-second-img{
-  opacity: .9;
+.modal-board-tile-container:hover .modal-tile-hover{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  z-index: 1;
 }
 .modal-board-tile-container:hover .modal-board-star-option-2 {
   opacity: 100;
   width: 24px;
   -webkit-transform: translateZ(10);
+}
+.modal-board-tile-star-container .board-tile-options-star-icon.is-starred {
+  margin-right: 9px;
 }
 </style>

@@ -185,14 +185,13 @@ export default {
   text-align: left;
   border-bottom: 1px solid rgba(9,30,66,.13);
   padding-bottom: 10px;
-  margin: 0 8px;
 }
 .modal-account-logout-container {
   box-shadow: 0 8px 16px -4px rgba(9,30,66,.25);
 
 }
 .modal-account-2-link, .modal-account-3-link, .modal-account-logout-link {
-  padding: 8px;
+  padding: 8px 16px;
   font-weight: 500;
 }
 </style>

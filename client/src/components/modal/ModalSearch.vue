@@ -1,7 +1,7 @@
 <template>
   <div class="atlaskit-portal-container" style="display: flex;">
     <div class="atlaskit-portal" style="z-index: 1;">
-      <section class="_3aCMXlRGLNlRiL _11TSwgmUkKFvi9 js-react-root" data-elevation="1" style="position: fixed; width: 600px; will-change: top, left; top: 44px; left: 190px;;">
+      <section class="_3aCMXlRGLNlRiL _11TSwgmUkKFvi9 js-react-root" data-elevation="1" style="position: fixed; width: 600px; will-change: top, left; top: 44px; left: 178px;">
         <div tabindex="-1" class="_1ArtKJZLTN_ljN" style="max-height: 929px;">
           <div class="_2qAhBotzZJDWpK">
             <section v-if="getState === 'noInput'" class="_1luI_RCj-NvNUa before-search">
@@ -36,6 +36,7 @@
                 <li v-for="(curBoard, $index) in getSearchResultBoards" :key="$index">
                   <div class="_1fp0H2u2NFTsxl">
                     <router-link :to="`/board/${curBoard.boardId}`" class="_1-xqt-RbCBt-Sv" :title="`${curBoard.name}`">
+                      <div class="modal-search-tile-hover"></div>
                       <div class="_26ZVKC32nK5LUz" :style="insertBackground(curBoard)"></div>
                       <div class="_3ip-7S5md5RzJ-" :style="insertBackground(curBoard)"></div>
                       <div class="_2o1voqefI-Jq7G">
@@ -169,13 +170,18 @@ export default {
   display: flex;
   font-weight: 700;
   height: 36px;
-  /* overflow: hidden; */
   padding: 0;
   position: relative;
   text-decoration: none;
-  /* -webkit-user-select: none; */
-  /* user-select: none; */
-  /* -webkit-user-drag: none; */
+}
+._1-xqt-RbCBt-Sv:hover .modal-search-tile-hover{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  z-index: 1;
 }
 ._26ZVKC32nK5LUz {
   background-size: cover;
@@ -247,6 +253,9 @@ export default {
 ._1I2bHC5OCLUBmu {
   align-content: center;
   display: flex;
+}
+._1I2bHC5OCLUBmu:hover ._2cmBd7gM0NLK7q {
+  transform: scale(1.02);
 }
 ._2cmBd7gM0NLK7q {
   flex-basis: 200px;

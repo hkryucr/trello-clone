@@ -61,9 +61,6 @@ export default {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
 }
-/* .delete-warning-modal .py-2:hover {
-  background-color: rgba(241, 241, 241, 0.349);
-} */
 #deleteWarningDelete:hover {
   background-color: #b8211c !important;
 }
@@ -72,9 +69,7 @@ export default {
   background-color: rgb(219, 219, 219) !important;
 }
 .text-gray-500 {
-  /* --text-opacity: 1; */
   color: #67748a;
-  /* color: rgba(107,114,128,var(--text-opacity)); */
 }
 .text-gray-900 {
     --text-opacity: 1;

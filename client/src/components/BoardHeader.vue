@@ -131,7 +131,6 @@ export default {
   font-size: 1.125rem;
 }
 .board-name {
-  /* font-size: 18px; */
   padding: 5px 12px;
 }
 .input-name:hover {
@@ -139,7 +138,7 @@ export default {
   cursor: pointer;
   border-radius: 3px;
 }
-/* consider renaming the class */
+
 .input-main-header {
   white-space:nowrap;
   display:inline-block;

@@ -104,7 +104,6 @@ export default {
   line-height: 1.333;
   border-radius: 4px;
   border: 1px solid #EB5A46;
-  /* padding: .5em 1em; */
   display: inline-block;
   white-space: nowrap;
   margin-bottom: 5px;

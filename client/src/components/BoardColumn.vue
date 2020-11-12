@@ -340,7 +340,7 @@ textarea.task-composer-textarea {
   font-size: 16px;
 }
 .self-start-confirm-button {
-  /* background-color: #e26956; */
+
   background-color: #eb5a46;
   border-radius: 15%;
 }
@@ -361,7 +361,6 @@ textarea.task-composer-textarea {
 }
 .drop-preview {
   background-color: rgba(150, 150, 200, 0.1);
-  /* border: 1px dashed #abc; */
   margin: 5px;
 }
 </style>

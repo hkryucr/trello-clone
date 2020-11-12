@@ -186,7 +186,6 @@ export default {
   right: 0;
   color: #fff;
   font-size: 14px;
-  /* width: 0; */
   height: 18px;
   opacity: 0;
   transition-duration: .15s;

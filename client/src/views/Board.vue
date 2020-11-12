@@ -257,7 +257,6 @@ export default {
   background-repeat: no-repeat;
 }
 .board-main {
-  /* padding-bottom: 20px; */
   height: calc(100vh - 88px);
 }
 .board-gradient {

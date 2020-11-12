@@ -44,7 +44,6 @@ export default {
   .side-menu-tial-container {
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-evenly; */
     overflow-y: auto;
     height: calc(100vh - 97px);
     align-content: flex-start;

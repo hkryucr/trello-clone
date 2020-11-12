@@ -448,7 +448,6 @@ input[type="submit"].primary:hover, button.primary:hover {
     margin-right: auto;
   }
   .task-main {
-    /* width: auto */
     flex-direction: row;
   }
   .w-4\/5 {

@@ -1,12 +1,9 @@
 <template>
   <div
     class="column flex flex-col max-h-full"
-    @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
-    @dragover.prevent
-    @dragenter.prevent
-    @dragstart.self="pickupColumn($event, columnIndex)"
-    draggable
     style="background-color: #ebecf0;"
+    @mouseenter="openContainer"
+    @mouseleave="closeContainer"
   >
     <div class="flex justify-between mb-3 font-bold">
         <div class="input-main-header w-full">
@@ -32,63 +29,94 @@
         </button>
     </div>
     <div class="list-reset overflow-y-auto">
-      <ColumnTask
-        v-for="(task, $taskIndex) of column.tasks"
-        :key="$taskIndex"
-        :task="task"
-        :column="column"
-        :taskIndex="$taskIndex"
-        :board="board"
-        :columnIndex="columnIndex"
-      />
-    </div>
-    <div class="task-composer task-hide" ref="taskWrapper" :id="'task-' + columnIndex">
-      <div class="task">
-        <textarea
-            ref="newTaskInput"
-            class="block p-2 w-full bg-transparent task-composer-textarea"
-            placeholder="Enter a title for this card…"
-            v-model="newTaskName"
-            @input="updateHeight($event)"
-            @keydown.enter.exact.prevent
-            @keyup.enter.exact="createTask"
-            @keyup.esc="closeAddCard"
+      <Container
+        group-name="task"
+        :get-child-payload="getTaskPayload"
+        :drop-placeholder="dropPlaceholderOptions"
+        @drop="(e) => onDrop(columnIndex, e)"
+        @drag-start="startDragging"
+        drag-class="tilt-task"
+        drop-class="drop-task"
+        v-if="containerOpen"
+      >
+      <Draggable v-for="(task, $taskIndex) of column.tasks" :key="$taskIndex">
+        <ColumnTask
+          :task="task"
+          :column="column"
+          :taskIndex="$taskIndex"
+          :board="board"
+          :columnIndex="columnIndex"
         />
-      </div>
-      <div class="task-controls">
-        <input type="submit" class="primary" value="Add Card" @click.prevent="createTask" style="margin: 4px 4px 0 0;font-size: 14px; font-weight: 400">
-        <a href="#" class="icon-lg icon-close dark-hover js-cancel" @click.prevent="closeAddCard"></a>
-      </div>
+        </Draggable>
+      </Container>
     </div>
-    <div class="task-composer-container" ref="addTaskContainer" :id="'composer-' + columnIndex">
-      <a href="#" class="open-task-composer" @click.prevent="openAddCard">
-        <span class="icon-sm icon-add"></span>
-        <span>Add a card</span>
-      </a>
-    </div>
+        <div class="task-composer task-hide" ref="taskWrapper" :id="'task-' + columnIndex">
+          <div class="task">
+            <textarea
+                ref="newTaskInput"
+                class="block p-2 w-full bg-transparent task-composer-textarea"
+                placeholder="Enter a title for this card…"
+                v-model="newTaskName"
+                @input="updateHeight($event)"
+                @keydown.enter.exact.prevent
+                @keyup.enter.exact="createTask"
+                @keyup.esc="closeAddCard"
+            />
+          </div>
+          <div class="task-controls">
+            <input type="submit" class="primary" value="Add Card" @click.prevent="createTask" style="margin: 4px 4px 0 0;font-size: 14px; font-weight: 400">
+            <a href="#" class="icon-lg icon-close dark-hover js-cancel" @click.prevent="closeAddCard"></a>
+          </div>
+        </div>
+        <div class="task-composer-container" ref="addTaskContainer" :id="'composer-' + columnIndex">
+          <a href="#" class="open-task-composer" @click.prevent="openAddCard">
+            <span class="icon-sm icon-add"></span>
+            <span>Add a card</span>
+          </a>
+        </div>
   </div>
 </template>
 
 <script>
 import ColumnTask from '@/components/ColumnTask'
 import movingTasksAndColumns from '@/mixins/movingTasksAndColumns'
+import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapGetters } from 'vuex'
 import autosize from 'autosize'
 import EventBus from '../utils/eventBus'
 
 export default {
-  components: { ColumnTask },
+  props: ['dragging'],
+  components: { ColumnTask, Container, Draggable },
   mixins: [movingTasksAndColumns],
   data () {
     return {
       newTaskName: '',
       throttling: false,
       updating: false,
-      deleteConfirm: false
+      deleteConfirm: false,
+      containerOpen: true,
+      dropPlaceholderOptions: {
+        className: 'drop-preview',
+        animationDuration: '150',
+        showOnTop: true
+      }
     }
   },
   computed: {
-    ...mapGetters(['getCurrentUser'])
+    ...mapGetters(['getCurrentUser']),
+    taskLength () {
+      return this.column.tasks.length
+    }
+  },
+  watch: {
+    taskLength (length) {
+      if (length === 0) {
+        this.containerOpen = false
+      } else {
+        this.containerOpen = true
+      }
+    }
   },
   mounted () {
     const vm = this
@@ -100,6 +128,9 @@ export default {
     EventBus.$on('closeConfirmed', function () {
       vm.deleteConfirm = false
     })
+    if (this.column.tasks.length === 0) {
+      this.containerOpen = false
+    }
   },
   methods: {
     deleteColumnNotConfirm () {
@@ -184,6 +215,39 @@ export default {
         column: this.column,
         idx: this.columnIndex
       })
+    },
+    getTaskPayload (index) {
+      return {
+        fromTaskIndex: index,
+        fromColumnIndex: this.columnIndex,
+        type: 'task'
+      }
+    },
+    onDrop (columnIndex, dropResult) {
+      if (dropResult.addedIndex !== null) {
+        this.$store.dispatch('moveTask', {
+          fromColumn: dropResult.payload.fromColumnIndex,
+          fromTask: dropResult.payload.fromTaskIndex,
+          toColumn: columnIndex,
+          toTask: dropResult.addedIndex
+        })
+      }
+      EventBus.$emit('stopDraggingTask')
+    },
+    openContainer () {
+      if (this.dragging) {
+        this.containerOpen = true
+      }
+    },
+    closeContainer () {
+      if (this.taskLength === 0) {
+        this.containerOpen = false
+      }
+    },
+    startDragging (dropResult) {
+      if (dropResult.payload.type === 'task') {
+        EventBus.$emit('startDraggingTask')
+      }
     }
   }
 }
@@ -286,5 +350,18 @@ textarea.task-composer-textarea {
 }
 .self-start-confirm-button > span:hover {
   font-size: 16px;
+}
+.tilt-task {
+  transition: transform 0.18s ease;
+  transform: rotateZ(5deg);
+}
+.drop-task {
+  transition: transform 0.18s ease-in-out;
+  transform: rotateZ(0deg);
+}
+.drop-preview {
+  background-color: rgba(150, 150, 200, 0.1);
+  /* border: 1px dashed #abc; */
+  margin: 5px;
 }
 </style>

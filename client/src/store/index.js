@@ -107,6 +107,12 @@ export default new Vuex.Store({
     ) => {
       const fromColumnId = state.board.columns[fromColumn]._id
       const toColumnId = state.board.columns[toColumn]._id
+      commit('MOVE_TASK', {
+        fromColumn,
+        fromTask,
+        toColumn,
+        toTask
+      })
       VueInstance.$socket.emit('moveTask', {
         fromColumn,
         fromTask,
@@ -118,6 +124,11 @@ export default new Vuex.Store({
     },
     moveColumn: ({ state, commit }, { fromColumnIndex, toColumnIndex }) => {
       const boardId = state.board._id
+      commit('MOVE_COLUMN', {
+        fromColumnIndex,
+        toColumnIndex,
+        boardId
+      })
       VueInstance.$socket.emit('moveColumn', {
         fromColumnIndex,
         toColumnIndex,
@@ -265,7 +276,18 @@ export default new Vuex.Store({
       const taskToMove = fromTasks.splice(fromTask, 1)[0]
       toTasks.splice(toTask, 0, taskToMove)
     },
+    MOVE_TASK (state, { fromColumn, fromTask, toColumn, toTask }) {
+      const fromTasks = state.board.columns[fromColumn].tasks
+      const toTasks = state.board.columns[toColumn].tasks
+      const taskToMove = fromTasks.splice(fromTask, 1)[0]
+      toTasks.splice(toTask, 0, taskToMove)
+    },
     SOCKET_MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
+      const columnList = state.board.columns
+      const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
+      columnList.splice(toColumnIndex, 0, columnToMove)
+    },
+    MOVE_COLUMN (state, { fromColumnIndex, toColumnIndex }) {
       const columnList = state.board.columns
       const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
       columnList.splice(toColumnIndex, 0, columnToMove)

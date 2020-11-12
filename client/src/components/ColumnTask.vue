@@ -1,12 +1,5 @@
 <template>
-  <div class="task task-in-columnTask"
-    @click="goToTask(task)"
-    draggable
-    @dragstart="pickupTask($event, taskIndex, columnIndex)"
-    @dragover.prevent
-    @dragenter.prevent
-    @drop.stop="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
-  >
+  <div class="task" @click="goToTask(task)">
     <span class="w-full flex-no-shrink" style="font-size: 14px; font-weight: 500">
       {{task.name}}
     </span>
@@ -37,13 +30,6 @@ export default {
     goToTask (task) {
       this.$router.push({ name: 'task', params: { taskId: task._id } })
     },
-    pickupTask (e, taskIndex, fromColumnIndex) {
-      e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.dropEffect = 'move'
-      e.dataTransfer.setData('from-task-index', taskIndex)
-      e.dataTransfer.setData('from-column-index', fromColumnIndex)
-      e.dataTransfer.setData('type', 'task')
-    },
     deleteTask (task) {
       this.$store.dispatch('deleteTask', task)
     }
@@ -66,7 +52,7 @@ export default {
     text-decoration: none;
     z-index: 0;
 }
-.task-in-columnTask:hover {
+.task:hover {
   background-color: #f4f5f7;
   border-bottom-color: rgba(9, 30, 66, .25);
 }

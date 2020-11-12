@@ -10,13 +10,26 @@
             class="board-main flex flex-col items-start w-full overflow-x-auto overflow-y-hidden"
           >
             <div class="flex flex-row items-start h-full">
-              <BoardColumn
-                v-for="(column, $columnIndex) of board.columns"
-                :key="$columnIndex"
-                :column="column"
-                :columnIndex="$columnIndex"
-                :board="board"
-              />
+              <Container
+                class="flex flex-row items-start"
+                group-name="board"
+                :get-child-payload="getColumnPayload"
+                :drop-placeholder="dropPlaceholderOptions"
+                orientation="horizontal"
+                @drop="onDrop"
+                drag-class="tilt-column"
+                non-drag-area-selector="div.task-composer-container"
+                drop-class="drop-column"
+              >
+                <Draggable v-for="(column, $columnIndex) of board.columns" :key="$columnIndex">
+                  <BoardColumn
+                    :column="column"
+                    :columnIndex="$columnIndex"
+                    :board="board"
+                    :dragging="draggingTask"
+                  />
+                </Draggable>
+              </Container>
               <div class="column mod-add is-idle" ref="listWrapper" @click.stop.prevent="openAddList" @blur="removeAddList">
                 <form
                   class="flex flex-row flex-wrap add-list-form"
@@ -80,6 +93,7 @@ import Color from '../components/sideMenu/Color'
 import Photo from '../components/sideMenu/Photo'
 import CreateBoardModal from '../components/modal/CreateBoardModal'
 import EventBus from '../utils/eventBus'
+import { Container, Draggable } from 'vue-smooth-dnd'
 import _ from 'lodash'
 
 export default {
@@ -91,7 +105,9 @@ export default {
     ChangeBackground,
     Color,
     Photo,
-    CreateBoardModal
+    CreateBoardModal,
+    Container,
+    Draggable
   },
   data () {
     return {
@@ -99,7 +115,13 @@ export default {
       boardName: '',
       sideMenu: false,
       component: 'splash',
-      createBoard: false
+      createBoard: false,
+      draggingTask: false,
+      dropPlaceholderOptions: {
+        className: 'drop-column-preview',
+        animationDuration: '150',
+        showOnTop: true
+      }
     }
   },
   computed: {
@@ -155,6 +177,14 @@ export default {
       vm.createBoard = true
       vm.openModal()
     })
+
+    EventBus.$on('startDraggingTask', function () {
+      vm.draggingTask = true
+    })
+
+    EventBus.$on('stopDraggingTask', function () {
+      vm.draggingTask = false
+    })
   },
   methods: {
     closeDeleteWarningModal () {
@@ -200,6 +230,20 @@ export default {
     closeModal () {
       this.createBoard = false
       EventBus.$emit('resetCreateBoard')
+    },
+    getColumnPayload (index) {
+      return {
+        fromColumnIndex: index,
+        type: 'column'
+      }
+    },
+    onDrop (dropResult) {
+      if (dropResult.addedIndex !== null) {
+        this.$store.dispatch('moveColumn', {
+          fromColumnIndex: dropResult.removedIndex,
+          toColumnIndex: dropResult.addedIndex
+        })
+      }
     }
   }
 }
@@ -229,12 +273,6 @@ export default {
   @apply p-2 text-left shadow rounded;
   width: 272px;
   margin: 0 4px;
-}
-.column:first-child {
-  margin-left: 8px;
-}
-.column:last-child {
-  margin-right: 8px;
 }
 .column-name {
   font-size: 14px;
@@ -348,5 +386,16 @@ export default {
 .side-menu-active.board-menu {
   box-shadow: 0 12px 24px -6px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
   transform: translateX(0);
+}
+.tilt-column {
+  transition: transform 0.18s ease;
+  transform: rotateZ(5deg);
+}
+.drop-column {
+  transition: transform 0.18s ease-in-out;
+  transform: rotateZ(0deg);
+}
+.drop-column-preview {
+  background-color: transparent;
 }
 </style>

@@ -10,21 +10,20 @@ class TaskController {
       toColumn,
       toTask,
       fromColumnId,
-      toColumnId,
+      toColumnId
     } = data;
     const fromColumnObj = await Column.findById(fromColumnId);
-
     if (fromColumnId === toColumnId) {
       const taskToMove = fromColumnObj.tasks.splice(fromTask, 1)[0];
       fromColumnObj.tasks.splice(toTask, 0, taskToMove);
       fromColumnObj
         .save()
         .then((col1) => {
-          io.sockets.emit("MOVE_TASK", {
+          socket.broadcast.emit("MOVE_TASK", {
             fromColumn,
             fromTask,
             toColumn,
-            toTask,
+            toTask
           });
         })
         .catch((err) => {
@@ -39,11 +38,11 @@ class TaskController {
         toColumnObj
           .save()
           .then((col2) => {
-            io.sockets.emit("MOVE_TASK", {
+            socket.broadcast.emit("MOVE_TASK", {
               fromColumn,
               fromTask,
               toColumn,
-              toTask,
+              toTask
             });
           })
           .catch((err) => {

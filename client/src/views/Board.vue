@@ -16,6 +16,7 @@
                 :column="column"
                 :columnIndex="$columnIndex"
                 :board="board"
+                :dragging="draggingTask"
               />
               <div class="column mod-add is-idle" ref="listWrapper" @click.stop.prevent="openAddList" @blur="removeAddList">
                 <form
@@ -99,7 +100,8 @@ export default {
       boardName: '',
       sideMenu: false,
       component: 'splash',
-      createBoard: false
+      createBoard: false,
+      draggingTask: false
     }
   },
   computed: {
@@ -154,6 +156,14 @@ export default {
     EventBus.$on('openCreateBoardFromBoard', function () {
       vm.createBoard = true
       vm.openModal()
+    })
+
+    EventBus.$on('startDraggingTask', function () {
+      vm.draggingTask = true
+    })
+
+    EventBus.$on('stopDraggingTask', function () {
+      vm.draggingTask = false
     })
   },
   methods: {

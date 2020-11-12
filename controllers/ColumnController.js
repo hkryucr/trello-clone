@@ -29,7 +29,7 @@ class ColumnController {
     const columnToMove = boardObj.columns.splice(fromColumnIndex, 1)[0]
     boardObj.columns.splice(toColumnIndex, 0, columnToMove)
     boardObj.save().then(board => {
-      io.sockets.emit("MOVE_COLUMN", { fromColumnIndex, toColumnIndex });
+      socket.broadcast.emit("MOVE_COLUMN", { fromColumnIndex, toColumnIndex });
     }).catch(err => {
       socket.emit("error", err);
     })

@@ -219,7 +219,8 @@ export default {
     getTaskPayload (index) {
       return {
         fromTaskIndex: index,
-        fromColumnIndex: this.columnIndex
+        fromColumnIndex: this.columnIndex,
+        type: 'task'
       }
     },
     onDrop (columnIndex, dropResult) {
@@ -243,8 +244,10 @@ export default {
         this.containerOpen = false
       }
     },
-    startDragging () {
-      EventBus.$emit('startDraggingTask')
+    startDragging (dropResult) {
+      if (dropResult.payload.type === 'task') {
+        EventBus.$emit('startDraggingTask')
+      }
     }
   }
 }

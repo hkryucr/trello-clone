@@ -11,6 +11,7 @@
           >
             <div class="flex flex-row items-start h-full">
               <Container
+                v-if="columnLength"
                 class="flex flex-row items-start"
                 group-name="board"
                 :get-child-payload="getColumnPayload"
@@ -125,6 +126,9 @@ export default {
     }
   },
   computed: {
+    columnLength () {
+      return this.board && this.board.columns && this.board.columns.length
+    },
     isTaskOpen () {
       return this.$route.name === 'task'
     },

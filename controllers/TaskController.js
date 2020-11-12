@@ -33,21 +33,29 @@ class TaskController {
     } else {
       const toColumnObj = await Column.findById(toColumnId);
       const taskToMove = fromColumnObj.tasks.splice(fromTask, 1)[0];
-      toColumnObj.tasks.splice(toTask, 0, taskToMove);
-      fromColumnObj.save().then((col1) => {
-        toColumnObj
-          .save()
-          .then((col2) => {
-            socket.broadcast.emit("MOVE_TASK", {
-              fromColumn,
-              fromTask,
-              toColumn,
-              toTask
+
+      const curTask = await Task.findById(taskToMove)
+      curTask.column = toColumnId
+      curTask.save().then(()=>{
+        toColumnObj.tasks.splice(toTask, 0, taskToMove);
+        fromColumnObj.save().then((col1) => {
+          toColumnObj
+            .save()
+            .then((col2) => {
+              socket.broadcast.emit("MOVE_TASK", {
+                fromColumn,
+                fromTask,
+                toColumn,
+                toTask
+              });
+            })
+            .catch((err) => {
+              socket.emit("error", err);
             });
-          })
-          .catch((err) => {
-            socket.emit("error", err);
-          });
+        });
+      })
+      .catch((err) => {
+        socket.emit("error", err);
       });
     }
   }
@@ -90,8 +98,8 @@ class TaskController {
   }
 
   async deleteTask(io, socket, { task, idx }) {
-    await Task.findOneAndDelete({_id: task._id})
-    await Column.findOneAndUpdate({_id: task.column}, {$pull: {tasks: task._id }}, {new: true}, function(err, col) {
+    const taskObj = await Task.findOneAndDelete({_id: task._id})
+    await Column.findOneAndUpdate({_id: taskObj.column}, {$pull: {tasks: task._id }}, {new: true}, function(err, col) {
         if (err) {
             res.send(err);
         }

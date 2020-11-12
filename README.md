@@ -35,6 +35,8 @@ Trello has numerous technical details over the entire applications. One good exa
 
 One of the main features in Trello is the simplest drag-and-drop and inline editing feature. The lists are customizable, meaning that you can follow exclusively metrics that are of interest to you.
 
+<img src="/client/public/board_interface.gif" width="80%"/>
+
 ### Well-Organized Board and Card System & Searchable database
 
 Having a board assigned for each project, and a card for each task, there is little risk of confusion, as every assignments are in order. All boards and tasks for all assignments can be searched from the database, using regular expression. 

@@ -70,7 +70,7 @@ export default {
       <div class="container pt-7 pb-6 text-white">
         <div class="flex flex-wrap flex-row items-center text-center text-md-left">
           <div class="col-lg-6">
-            <h1>Trello helps teams work more collaboratively and get more done.</h1>
+            <h1 style="font-weight: 600">Trello helps teams work more collaboratively and get more done.</h1>
             <p class="lead">Trello’s boards, lists, and cards enable teams to organize and prioritize projects in a fun, flexible, and rewarding way.</p>
           </div>
           <div class="col-lg-6">
@@ -461,7 +461,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     text-align: left;
   }
 }
@@ -488,13 +488,13 @@ export default {
 }
 .section-container-row-left > h1, .section-container-row-right2>h1 {
   font-size: 3rem;
-  font-weight: bolder;
+  font-weight: 600;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 .section-container-row-left > h3, .section-container-row-right2 > h3 {
   font-size: 2.2rem;
-  font-weight: bolder;
+  font-weight: 600;
   line-height: 1.2;
   margin-bottom: 1rem;
 }

@@ -22,7 +22,7 @@ export default {
       <div class="board-tile-container board-tile-details">
         <div class="board-tile-details is-badged">
           <div title="Trello" dir="auto" class="board-tile-details-name">
-            <div style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2; font-weight: 800;">
+            <div style="overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2; font-weight: 700;">
               {{board.name}}
             </div>
           </div>

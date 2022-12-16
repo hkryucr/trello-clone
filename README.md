@@ -18,7 +18,6 @@ Our dev team was inspired by beautiful and seamless frontend Trello's UIs. It is
 Trello has numerous technical details over the entire applications. One good example is the communications between frontend and backend, such as using socket.io and HTTP request calls selectively. Our team of four tried to implement this well polished application in two months time periods, and now release the beta version of the application.
 
 ## Technologies
-- React / Redux
 - Node.js
 - Express.js
 - MongoDB
